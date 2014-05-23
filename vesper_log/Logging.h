@@ -4,6 +4,7 @@
 #include "Vout.h"
 
 #include <iostream>
+#include <sstream>
 #include <thread>
 
 namespace Vesper
@@ -77,7 +78,7 @@ class Logging
     protected:
     private:
 
-        static void printString(std::thread **source, Logging *who, char *toPrint);
+        static void printString(std::thread **source, Logging *who, std::stringstream *toPrint);
 
         LoggingType::LoggingClientType clientType;
 

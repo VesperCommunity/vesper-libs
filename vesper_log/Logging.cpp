@@ -1,5 +1,9 @@
 #include "Logging.h"
 
+//we need this for variable argument lists
+//C-Style, I don't wanna mess with template and/or vector classes ;-)
+#include <cstdarg>
+
 using namespace Vesper;
 
 int Logging::nextID = 1;
@@ -53,14 +57,22 @@ void Logging::logDebug(char *text, ...)
 
 void Logging::logNeutral(char *text, ...)
 {
-    char *logString;
-    logString = new char[2048];
+    std::stringstream *logString = new std::stringstream;
 
-        
+    va_list args;
+
+    va_start(args, *text);
+    //adjust true to sweep for all %* in the text char-array
+    while(true)
+    {
+        //adjust int to depend on %* commands in the string
+        *logString << va_arg(args, int);
+    }
+    va_end(args);
 
     std::thread **p;
     p = 0;
-    std::thread  *t = new std::thread(Logging::printString, p, this, text);
+    std::thread  *t = new std::thread(Logging::printString, p, this, logString);
     p = &t;
 }
 
@@ -104,7 +116,7 @@ void Logging::stopGarbageCollector()
     garbageCollectorData.threadRunning = false;
 }
 
-void Logging::printString(std::thread **source, Logging *who, char *toPrint)
+void Logging::printString(std::thread **source, Logging *who, std::stringstream *toPrint)
 {
 
     if (who->getType() == LoggingType::client)
@@ -117,7 +129,7 @@ void Logging::printString(std::thread **source, Logging *who, char *toPrint)
     }
 
     std::cout << who->getID() << ":";
-    std::cout << toPrint << std::endl;
+    std::cout << *toPrint << std::endl;
 
     while (!source){} //wait for the source to be 0
     deleteThread(*source); //delete this thread
