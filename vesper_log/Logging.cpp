@@ -38,6 +38,11 @@ int Logging::getID()
     return uniqueID;
 }
 
+LoggingType::LoggingClientType Logging::getType()
+{
+    return clientType;
+}
+
 void Logging::logStart(char *text, ...)
 {
 }
@@ -48,6 +53,15 @@ void Logging::logDebug(char *text, ...)
 
 void Logging::logNeutral(char *text, ...)
 {
+    char *logString;
+    logString = new char[2048];
+
+        
+
+    std::thread **p;
+    p = 0;
+    std::thread  *t = new std::thread(Logging::printString, p, this, text);
+    p = &t;
 }
 
 void Logging::logWarning(char *text, ...)
@@ -88,6 +102,25 @@ void Logging::garbageCollector()
 void Logging::stopGarbageCollector()
 {
     garbageCollectorData.threadRunning = false;
+}
+
+void Logging::printString(std::thread **source, Logging *who, char *toPrint)
+{
+
+    if (who->getType() == LoggingType::client)
+    {
+        std::cout << "client|";
+    }
+    else
+    {
+        std::cout << "server|";
+    }
+
+    std::cout << who->getID() << ":";
+    std::cout << toPrint << std::endl;
+
+    while (!source){} //wait for the source to be 0
+    deleteThread(*source); //delete this thread
 }
 
 void Logging::deleteThread(std::thread *toDelete)

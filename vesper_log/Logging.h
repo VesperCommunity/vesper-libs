@@ -21,8 +21,8 @@ namespace LoggingType
 
 enum LoggingClientType
 {
-    client, //
-    server
+    client, // the logging client is a client
+    server  // the logging client is a server
 };
 
 struct garbageStackItem
@@ -47,6 +47,7 @@ class Logging
         ~Logging();
 
         int getID();
+        LoggingType::LoggingClientType getType();
 
         void logStart(char *text, ...);
         void logDebug(char *text, ...);
@@ -75,6 +76,8 @@ class Logging
 
     protected:
     private:
+
+        static void printString(std::thread **source, Logging *who, char *toPrint);
 
         LoggingType::LoggingClientType clientType;
 
@@ -112,7 +115,7 @@ class Logging
          * The garbageCollectorThread automatically
          * the "garbage" after max. 1 second.
          */
-        void deleteThread(std::thread *toDelete);
+        static void deleteThread(std::thread *toDelete);
 
 
 };
