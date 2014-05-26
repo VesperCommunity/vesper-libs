@@ -23,11 +23,6 @@ enum LoggingClientType {
     server  // the logging client is a server
 };
 
-struct garbageStackItem {
-    std::thread *toDelete;
-    garbageStackItem *next;
-};
-
 enum ScanDataType {
     error,   //an error occured
     unknown, //unknown escape sequence
@@ -63,25 +58,6 @@ class Logging {
         void logWarning(char *text, ...);
         void logError(char *text, ...);
 
-        /**
-         * This is the actual GarbageCollector. It
-         * sleeps for 1 second and then clears the stack.
-         * It checks for the mutex if its locked!
-         */
-        void garbageCollector();
-
-        /**
-         * startGarbageCollector() just starts the
-         * garbageCollector. We need a static function
-         * for our thread.
-         */
-        static void startGarbageCollector(Logging *toStart);
-
-        /**
-         * Stops the garbageCollector
-         */
-        void stopGarbageCollector();
-
     protected:
     private:
 
@@ -106,24 +82,6 @@ class Logging {
         void print(char *data);
         void printLn(char *data);
         void printLnEnd();*/
-
-        std::thread *garbageCollectorThread;
-
-        struct garbageCollectorDataStruct {
-            std::mutex *locker;
-            LoggingType::garbageStackItem *gStack;
-
-            bool threadRunning;
-        }static garbageCollectorData;
-
-        /**
-         * After the thread wrote something it invokes
-         * deleteThread. deleteThread puts the thread
-         * on the garbageCollectorStack.
-         * The garbageCollectorThread automatically
-         * the "garbage" after max. 1 second.
-         */
-        static void deleteThread(std::thread *toDelete);
 
         /**
          * This function print a c-style escape sequence
