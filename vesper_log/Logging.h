@@ -7,8 +7,7 @@
 #include <sstream>
 #include <thread>
 
-namespace Vesper
-{
+namespace Vesper {
 
 /**
  * The namespace LoggingTypes will contain enums, structs
@@ -17,25 +16,33 @@ namespace Vesper
  * --> for example use this: LoggingType.client
  * --> avoid using the LoggingType namespace
  */
-namespace LoggingType
-{
+namespace LoggingType {
 
-enum LoggingClientType
-{
+enum LoggingClientType {
     client, // the logging client is a client
     server  // the logging client is a server
 };
 
-struct garbageStackItem
-{
+struct garbageStackItem {
     std::thread *toDelete;
     garbageStackItem *next;
 };
 
+enum ScanDataType {
+    error,   //an error occured
+    unknown, //unknown escape sequence
+    eos,     //*E*nd *O*f *S*tring
+    t_int,   //integer
+    t_bool,  //boolean
+    t_char,  //character
+    t_cstr,  //char[] array aka cstring
+    t_stdstr,//std::string
+    t_void   //void* pointer aka mem adress (--> hexadecimal)    
+};
+
 }; /* namespace LoggingType*/
 
-class Logging
-{
+class Logging {
     public:
 
         /**
@@ -102,7 +109,7 @@ class Logging
 
         std::thread *garbageCollectorThread;
 
-        struct garbageCollectorDataStruct{
+        struct garbageCollectorDataStruct {
             std::mutex *locker;
             LoggingType::garbageStackItem *gStack;
 
@@ -118,6 +125,13 @@ class Logging
          */
         static void deleteThread(std::thread *toDelete);
 
+        /**
+         * This function print a c-style escape sequence
+         * *data is a pointer to the data given by va_args
+         * *toPrint is the Begine of the Escape Sequence ('%')
+         * It returns 0 if success!
+         */
+        char *getCharFromEscSequence(char *toPrint, void *data);
 
 };
 

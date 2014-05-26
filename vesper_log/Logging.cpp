@@ -16,8 +16,7 @@ Logging::garbageCollectorDataStruct Logging::garbageCollectorData =
     false
 };
 
-Logging::Logging()
-{
+Logging::Logging() {
     garbageCollectorData.threadRunning = true;
     garbageCollectorData.gStack = 0;
 
@@ -27,47 +26,56 @@ Logging::Logging()
     garbageCollectorThread = new std::thread(Logging::startGarbageCollector, this);
 }
 
-Logging::Logging(LoggingType::LoggingClientType typets)
-{
+Logging::Logging(LoggingType::LoggingClientType typets) {
     clientType = typets;
 }
 
-Logging::~Logging()
-{
+Logging::~Logging() {
 
 }
 
-int Logging::getID()
-{
+int Logging::getID() {
     return uniqueID;
 }
 
-LoggingType::LoggingClientType Logging::getType()
-{
+LoggingType::LoggingClientType Logging::getType() {
     return clientType;
 }
 
-void Logging::logStart(char *text, ...)
-{
+void Logging::logStart(char *text, ...) {
 }
 
-void Logging::logDebug(char *text, ...)
-{
+void Logging::logDebug(char *text, ...) {
 }
 
-void Logging::logNeutral(char *text, ...)
-{
+void Logging::logNeutral(char *text, ...) {
     std::stringstream *logString = new std::stringstream;
 
     va_list args;
 
     va_start(args, *text);
-    //adjust true to sweep for all %* in the text char-array
-    while(true)
-    {
+
+    char *buffer;
+    char *tempP;
+
+    int textPos=0;
+
+    do {
+
+        for (; text[textPos] != '%'; textPos++)
+            *logString << text[textPos];
+
+        tempP = &text[textPos];
+
+        //Now we got an escape sequence at text[textPos]!
+        //buffer = getCharFromEscSequence(tempP, (void*) &va_arg(args, int));
         //adjust int to depend on %* commands in the string
-        *logString << va_arg(args, int);
-    }
+        *logString << buffer;
+
+        delete(buffer);
+
+        textPos += 2; //increase pointer with length of escape sequence
+    }while(true);
     va_end(args);
 
     std::thread **p;
@@ -76,21 +84,17 @@ void Logging::logNeutral(char *text, ...)
     p = &t;
 }
 
-void Logging::logWarning(char *text, ...)
-{
+void Logging::logWarning(char *text, ...) {
 }
 
-void Logging::logError(char *text, ...)
-{
+void Logging::logError(char *text, ...) {
 }
 
-void Logging::startGarbageCollector(Logging *toStart)
-{
+void Logging::startGarbageCollector(Logging *toStart) {
     toStart->garbageCollector();
 }
 
-void Logging::garbageCollector()
-{
+void Logging::garbageCollector() {
     logNeutral("Garbage Collector for Logging started!");
     while (garbageCollectorData.threadRunning)
     {
@@ -111,13 +115,11 @@ void Logging::garbageCollector()
     }
 }
 
-void Logging::stopGarbageCollector()
-{
+void Logging::stopGarbageCollector() {
     garbageCollectorData.threadRunning = false;
 }
 
-void Logging::printString(std::thread **source, Logging *who, std::stringstream *toPrint)
-{
+void Logging::printString(std::thread **source, Logging *who, std::stringstream *toPrint) {
 
     if (who->getType() == LoggingType::client)
     {
@@ -131,12 +133,13 @@ void Logging::printString(std::thread **source, Logging *who, std::stringstream 
     std::cout << who->getID() << ":";
     std::cout << *toPrint << std::endl;
 
-    while (!source){} //wait for the source to be 0
+    //while (!source){} //wait for the source to be 0
+    sleep(1); //this is better than this above!
+
     deleteThread(*source); //delete this thread
 }
 
-void Logging::deleteThread(std::thread *toDelete)
-{
+void Logging::deleteThread(std::thread *toDelete) {
     //we are now deleting a thread so please don't disturb us!
     garbageCollectorData.locker->lock();
 
@@ -154,3 +157,9 @@ void Logging::deleteThread(std::thread *toDelete)
     garbageCollectorData.locker->unlock();
 }
 
+char *Logging::getCharFromEscSequence(char *toPrint, void *data) {
+    char retString;
+
+    //
+
+}
