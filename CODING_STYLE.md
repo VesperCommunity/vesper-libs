@@ -92,8 +92,8 @@ int output_string(int *interesting_number)
 `NumberOperator.hpp`:
 
 ```C++
-#if !defined NUMBERWORKS_HPP_INCLUDED
-#define NUMBERWORKS_HPP_INCLUDED
+#if !defined NUMBEROPERATOR_HPP_INCLUDED
+#define NUMBEROPERATOR_HPP_INCLUDED
 
 #include <iostream>
 
@@ -121,5 +121,5 @@ class NumberOperator {
 
 } /* namespace NumberWorks */
 
-#endif /* !defined NUMBERWORKS_HPP_INCLUDED */
+#endif /* !defined NUMBEROPERATOR_HPP_INCLUDED */
 ```
