@@ -56,7 +56,7 @@ Code in `vesper-libs` should furthermore conform to the following rules:
   #include <windows.h>
 #endif /* defined _WIN32 */
 
-/*
+/**
  * Output information about input number.
  * Returns 0 if input number is even, else 1.
  */
@@ -109,7 +109,7 @@ class NumberOperator {
         /* do nothing */
     }
 
-    /*
+    /**
      * Print the number and return.
      */
     void printInformation()
