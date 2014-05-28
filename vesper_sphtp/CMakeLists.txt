@@ -21,6 +21,15 @@ set(SOURCES
 # the SPHTP_BUILD_API flag activates API function export
 add_definitions("-DSPHTP_BUILD_API")
 
+# add compiler flags to define C version
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c89")
+
+# add compiler flags to enable strict compilation in debug mode
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0 --coverage")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra -pedantic")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wmissing-prototypes")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wstrict-prototypes")
+
 # set linker options to hide internal symbols
 set(CMAKE_SHARED_LINKER_FLAGS
     "${CMAKE_SHARED_LINKER_FLAGS} -fvisibility=hidden")
