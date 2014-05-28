@@ -31,8 +31,9 @@ Code in `vesper-libs` should furthermore conform to the following rules:
 * Binary operators excluding `>>` and `<<` are framed by spaces.
 * Unary operators and increment or decrement operators are not framed by spaces.
 * Inner elements in round brackets are not framed by spaces.
-* Preprocessor commands (starting with hash `#` sign) use current code
-  indentation and are indented another 2 spaces per indentation level.
+* Nested preprocessor commands (starting with hash `#` sign) use current code
+  indentation and are indented by 2 spaces per level.
+* Code inside preprocessor commands is indented by 4 spaces.
 * `#endif` lines should include matching `#if` condition as a comment.
 * Curly brackets closing a namespace should include namespace as a comment.
 * Namespace do not affect indentation at all.
@@ -42,7 +43,7 @@ Code in `vesper-libs` should furthermore conform to the following rules:
 * All code should use `/* C-style */` comments.
 * Multi-line comments begin and end with an empty line and are prefixed by `*`.
 * Header files should be guarded by `HEADER_H_INCLUDED` or `HEADER_HPP_INCLUDED`
-  preprocessor commands.
+  preprocessor commands, which do not affect indentation at all.
 
 ## Example
 
@@ -68,8 +69,7 @@ int output_string(int *interesting_number)
     }
 
     int x = *interesting_number % 2;
-    switch (x)
-    {
+    switch (x) {
         case 0:
             puts("Even number.");
           break;
@@ -80,7 +80,7 @@ int output_string(int *interesting_number)
     }
 
     #if defined PRINT_GREETING
-      puts("Hello, world.");
+        puts("Hello, world.");
     #endif /* defined PRINT_GREETING */
 
     return x;
