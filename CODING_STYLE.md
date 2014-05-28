@@ -26,6 +26,7 @@ http://en.wikipedia.org/wiki/Indent_style#Variant:_1TBS
 
 Code in `vesper-libs` should furthermore conform to the following rules:
 
+* Lines should not be longer than 80 characters.
 * Pointer variables have the asterisk `*` symbol attached to their name.
 * Keywords like `if`, `for`, `while`, `switch` are followed by a space.
 * Binary operators excluding `>>` and `<<` are framed by spaces.
