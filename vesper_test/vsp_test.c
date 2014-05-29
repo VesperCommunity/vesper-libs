@@ -4,6 +4,8 @@
  * Full license text is under the file "LICENSE" provided with this code.
  */
 
+#include "minunit.h"
+
 #include <vsp_network_connector.h>
 
 int main(void)

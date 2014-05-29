@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8)
 
 # add header files of this module
 set(HEADERS
-    # currently no headers
+    ${PROJECT_SOURCE_DIR}/minunit.h
 )
 
 # add source files of this module
