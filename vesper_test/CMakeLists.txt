@@ -29,7 +29,7 @@ set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wstrict-prototypes")
 add_executable(vesper-test ${HEADERS} ${SOURCES})
 
 # add external libraries linked to shared module library
-target_link_libraries(vesper-test)
+target_link_libraries(vesper-test vesper-sphtp)
 
 # add rule to install executable
 install(TARGETS vesper-test RUNTIME DESTINATION bin)
