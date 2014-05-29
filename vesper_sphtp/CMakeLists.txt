@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8)
 
 # add API header files of this module
 set(API_HEADERS
-    ${PROJECT_SOURCE_DIR}/vsp_network_connector.h
+    ${PROJECT_SOURCE_DIR}/vsp_sphtp.h
 )
 
 # add header files of this module

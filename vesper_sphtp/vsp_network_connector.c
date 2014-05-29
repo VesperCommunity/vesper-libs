@@ -4,7 +4,7 @@
  * Full license text is under the file "LICENSE" provided with this code.
  */
 
-#include "vsp_network_connector.h"
+#include "vsp_sphtp.h"
 
 #if !defined __STDC_VERSION__ || __STDC_VERSION__ < 199901L
   /* define "inline" keyword for pre-C99 C standard */

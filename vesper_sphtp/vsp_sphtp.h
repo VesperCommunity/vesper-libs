@@ -4,8 +4,8 @@
  * Full license text is under the file "LICENSE" provided with this code.
  */
 
-#if !defined VSP_NETWORK_CONNECTOR_H_INCLUDED
-#define VSP_NETWORK_CONNECTOR_H_INCLUDED
+#if !defined VSP_SPHTP_H_INCLUDED
+#define VSP_SPHTP_H_INCLUDED
 
 #if defined __cplusplus
 extern "C" {
@@ -52,4 +52,4 @@ SPHTP_API int vsp_network_connector_close(vsp_network_connector_ptr net_conn);
 }
 #endif /* defined __cplusplus */
 
-#endif /* !defined VSP_NETWORK_CONNECTOR_H_INCLUDED */
+#endif /* !defined VSP_SPHTP_H_INCLUDED */
