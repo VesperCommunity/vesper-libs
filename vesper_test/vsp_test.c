@@ -10,7 +10,7 @@
 
 MU_TEST(vesper_sphtp_allocation)
 {
-    struct vsp_network_connector *net_conn;
+    vsp_network_connector_ptr net_conn;
     int ret;
     /* test allocation */
     net_conn = vsp_network_connector_new();
