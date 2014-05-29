@@ -4,12 +4,12 @@ cmake_minimum_required(VERSION 2.8)
 
 # add API header files of this module
 set(API_HEADERS
-    ${PROJECT_SOURCE_DIR}/sphtp.h
+    ${PROJECT_SOURCE_DIR}/network_connector.h
 )
 
 # add header files of this module
 set(HEADERS
-    ${PROJECT_SOURCE_DIR}/network_connector.h
+    # currently no headers
 )
 
 # add source files of this module
