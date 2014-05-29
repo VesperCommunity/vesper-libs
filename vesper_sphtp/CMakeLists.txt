@@ -43,7 +43,7 @@ add_library(vesper-sphtp-static STATIC $<TARGET_OBJECTS:vesper-sphtp-objects>)
 add_library(vesper-sphtp SHARED $<TARGET_OBJECTS:vesper-sphtp-objects>)
 
 # add external libraries linked to shared module library
-target_link_libraries(vesper-sphtp)
+target_link_libraries(vesper-sphtp nanomsg)
 
 # add rule to install public header file
 install(FILES ${API_HEADERS} DESTINATION include)

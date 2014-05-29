@@ -6,6 +6,12 @@
 
 #include "vsp_network_connector.h"
 
+#if !defined __STDC_VERSION__ || __STDC_VERSION__ < 199901L
+  /* define "inline" keyword for pre-C99 C standard */
+  #define inline
+#endif
+#include <nanomsg/nn.h>
+#include <nanomsg/pubsub.h>
 #include <stdlib.h>
 
 /** vsp_network_connector state machine flag. */
@@ -16,6 +22,8 @@ typedef enum {
 /** State and other data used for network connection. */
 struct vsp_network_connector {
     vsp_connector_state state;
+    int publish_socket;
+    int subscribe_socket;
 };
 
 vsp_network_connector_ptr vsp_network_connector_new(void)
@@ -29,6 +37,9 @@ vsp_network_connector_ptr vsp_network_connector_new(void)
     }
     /* initialize struct data */
     net_conn->state = UNINITIALIZED;
+    net_conn->publish_socket = 0;
+    net_conn->subscribe_socket = 0;
+    /* return struct pointer */
     return net_conn;
 }
 
