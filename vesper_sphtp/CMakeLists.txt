@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8)
 
 # add API header files of this module
 set(API_HEADERS
-    ${PROJECT_SOURCE_DIR}/network_connector.h
+    ${PROJECT_SOURCE_DIR}/vsp_network_connector.h
 )
 
 # add header files of this module
@@ -14,7 +14,7 @@ set(HEADERS
 
 # add source files of this module
 set(SOURCES
-    ${PROJECT_SOURCE_DIR}/network_connector.c
+    ${PROJECT_SOURCE_DIR}/vsp_network_connector.c
 )
 
 # add definitions used by the sources

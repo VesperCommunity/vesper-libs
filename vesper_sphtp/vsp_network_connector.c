@@ -4,7 +4,7 @@
  * Full license text is under the file "LICENSE" provided with this code.
  */
 
-#include "network_connector.h"
+#include "vsp_network_connector.h"
 
 #include <stdlib.h>
 
