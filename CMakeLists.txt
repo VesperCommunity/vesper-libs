@@ -20,6 +20,20 @@ include_directories(SYSTEM "${PROJECT_SOURCE_DIR}")
 # the VESPER_BUILD_API flag activates API function export
 add_definitions("-DVESPER_BUILD_API")
 
+# add compiler flags to define C version
+# and to compile position independent code
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c89 -fPIC")
+
+# add compiler flags to enable strict compilation in debug mode
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0 --coverage")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra -pedantic")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wmissing-prototypes")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wstrict-prototypes")
+
+# set linker options to hide internal symbols
+set(CMAKE_SHARED_LINKER_FLAGS
+    "${CMAKE_SHARED_LINKER_FLAGS} -fvisibility=hidden")
+
 # add modules
 add_subdirectory(vesper_log)
 add_subdirectory(vesper_sphtp)
