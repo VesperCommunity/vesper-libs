@@ -16,3 +16,4 @@ message(STATUS "'${CMAKE_BUILD_TYPE}' built type was selected.")
 # add modules
 add_subdirectory(vesper_log)
 add_subdirectory(vesper_sphtp)
+add_subdirectory(vesper_test)
