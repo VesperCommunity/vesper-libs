@@ -17,10 +17,6 @@ set(SOURCES
     ${PROJECT_SOURCE_DIR}/vsp_network_connector.c
 )
 
-# add definitions used by the sources
-# the SPHTP_BUILD_API flag activates API function export
-add_definitions("-DSPHTP_BUILD_API")
-
 # add compiler flags to define C version
 # and to compile position independent code
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c89 -fPIC")

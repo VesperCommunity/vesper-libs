@@ -13,6 +13,13 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 message(STATUS "'${CMAKE_BUILD_TYPE}' built type was selected.")
 
+# add include directories
+include_directories(SYSTEM "${PROJECT_SOURCE_DIR}")
+
+# add definitions used by the sources
+# the VESPER_BUILD_API flag activates API function export
+add_definitions("-DVESPER_BUILD_API")
+
 # add modules
 add_subdirectory(vesper_log)
 add_subdirectory(vesper_sphtp)

@@ -6,7 +6,7 @@
 
 #include "minunit.h"
 
-#include <vsp_sphtp.h>
+#include <vesper_sphtp/vsp_sphtp.h>
 
 MU_TEST(vesper_sphtp_allocation)
 {

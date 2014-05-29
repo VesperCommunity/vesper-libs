@@ -12,9 +12,6 @@ set(SOURCES
     ${PROJECT_SOURCE_DIR}/vsp_test.c
 )
 
-# add include directories
-include_directories(SYSTEM "${vesper-libs_SOURCE_DIR}/vesper_sphtp")
-
 # add compiler flags to define C version
 # and to compile position independent code
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c89")

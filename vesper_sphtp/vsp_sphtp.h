@@ -7,26 +7,11 @@
 #if !defined VSP_SPHTP_H_INCLUDED
 #define VSP_SPHTP_H_INCLUDED
 
+#include <vesper_util/vsp_util.h>
+
 #if defined __cplusplus
 extern "C" {
 #endif /* defined __cplusplus */
-
-/* only export API functions prefixed with SPHTP_API */
-#if defined _WIN32
-  #if defined SPHTP_BUILD_API
-    /* build dll */
-    #define SPHTP_API __declspec(dllexport)
-  #else
-    /* use dll */
-    #define SPHTP_API __declspec(dllimport)
-  #endif /* defined SPHTP_BUILD_API*/
-#else
-  #if __GNUC__ >= 4
-    #define SPHTP_API __attribute__((visibility("default")))
-  #else
-    #define SPHTP_API
-  #endif
-#endif /* defined _WIN32 */
 
 /** State and other data used for network connection. */
 struct vsp_network_connector;
@@ -37,16 +22,14 @@ typedef struct vsp_network_connector* vsp_network_connector_ptr;
  * Create new vsp_network_connector object. Returns NULL if failed.
  * Returned pointer should be freed with vsp_network_connector_close.
  */
-SPHTP_API vsp_network_connector_ptr vsp_network_connector_new(void);
+VESPER_API vsp_network_connector_ptr vsp_network_connector_new(void);
 
 /** Initialize and connect sockets. Returns non-zero if failed. */
-SPHTP_API int vsp_establish_connection(vsp_network_connector_ptr net_conn,
+VESPER_API int vsp_establish_connection(vsp_network_connector_ptr net_conn,
     const char *publish_address, const char *subscribe_address);
 
 /** Free vsp_network_connector object. Returns non-zero if failed. */
-SPHTP_API int vsp_network_connector_close(vsp_network_connector_ptr net_conn);
-
-#undef SPHTP_API
+VESPER_API int vsp_network_connector_close(vsp_network_connector_ptr net_conn);
 
 #if defined __cplusplus
 }
