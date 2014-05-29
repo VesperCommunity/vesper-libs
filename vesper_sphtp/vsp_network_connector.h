@@ -39,6 +39,10 @@ typedef struct vsp_network_connector* vsp_network_connector_ptr;
  */
 SPHTP_API vsp_network_connector_ptr vsp_network_connector_new(void);
 
+/** Initialize and connect sockets. Returns non-zero if failed. */
+SPHTP_API int vsp_establish_connection(vsp_network_connector_ptr net_conn,
+    const char *publish_address, const char *subscribe_address);
+
 /** Free vsp_network_connector object. Returns non-zero if failed. */
 SPHTP_API int vsp_network_connector_close(vsp_network_connector_ptr net_conn);
 
