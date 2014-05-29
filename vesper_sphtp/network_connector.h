@@ -28,7 +28,18 @@ extern "C" {
   #endif
 #endif /* defined _WIN32 */
 
+/** State and other data used for network connection. */
+struct vsp_network_connector;
 
+/**
+ * Create new vsp_network_connector object. Returns NULL if failed.
+ * Returned pointer should be freed with vsp_network_connector_close.
+ */
+SPHTP_API struct vsp_network_connector* vsp_network_connector_new(void);
+
+/** Free vsp_network_connector object. Returns non-zero if failed. */
+SPHTP_API int vsp_network_connector_close(
+    struct vsp_network_connector *net_conn);
 
 #undef SPHTP_API
 

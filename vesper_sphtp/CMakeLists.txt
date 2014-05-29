@@ -22,7 +22,8 @@ set(SOURCES
 add_definitions("-DSPHTP_BUILD_API")
 
 # add compiler flags to define C version
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c89")
+# and to compile position independent code
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c89 -fPIC")
 
 # add compiler flags to enable strict compilation in debug mode
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0 --coverage")
