@@ -11,29 +11,29 @@
 
 MU_TEST(vesper_sphtp_allocation)
 {
-    vsp_network_connector_ptr net_conn;
+    vsp_sphtp_network_connector *net_conn;
     int ret;
     /* test allocation */
-    net_conn = vsp_network_connector_new();
+    net_conn = vsp_sphtp_network_connector_create();
     mu_assert(net_conn != NULL, vsp_error_str(vsp_error_num()));
     /* test deallocation */
-    ret = vsp_network_connector_close(net_conn);
+    ret = vsp_sphtp_network_connector_free(net_conn);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
 }
 
 MU_TEST(vesper_sphtp_connection)
 {
-    vsp_network_connector_ptr net_conn;
+    vsp_sphtp_network_connector *net_conn;
     int ret;
     /* test allocation */
-    net_conn = vsp_network_connector_new();
+    net_conn = vsp_sphtp_network_connector_create();
     mu_assert(net_conn != NULL, vsp_error_str(vsp_error_num()));
     /* test connection */
-    ret = vsp_establish_connection(net_conn, "tcp://127.0.0.1:7571",
+    ret = vsp_sphtp_connect(net_conn, "tcp://127.0.0.1:7571",
         "tcp://127.0.0.1:7572");
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
     /* test deallocation */
-    ret = vsp_network_connector_close(net_conn);
+    ret = vsp_sphtp_network_connector_free(net_conn);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
 }
 

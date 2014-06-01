@@ -15,40 +15,40 @@
 #include <stdlib.h>
 #include <vesper_error/vsp_error.h>
 
-/** vsp_network_connector state machine flag. */
+/** vsp_sphtp_network_connector state machine flag. */
 typedef enum {
     /** sockets are not initialized and not connected */
-    VSP_SOCK_UNINITIALIZED,
+    VSP_SPHTP_UNINITIALIZED,
     /** sockets are initialized and connected */
-    VSP_SOCK_INITIALIZED
-} vsp_connector_state;
+    VSP_SPHTP_INITIALIZED
+} vsp_sphtp_state;
 
 /** State and other data used for network connection. */
-struct vsp_network_connector {
-    vsp_connector_state state;
+struct vsp_sphtp_network_connector {
+    vsp_sphtp_state state;
     int publish_socket;
     int subscribe_socket;
 };
 
-vsp_network_connector_ptr vsp_network_connector_new(void)
+vsp_sphtp_network_connector* vsp_sphtp_network_connector_create(void)
 {
-    vsp_network_connector_ptr net_conn;
+    vsp_sphtp_network_connector *net_conn;
     /* allocate memory */
-    net_conn = malloc(sizeof(struct vsp_network_connector));
+    net_conn = malloc(sizeof(struct vsp_sphtp_network_connector));
     if (net_conn == NULL) {
         /* allocation failed */
         vsp_error_set_num(ENOMEM);
         return NULL;
     }
     /* initialize struct data */
-    net_conn->state = VSP_SOCK_UNINITIALIZED;
+    net_conn->state = VSP_SPHTP_UNINITIALIZED;
     net_conn->publish_socket = 0;
     net_conn->subscribe_socket = 0;
     /* return struct pointer */
     return net_conn;
 }
 
-int vsp_establish_connection(vsp_network_connector_ptr net_conn,
+int vsp_sphtp_connect(vsp_sphtp_network_connector *net_conn,
     const char *publish_address, const char *subscribe_address)
 {
     int ret;
@@ -59,7 +59,7 @@ int vsp_establish_connection(vsp_network_connector_ptr net_conn,
         vsp_error_set_num(EINVAL);
         return -1;
     }
-    if(net_conn->state != VSP_SOCK_UNINITIALIZED) {
+    if(net_conn->state != VSP_SPHTP_UNINITIALIZED) {
         /* sockets already initialized */
         vsp_error_set_num(EALREADY);
         return -1;
@@ -79,12 +79,12 @@ int vsp_establish_connection(vsp_network_connector_ptr net_conn,
         return -1;
     }
     /* set state */
-    net_conn->state = VSP_SOCK_INITIALIZED;
+    net_conn->state = VSP_SPHTP_INITIALIZED;
     /* sockets successfully connected */
     return 0;
 }
 
-int vsp_network_connector_close(vsp_network_connector_ptr net_conn)
+int vsp_sphtp_network_connector_free(vsp_sphtp_network_connector *net_conn)
 {
     int ret;
     int success;
@@ -96,7 +96,7 @@ int vsp_network_connector_close(vsp_network_connector_ptr net_conn)
         vsp_error_set_num(EINVAL);
         return -1;
     }
-    if (net_conn->state != VSP_SOCK_UNINITIALIZED) {
+    if (net_conn->state != VSP_SPHTP_UNINITIALIZED) {
         /* close publish socket */
         ret = nn_close(net_conn->publish_socket);
         if (ret != 0) {
