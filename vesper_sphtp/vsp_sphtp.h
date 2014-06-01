@@ -16,19 +16,27 @@ extern "C" {
 /** State and other data used for network connection. */
 struct vsp_network_connector;
 
+/** Pointer type used to expose vsp_network_connector data. */
 typedef struct vsp_network_connector* vsp_network_connector_ptr;
 
 /**
- * Create new vsp_network_connector object. Returns NULL if failed.
+ * Create new vsp_network_connector object and get a pointer to it.
  * Returned pointer should be freed with vsp_network_connector_close.
+ * Returns NULL and sets vsp_error_num if failed.
  */
 VESPER_API vsp_network_connector_ptr vsp_network_connector_new(void);
 
-/** Initialize and connect sockets. Returns non-zero if failed. */
+/**
+ * Initialize and connect sockets.
+ * Returns non-zero and sets vsp_error_num if failed.
+ */
 VESPER_API int vsp_establish_connection(vsp_network_connector_ptr net_conn,
     const char *publish_address, const char *subscribe_address);
 
-/** Free vsp_network_connector object. Returns non-zero if failed. */
+/**
+ * Free vsp_network_connector object.
+ * Returns non-zero and sets vsp_error_num if failed.
+ */
 VESPER_API int vsp_network_connector_close(vsp_network_connector_ptr net_conn);
 
 #if defined __cplusplus

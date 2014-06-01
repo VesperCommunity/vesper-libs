@@ -6,6 +6,7 @@
 
 #include "minunit.h"
 
+#include <vesper_error/vsp_error.h>
 #include <vesper_sphtp/vsp_sphtp.h>
 
 MU_TEST(vesper_sphtp_allocation)
@@ -14,10 +15,10 @@ MU_TEST(vesper_sphtp_allocation)
     int ret;
     /* test allocation */
     net_conn = vsp_network_connector_new();
-    mu_check(net_conn != NULL);
+    mu_assert(net_conn != NULL, vsp_error_str(vsp_error_num()));
     /* test deallocation */
     ret = vsp_network_connector_close(net_conn);
-    mu_check(ret == 0);
+    mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
 }
 
 MU_TEST(vesper_sphtp_connection)
@@ -26,14 +27,14 @@ MU_TEST(vesper_sphtp_connection)
     int ret;
     /* test allocation */
     net_conn = vsp_network_connector_new();
-    mu_check(net_conn != NULL);
+    mu_assert(net_conn != NULL, vsp_error_str(vsp_error_num()));
     /* test connection */
     ret = vsp_establish_connection(net_conn, "tcp://127.0.0.1:7571",
         "tcp://127.0.0.1:7572");
-    mu_check(ret == 0);
+    mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
     /* test deallocation */
     ret = vsp_network_connector_close(net_conn);
-    mu_check(ret == 0);
+    mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
 }
 
 /* test SphTP implementation */

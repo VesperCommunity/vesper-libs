@@ -13,6 +13,7 @@
 #include <nanomsg/nn.h>
 #include <nanomsg/pubsub.h>
 #include <stdlib.h>
+#include <vesper_error/vsp_error.h>
 
 /** vsp_network_connector state machine flag. */
 typedef enum {
@@ -36,6 +37,7 @@ vsp_network_connector_ptr vsp_network_connector_new(void)
     net_conn = malloc(sizeof(struct vsp_network_connector));
     if (net_conn == NULL) {
         /* allocation failed */
+        vsp_error_set_num(ENOMEM);
         return NULL;
     }
     /* initialize struct data */
@@ -53,11 +55,13 @@ int vsp_establish_connection(vsp_network_connector_ptr net_conn,
 
     if (net_conn == NULL || publish_address == NULL
         || subscribe_address == NULL) {
-        /* invalid parameters */
+        /* invalid parameter */
+        vsp_error_set_num(EINVAL);
         return -1;
     }
     if(net_conn->state != VSP_SOCK_UNINITIALIZED) {
         /* sockets already initialized */
+        vsp_error_set_num(EALREADY);
         return -1;
     }
     /* initialize sockets */
@@ -66,10 +70,12 @@ int vsp_establish_connection(vsp_network_connector_ptr net_conn,
     /* connect sockets */
     ret = nn_connect(net_conn->publish_socket, publish_address);
     if (ret < 0) {
+        /* errno set by nanomsg */
         return -1;
     }
     ret = nn_connect(net_conn->subscribe_socket, subscribe_address);
     if (ret < 0) {
+        /* errno set by nanomsg */
         return -1;
     }
     /* set state */
@@ -87,17 +93,20 @@ int vsp_network_connector_close(vsp_network_connector_ptr net_conn)
 
     if (net_conn == NULL) {
         /* invalid parameter */
+        vsp_error_set_num(EINVAL);
         return -1;
     }
     if (net_conn->state != VSP_SOCK_UNINITIALIZED) {
         /* close publish socket */
         ret = nn_close(net_conn->publish_socket);
         if (ret != 0) {
+            /* errno set by nanomsg */
             success = -1;
         }
         /* close subscribe socket */
         ret = nn_close(net_conn->subscribe_socket);
         if (ret != 0) {
+            /* errno set by nanomsg */
             success = -1;
         }
     }

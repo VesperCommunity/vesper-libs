@@ -16,7 +16,7 @@ set(SOURCES
 add_executable(vesper-test ${HEADERS} ${SOURCES})
 
 # add external libraries linked to shared module library
-target_link_libraries(vesper-test vesper-sphtp)
+target_link_libraries(vesper-test vesper-error vesper-sphtp)
 
 # add rule to install executable
 install(TARGETS vesper-test RUNTIME DESTINATION bin)
