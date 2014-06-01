@@ -41,6 +41,22 @@ VESPER_API int vsp_sphtp_connect(vsp_sphtp_network_connector *net_conn,
 VESPER_API int vsp_sphtp_disconnect(vsp_sphtp_network_connector *net_conn);
 
 /**
+ * Run event loop for message reception. Should run in its own thread.
+ * Terminates when vsp_sphtp_reception_thread_stop is called.
+ * Returns non-zero and sets vsp_error_num if suddenly interrupted or failed.
+ */
+VESPER_API int vsp_sphtp_reception_thread_run(
+    vsp_sphtp_network_connector *net_conn);
+
+/**
+ * Stop event loop for message reception.
+ * Does not wait until vsp_sphtp_reception_thread_run has finished.
+ * Returns non-zero and sets vsp_error_num if failed.
+ */
+VESPER_API int vsp_sphtp_reception_thread_stop(
+    vsp_sphtp_network_connector *net_conn);
+
+/**
  * Free vsp_sphtp_network_connector object.
  * Returns non-zero and sets vsp_error_num if failed.
  */

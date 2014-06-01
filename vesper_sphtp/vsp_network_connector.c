@@ -25,9 +25,14 @@ typedef enum {
 
 /** State and other data used for network connection. */
 struct vsp_sphtp_network_connector {
+    /* finite state machine flag */
     vsp_sphtp_state state;
+    /* nanomsg socket number to publish messages */
     int publish_socket;
+    /* nanomsg socket number to receive messages */
     int subscribe_socket;
+    /* flag for reception thread (1 if running, 0 otherwise) */
+    int receiving;
 };
 
 vsp_sphtp_network_connector* vsp_sphtp_network_connector_create(void)
@@ -116,6 +121,36 @@ int vsp_sphtp_disconnect(vsp_sphtp_network_connector *net_conn)
     /* set state */
     net_conn->state = VSP_SPHTP_UNINITIALIZED;
     /* sockets successfully connected */
+    return 0;
+}
+
+int vsp_sphtp_reception_thread_run(vsp_sphtp_network_connector *net_conn)
+{
+    if (net_conn == NULL) {
+        /* invalid parameter */
+        vsp_error_set_num(EINVAL);
+        return -1;
+    }
+
+    net_conn->receiving = 1;
+    /* reception loop */
+    while (net_conn->receiving) {
+
+    }
+    /* success */
+    return 0;
+}
+
+int vsp_sphtp_reception_thread_stop(vsp_sphtp_network_connector *net_conn)
+{
+    if (net_conn == NULL) {
+        /* invalid parameter */
+        vsp_error_set_num(EINVAL);
+        return -1;
+    }
+    /* stop reception */
+    net_conn->receiving = 0;
+    /* success */
     return 0;
 }
 
