@@ -1,4 +1,6 @@
 /**
+ * \authors Max Mertens
+ *
  * Copyright (c) 2014, Max Mertens. All rights reserved.
  * This file is licensed under the "BSD 3-Clause License".
  * Full license text is under the file "LICENSE" provided with this code.
@@ -15,23 +17,23 @@
 #include <stdlib.h>
 #include <vesper_error/vsp_error.h>
 
-/** vsp_sphtp_network_connector state machine flag. */
+/** vsp_sphtp_network_connector finite state machine flag. */
 typedef enum {
-    /** sockets are not initialized and not connected */
+    /** Sockets are not initialized and not connected. */
     VSP_SPHTP_UNINITIALIZED,
-    /** sockets are initialized and connected */
+    /** Sockets are initialized and connected. */
     VSP_SPHTP_INITIALIZED
 } vsp_sphtp_state;
 
 /** State and other data used for network connection. */
 struct vsp_sphtp_network_connector {
-    /* finite state machine flag */
+    /** Finite state machine flag. */
     vsp_sphtp_state state;
-    /* nanomsg socket number to publish messages */
+    /** nanomsg socket number to publish messages. */
     int publish_socket;
-    /* nanomsg socket number to receive messages */
+    /** nanomsg socket number to receive messages. */
     int subscribe_socket;
-    /* flag for reception thread (1 if running, 0 otherwise) */
+    /** Flag for reception thread (1 if running, 0 otherwise). */
     int receiving;
 };
 
