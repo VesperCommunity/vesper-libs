@@ -35,6 +35,7 @@ set(CMAKE_SHARED_LINKER_FLAGS
     "${CMAKE_SHARED_LINKER_FLAGS} -fvisibility=hidden")
 
 # add modules
+add_subdirectory(vesper_error)
 add_subdirectory(vesper_log)
 add_subdirectory(vesper_sphtp)
 add_subdirectory(vesper_test)
