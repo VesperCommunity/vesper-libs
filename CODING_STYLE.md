@@ -52,6 +52,8 @@ Code in `vesper-libs` should furthermore conform to the following rules:
 
 `output_string.c`:
 
+```C
+
     #if defined _WIN32
       #include <windows.h>
     #endif /* defined _WIN32 */
@@ -86,9 +88,13 @@ Code in `vesper-libs` should furthermore conform to the following rules:
         return x;
     }
 
+```
+
 ### C++ code
 
 `NumberOperator.hpp`:
+
+```C++
 
     #if !defined NUMBEROPERATOR_HPP_INCLUDED
     #define NUMBEROPERATOR_HPP_INCLUDED
@@ -120,3 +126,5 @@ Code in `vesper-libs` should furthermore conform to the following rules:
     } /* namespace NumberWorks */
 
     #endif /* !defined NUMBEROPERATOR_HPP_INCLUDED */
+
+```
