@@ -35,6 +35,12 @@ VESPER_API int vsp_sphtp_connect(vsp_sphtp_network_connector *net_conn,
     const char *publish_address, const char *subscribe_address);
 
 /**
+ * Disconnect and deinitialize sockets.
+ * Returns non-zero and sets vsp_error_num if failed.
+ */
+VESPER_API int vsp_sphtp_disconnect(vsp_sphtp_network_connector *net_conn);
+
+/**
  * Free vsp_sphtp_network_connector object.
  * Returns non-zero and sets vsp_error_num if failed.
  */

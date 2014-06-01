@@ -42,8 +42,8 @@ vsp_sphtp_network_connector* vsp_sphtp_network_connector_create(void)
     }
     /* initialize struct data */
     net_conn->state = VSP_SPHTP_UNINITIALIZED;
-    net_conn->publish_socket = 0;
-    net_conn->subscribe_socket = 0;
+    net_conn->publish_socket = -1;
+    net_conn->subscribe_socket = -1;
     /* return struct pointer */
     return net_conn;
 }
@@ -59,7 +59,7 @@ int vsp_sphtp_connect(vsp_sphtp_network_connector *net_conn,
         vsp_error_set_num(EINVAL);
         return -1;
     }
-    if(net_conn->state != VSP_SPHTP_UNINITIALIZED) {
+    if (net_conn->state != VSP_SPHTP_UNINITIALIZED) {
         /* sockets already initialized */
         vsp_error_set_num(EALREADY);
         return -1;
@@ -80,6 +80,41 @@ int vsp_sphtp_connect(vsp_sphtp_network_connector *net_conn,
     }
     /* set state */
     net_conn->state = VSP_SPHTP_INITIALIZED;
+    /* sockets successfully connected */
+    return 0;
+}
+
+int vsp_sphtp_disconnect(vsp_sphtp_network_connector *net_conn)
+{
+    int ret;
+
+    if (net_conn == NULL) {
+        /* invalid parameter */
+        vsp_error_set_num(EINVAL);
+        return -1;
+    }
+    if (net_conn->state == VSP_SPHTP_UNINITIALIZED) {
+        /* sockets not connected */
+        vsp_error_set_num(ENOTCONN);
+        return -1;
+    }
+
+    /* disconnect sockets */
+    ret = nn_close(net_conn->publish_socket);
+    if (ret < 0) {
+        /* errno set by nanomsg */
+        return -1;
+    }
+    ret = nn_close(net_conn->subscribe_socket);
+    if (ret < 0) {
+        /* errno set by nanomsg */
+        return -1;
+    }
+    /* deinitialize sockets */
+    net_conn->publish_socket = -1;
+    net_conn->subscribe_socket = -1;
+    /* set state */
+    net_conn->state = VSP_SPHTP_UNINITIALIZED;
     /* sockets successfully connected */
     return 0;
 }
