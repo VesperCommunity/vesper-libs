@@ -36,4 +36,7 @@ markers.
 ## License
 
 vesper-libs is released under the BSD 3-Clause License.
-Please refer to [`LICENSE`](LICENSE) file for details.
+Please refer to [`LICENSE`][license_link] file for details.
+
+[license_link]:
+https://github.com/VesperCommunity/vesper-libs/blob/master/LICENSE
