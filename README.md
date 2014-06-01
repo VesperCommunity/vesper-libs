@@ -30,8 +30,12 @@ and names (like standard `errno` and `strerror()`).
 
 ### vesper-util
 
-`vesper-util` is a helper module providing a header file with symbol export
-markers.
+`vesper-util` is a helper module providing a header
+
+## Coding style
+
+See [`CODING_STYLE.md`](CODING_STYLE.md) file for details about coding style of
+this project.
 
 ## License
 
