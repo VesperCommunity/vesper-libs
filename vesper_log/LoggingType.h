@@ -10,6 +10,8 @@
  */
 namespace LoggingType {
 
+class Vout;
+
 enum ScanDataType {
     error,   //an error occured
     unknown, //unknown escape sequence
@@ -19,7 +21,7 @@ enum ScanDataType {
     t_char,  //character
     t_cstr,  //char[] array aka cstring
     t_stdstr,//std::string
-    t_void   //void* pointer aka mem adress (--> hexadecimal)
+    t_void   //use this for pointer aka mem adress (--> hexadecimal)
 };
 
 enum LoggingFlags {
@@ -51,7 +53,7 @@ struct LoggingPipe {
     LoggingPipe *older;
     LoggingPipe *newer;
 
-    MessagePipe *toPrint;
+    MessagePipe *messageSource;
 };
 
 }; /* namespace LoggingType*/

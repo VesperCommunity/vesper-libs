@@ -33,14 +33,13 @@ class Vout {
         ///pop() used by thread to get at FIFOfirst
         ///pop() returns 1 if pipe is empty
         int pop(LoggingType::ScanDataType *typetg, void *datatg);
-        std::mutex mPopMutex;
+        std::mutex mMutex;
         LoggingType::MessagePipe *mFIFOfirst;
 
     private:
 
         ///push() used by operators to add at FIFOlast
         void push(LoggingType::ScanDataType typets, void *datats);
-        std::mutex mPushMutex;
         LoggingType::MessagePipe *mFIFOlast;
 
         /**
@@ -49,11 +48,9 @@ class Vout {
          * lFIFO will be written by the pipiFunction.
          */
 
+        static std::mutex lMutex;
         static LoggingType::LoggingPipe *lFIFOfirst;
-        static std::mutex lMutexFirst;
-
         static LoggingType::LoggingPipe *lFIFOlast;
-        static std::mutex lMutexLast;
 
         static bool threadRunning; // = false; //does not work ;-(
         static std::thread *pipeThread; // = 0; //iso undso

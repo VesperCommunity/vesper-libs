@@ -31,7 +31,7 @@ Vout::~Vout() {
                 delete (std::string*) dataToDelete;
                 break;
             case LoggingType::t_void:
-                delete (void**) dataToDelete; //idk if this is right
+                delete (void*) dataToDelete; //idk if this is right
                 break;
             default:
                 //this will be a mem leak
@@ -59,21 +59,95 @@ void Vout::operator<<(int toWrite) {
 }
 
 void Vout::operator<<(bool toWrite) {
+
+    bool *temp = new bool;
+    *temp = toWrite;
+
+    push(LoggingType::t_bool, (void*) temp);
 }
 
 void Vout::operator<<(char toWrite) {
+
+    char *temp = new char;
+    *temp = toWrite;
+
+    push(LoggingType::t_char, (void*) temp);
 }
 
 void Vout::operator<<(char toWrite[]) {
+
+    char **temp = new char*;
+    *temp = toWrite;
+
+    push(LoggingType::t_cstr, (void*) temp);
 }
 
 void Vout::operator<<(std::string  toWrite) {
+
+    std::string *temp = new std::string;
+    *temp = toWrite;
+
+    push(LoggingType::t_stdstr, (void*) temp);
 }
 
 void Vout::operator<<(void *toWrite) {
+
+    void **temp = new void*;
+    *temp = toWrite;
+
+    push(LoggingType::t_void, (void*) temp);
 }
 
 void Vout::operator<<(LoggingType::LoggingFlags flag) {
+    switch (flag){
+        case LoggingType::eom:
+            flush();
+            break;
+
+        default:
+            //unknown flag
+            break;
+    }
+}
+
+void Vout::flush() {
+
+    this->mMutex.lock();
+
+    ///now we have to attach 'this' to our lFIFO, which is printed by the thread
+
+    bool stackIsEmpty = false;
+
+    LoggingType::LoggingPipe *tempPipe = new LoggingType::LoggingPipe;
+    tempPipe->messageSource = this->mFIFOfirst;
+
+    mFIFOfirst = 0;
+    mFIFOlast = 0;
+
+    this->mMutex.unlock();
+
+    this->lMutex.lock();
+    if (!lFIFOlast) { //nothing in the FIFO
+        tempPipe->newer = 0;
+        tempPipe->older = 0;
+
+        lFIFOfirst = tempPipe;
+        lFIFOlast = tempPipe;
+        lMutex.unlock();
+
+        return;
+    }
+    else {
+        tempPipe->newer = 0;
+        tempPipe->older = lFIFOlast;
+
+        lFIFOlast = tempPipe;
+        lMutex.unlock();
+
+        return;
+    }
+
+
 }
 
 //Vout::
