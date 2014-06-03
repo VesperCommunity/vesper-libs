@@ -53,39 +53,41 @@ Code in `vesper-libs` should furthermore conform to the following rules:
 `output_string.c`:
 
 ```C
-#if defined _WIN32
-  #include <windows.h>
-#endif /* defined _WIN32 */
 
-/**
- * Output information about input number.
- * Returns 0 if input number is even, else 1.
- */
-int output_string(int *interesting_number)
-{
-    if (*interesting_number > 100) {
-        puts("Big number.");
-    } else {
-        puts("Small number.");
+    #if defined _WIN32
+      #include <windows.h>
+    #endif /* defined _WIN32 */
+
+    /**
+     * Output information about input number.
+     * Returns 0 if input number is even, else 1.
+     */
+    int output_string(int *interesting_number)
+    {
+        if (*interesting_number > 100) {
+            puts("Big number.");
+        } else {
+            puts("Small number.");
+        }
+
+        int x = *interesting_number % 2;
+        switch (x) {
+            case 0:
+                puts("Even number.");
+              break;
+
+            case 1:
+                puts("Odd number.");
+              break;
+        }
+
+        #if defined PRINT_GREETING
+            puts("Hello, world.");
+        #endif /* defined PRINT_GREETING */
+
+        return x;
     }
 
-    int x = *interesting_number % 2;
-    switch (x) {
-        case 0:
-            puts("Even number.");
-          break;
-
-        case 1:
-            puts("Odd number.");
-          break;
-    }
-
-    #if defined PRINT_GREETING
-        puts("Hello, world.");
-    #endif /* defined PRINT_GREETING */
-
-    return x;
-}
 ```
 
 ### C++ code
@@ -93,34 +95,36 @@ int output_string(int *interesting_number)
 `NumberOperator.hpp`:
 
 ```C++
-#if !defined NUMBEROPERATOR_HPP_INCLUDED
-#define NUMBEROPERATOR_HPP_INCLUDED
 
-#include <iostream>
+    #if !defined NUMBEROPERATOR_HPP_INCLUDED
+    #define NUMBEROPERATOR_HPP_INCLUDED
 
-namespace NumberWorks {
+    #include <iostream>
 
-class NumberOperator {
-  private:
-    int anyNumber;
+    namespace NumberWorks {
 
-  public:
-    NumberOperator(int anyNumber) : anyNumber(anyNumber)
-    {
-        /* do nothing */
-    }
+    class NumberOperator {
+      private:
+        int anyNumber;
 
-    /**
-     * Print the number and return.
-     */
-    void printInformation()
-    {
-        std::cout<<"Number: "<<anyNumber<<std::endl;
-    }
+      public:
+        NumberOperator(int anyNumber) : anyNumber(anyNumber)
+        {
+            /* do nothing */
+        }
 
-};
+        /**
+         * Print the number and return.
+         */
+        void printInformation()
+        {
+            std::cout<<"Number: "<<anyNumber<<std::endl;
+        }
 
-} /* namespace NumberWorks */
+    };
 
-#endif /* !defined NUMBEROPERATOR_HPP_INCLUDED */
+    } /* namespace NumberWorks */
+
+    #endif /* !defined NUMBEROPERATOR_HPP_INCLUDED */
+
 ```
