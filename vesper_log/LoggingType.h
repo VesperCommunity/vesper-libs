@@ -10,7 +10,23 @@
  */
 namespace LoggingType {
 
-enum LoggingLevel{
+enum ScanDataType {
+    error,   //an error occured
+    unknown, //unknown escape sequence
+    //eos,     //*E*nd *O*f *S*tring
+    t_int,   //integer
+    t_bool,  //boolean
+    t_char,  //character
+    t_cstr,  //char[] array aka cstring
+    t_stdstr,//std::string
+    t_void   //void* pointer aka mem adress (--> hexadecimal)
+};
+
+enum LoggingFlags {
+    eom //EndOfMessage
+};
+
+enum LoggingLevel {
     l_start,    //startup sequence
     l_debug,    //debug messages
     l_neutral,  //white
@@ -23,24 +39,19 @@ enum LoggingClientType {
     server  // the logging client is a server
 };
 
-struct LoggingPipe{ //FIFO
-    LoggingPipe *older;
-    LoggingPipe *newer;
+struct MessagePipe { //FIFO
+    MessagePipe *older;
+    MessagePipe *newer;
 
     ScanDataType type;
     void        *data;
 };
 
-enum ScanDataType {
-    error,   //an error occured
-    unknown, //unknown escape sequence
-    eos,     //*E*nd *O*f *S*tring
-    t_int,   //integer
-    t_bool,  //boolean
-    t_char,  //character
-    t_cstr,  //char[] array aka cstring
-    t_stdstr,//std::string
-    t_void   //void* pointer aka mem adress (--> hexadecimal)
+struct LoggingPipe {
+    LoggingPipe *older;
+    LoggingPipe *newer;
+
+    MessagePipe *toPrint;
 };
 
 }; /* namespace LoggingType*/
