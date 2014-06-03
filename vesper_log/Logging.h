@@ -5,37 +5,10 @@
 
 #include <iostream>
 #include <sstream>
-#include <thread>
+
+#include "LoggingType.h"
 
 namespace Vesper {
-
-/**
- * The namespace LoggingTypes will contain enums, structs
- * and other things, that are needed by the Logging class
- * We use a namespace to avoid Name-conflicts
- * --> for example use this: LoggingType.client
- * --> avoid using the LoggingType namespace
- */
-namespace LoggingType {
-
-enum LoggingClientType {
-    client, // the logging client is a client
-    server  // the logging client is a server
-};
-
-enum ScanDataType {
-    error,   //an error occured
-    unknown, //unknown escape sequence
-    eos,     //*E*nd *O*f *S*tring
-    t_int,   //integer
-    t_bool,  //boolean
-    t_char,  //character
-    t_cstr,  //char[] array aka cstring
-    t_stdstr,//std::string
-    t_void   //void* pointer aka mem adress (--> hexadecimal)    
-};
-
-}; /* namespace LoggingType*/
 
 class Logging {
     public:
@@ -52,6 +25,7 @@ class Logging {
         int getID();
         LoggingType::LoggingClientType getType();
 
+        void log(LoggingType::LoggingLevel level);
         void logStart(char *text, ...);
         void logDebug(char *text, ...);
         void logNeutral(char *text, ...);

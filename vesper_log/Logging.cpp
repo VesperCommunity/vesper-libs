@@ -88,7 +88,7 @@ void Logging::printString(std::thread **source, Logging *who, std::stringstream 
         std::cout << "server|";
     }
 
-    std::cout << who->getID() << ":";
+    std::cout << std::setw(3) << who->getID() << ":";
     std::cout << *toPrint << std::endl;
 
     //while (!source){} //wait for the source to be 0
