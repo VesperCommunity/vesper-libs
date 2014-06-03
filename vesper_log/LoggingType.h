@@ -27,7 +27,8 @@ struct LoggingPipe{ //FIFO
     LoggingPipe *older;
     LoggingPipe *newer;
 
-
+    ScanDataType type;
+    void        *data;
 };
 
 enum ScanDataType {
