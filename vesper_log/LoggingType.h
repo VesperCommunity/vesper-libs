@@ -21,11 +21,13 @@ enum ScanDataType {
     t_char,  //character
     t_cstr,  //char[] array aka cstring
     t_stdstr,//std::string
-    t_void   //use this for pointer aka mem adress (--> hexadecimal)
+    t_void,  //use this for pointer aka mem adress (--> hexadecimal)
+    t_flag
 };
 
 enum LoggingFlags {
-    eom //EndOfMessage
+    endl, //end of line
+    eom  //EndOfMessage
 };
 
 enum LoggingLevel {

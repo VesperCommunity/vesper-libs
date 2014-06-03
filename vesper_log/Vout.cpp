@@ -33,6 +33,9 @@ Vout::~Vout() {
             case LoggingType::t_void:
                 delete (void*) dataToDelete; //idk if this is right
                 break;
+            case LoggingType::t_flag:
+                delete (LoggingType::LoggingFlags*) dataToDelete;
+                break;
             default:
                 //this will be a mem leak
                 break;
@@ -101,6 +104,10 @@ void Vout::operator<<(void *toWrite) {
 void Vout::operator<<(LoggingType::LoggingFlags flag) {
     switch (flag){
         case LoggingType::eom:
+            flush();
+            break;
+
+        case LoggingType::endl:
             flush();
             break;
 
@@ -198,3 +205,86 @@ void Vout::pushM(LoggingType::ScanDataType typets, void *datats) {
 
 }
 
+std::mutex                Vout::lMutex;
+LoggingType::LoggingPipe  Vout::*lFIFOfirst = 0;
+LoggingType::LoggingPipe  Vout::*lFIFOlast  = 0;
+
+bool         Vout::threadRunning = false; //does not work ;-(
+std::thread  Vout::*pipeThread   = 0;
+
+void Vout::pipeFunction() {
+    threadRunning = true;
+    while (threadRunning) {
+
+        lMutex.lock();
+
+        while(lFIFOfirst) {
+
+            LoggingType::LoggingPipe *lPipeToDelete;
+
+            LoggingType::MessagePipe *messageToDelete;
+            LoggingType::MessagePipe *nextMessage = new LoggingType::MessagePipe;
+            nextMessage = lFIFOfirst->messageSource;
+
+            //we start with the output and delete / pop the lstack later
+            while (nextMessage) {
+                switch(nextMessage->type){
+                    case LoggingType::t_int:
+                        std::cout << *((int*) nextMessage->data);
+                        delete (int*) nextMessage->data;
+                        break;
+                    case LoggingType::t_bool:
+                        std::cout << *((bool*) nextMessage->data);
+                        delete (int*) nextMessage->data;
+                        break;
+                    case LoggingType::t_char:
+                        std::cout << *((char*) nextMessage->data);
+                        break;
+                    case LoggingType::t_cstr:
+                        std::cout << *((char**) nextMessage->data);
+                        break;
+                    case LoggingType::t_stdstr:
+                        std::cout << *((std::string*) nextMessage->data);
+                        break;
+                    case LoggingType::t_void:
+                        std::cout << *((void**) nextMessage->data);
+                        break;
+                    case LoggingType::t_flag:
+                        //We got a flag!
+
+                        LoggingType::LoggingFlags tempFlag;
+                        tempFlag = *((LoggingType::LoggingFlags*)nextMessage->data);
+
+                        switch(tempFlag) {
+                            case LoggingType::endl:
+                                std::cout << std::endl;
+                                break;
+                            default:
+                                ///TODO: add exception or similiar
+                                break;
+                        }
+
+                        break;
+                    default:
+                        //not recognized ... maybe throw an error
+                        break;
+                }
+
+                messageToDelete = nextMessage;
+                nextMessage = nextMessage->newer;
+
+                delete messageToDelete;
+            }
+
+            lPipeToDelete = lFIFOfirst;
+            lFIFOfirst = lFIFOfirst->newer;
+
+            delete lPipeToDelete;
+        }
+
+        lMutex.unlock();
+    }
+    std::cout << "[logclass] note: thread stopped!" << std::endl;
+
+    return;
+}

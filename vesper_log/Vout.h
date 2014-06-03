@@ -55,8 +55,8 @@ class Vout {
         static LoggingType::LoggingPipe *lFIFOfirst;
         static LoggingType::LoggingPipe *lFIFOlast;
 
-        static bool threadRunning; // = false; //does not work ;-(
-        static std::thread *pipeThread; // = 0; //iso undso
+        static bool threadRunning;
+        static std::thread *pipeThread;
 
         static void pipeFunction();
 
