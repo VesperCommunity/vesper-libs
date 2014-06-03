@@ -30,16 +30,19 @@ class Vout {
         void operator<<(LoggingType::LoggingFlags flag);
         void flush();
 
-        ///pop() used by thread to get at FIFOfirst
-        ///pop() returns 1 if pipe is empty
-        int pop(LoggingType::ScanDataType *typetg, void *datatg);
+        /**
+         * pop() used by thread to get at FIFOfirst
+         * pop() returns 1 if pipe is empty
+         * we may need this function but by now it is unused
+         */
+        int popM(LoggingType::ScanDataType *typetg, void **datatg);
         std::mutex mMutex;
         LoggingType::MessagePipe *mFIFOfirst;
 
     private:
 
         ///push() used by operators to add at FIFOlast
-        void push(LoggingType::ScanDataType typets, void *datats);
+        void pushM(LoggingType::ScanDataType typets, void *datats);
         LoggingType::MessagePipe *mFIFOlast;
 
         /**

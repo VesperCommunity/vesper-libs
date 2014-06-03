@@ -13,7 +13,7 @@ Vout::~Vout() {
 
     LoggingType::ScanDataType type;
     void *dataToDelete;
-    while (!this->pop(&type, dataToDelete)) {
+    while (!this->popM(&type, &dataToDelete)) {
         switch (type) {
             case LoggingType::t_int:
                 delete (int*) dataToDelete;
@@ -55,7 +55,7 @@ void Vout::operator<<(int toWrite) {
     int *temp = new int;
     *temp = toWrite;
 
-    push(LoggingType::t_int, (void*) temp);
+    pushM(LoggingType::t_int, (void*) temp);
 }
 
 void Vout::operator<<(bool toWrite) {
@@ -63,7 +63,7 @@ void Vout::operator<<(bool toWrite) {
     bool *temp = new bool;
     *temp = toWrite;
 
-    push(LoggingType::t_bool, (void*) temp);
+    pushM(LoggingType::t_bool, (void*) temp);
 }
 
 void Vout::operator<<(char toWrite) {
@@ -71,7 +71,7 @@ void Vout::operator<<(char toWrite) {
     char *temp = new char;
     *temp = toWrite;
 
-    push(LoggingType::t_char, (void*) temp);
+    pushM(LoggingType::t_char, (void*) temp);
 }
 
 void Vout::operator<<(char toWrite[]) {
@@ -79,7 +79,7 @@ void Vout::operator<<(char toWrite[]) {
     char **temp = new char*;
     *temp = toWrite;
 
-    push(LoggingType::t_cstr, (void*) temp);
+    pushM(LoggingType::t_cstr, (void*) temp);
 }
 
 void Vout::operator<<(std::string  toWrite) {
@@ -87,7 +87,7 @@ void Vout::operator<<(std::string  toWrite) {
     std::string *temp = new std::string;
     *temp = toWrite;
 
-    push(LoggingType::t_stdstr, (void*) temp);
+    pushM(LoggingType::t_stdstr, (void*) temp);
 }
 
 void Vout::operator<<(void *toWrite) {
@@ -95,7 +95,7 @@ void Vout::operator<<(void *toWrite) {
     void **temp = new void*;
     *temp = toWrite;
 
-    push(LoggingType::t_void, (void*) temp);
+    pushM(LoggingType::t_void, (void*) temp);
 }
 
 void Vout::operator<<(LoggingType::LoggingFlags flag) {
@@ -147,7 +147,54 @@ void Vout::flush() {
         return;
     }
 
+}
+
+int Vout::popM(LoggingType::ScanDataType *typetg, void **datatg){
+    if (!mFIFOfirst)
+        return 1;
+
+    LoggingType::MessagePipe *tempPipe;
+
+    mMutex.lock();
+
+        tempPipe = mFIFOlast;
+        mFIFOlast = tempPipe->newer;
+
+    mMutex.unlock();
+
+    *typetg = tempPipe->type;
+    *datatg = tempPipe->data;
+
+    delete tempPipe;
+
+    return 0;
+}
+
+void Vout::pushM(LoggingType::ScanDataType typets, void *datats) {
+
+    LoggingType::MessagePipe *tempMsg = new LoggingType::MessagePipe;
+
+    tempMsg->data = datats;
+    tempMsg->type = typets;
+
+    mMutex.lock();
+
+    if (!mFIFOfirst) {
+        mFIFOfirst = tempMsg;
+        mFIFOlast = tempMsg;
+
+        mMutex.unlock();
+
+        return;
+    }
+    else {
+        tempMsg->older = mFIFOlast;
+        mFIFOlast = tempMsg;
+
+        mMutex.unlock();
+
+        return;
+    }
 
 }
 
-//Vout::
