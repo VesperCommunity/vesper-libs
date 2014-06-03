@@ -48,7 +48,7 @@ class Vout {
         /**
          * When a LoggingPipe reaches LogginType::eom the message is complete
          * and will be pushed to lFIFO (logging FIFO)
-         * lFIFO will be written by the pipiFunction.
+         * lFIFO will be written by the pipeFunction.
          */
 
         static std::mutex lMutex;
