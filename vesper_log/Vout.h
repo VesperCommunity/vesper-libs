@@ -12,11 +12,13 @@
 
 namespace Vesper {
 
+class Logging;
+
 class Vout {
 
     public:
 
-        Vout();
+        Vout(Logging *parentts);
         ~Vout();
 
         static int init();
@@ -40,6 +42,8 @@ class Vout {
         LoggingType::MessagePipe *mFIFOfirst;
 
     private:
+
+        Logging *parent;
 
         ///push() used by operators to add at FIFOlast
         void pushM(LoggingType::ScanDataType typets, void *datats);

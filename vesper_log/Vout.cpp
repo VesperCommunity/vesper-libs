@@ -2,10 +2,12 @@
 
 using namespace Vesper;
 
-Vout::Vout() {
+Vout::Vout(Logging *parentts) {
     if (!threadRunning)
         std::cout << "[logclass] warning: creating object from Vout class while "
                      "thread isn't running" << std::endl;
+
+    parent = parentts;
 }
 
 Vout::~Vout() {
@@ -127,6 +129,7 @@ void Vout::flush() {
 
     LoggingType::LoggingPipe *tempPipe = new LoggingType::LoggingPipe;
     tempPipe->messageSource = this->mFIFOfirst;
+    tempPipe->type = this->parent;
 
     mFIFOfirst = 0;
     mFIFOlast = 0;
@@ -225,6 +228,22 @@ void Vout::pipeFunction() {
             LoggingType::MessagePipe *messageToDelete;
             LoggingType::MessagePipe *nextMessage = new LoggingType::MessagePipe;
             nextMessage = lFIFOfirst->messageSource;
+
+            //print the header:
+            std::cout << std::setw(8);
+            switch (nextMessage->src->getType()) {
+                case LoggingType::client:
+                    std::cout << "[client ";
+                    break;
+                case LoggingType::server:
+                    std::cout << "[server ";
+                    break;
+                default:
+                    std::cout << "[###### ";
+                    break;
+            }
+            std::cout << "|" << std::setw(5);
+            std::cout << nextMessage->src->getID() << "] ";
 
             //we start with the output and delete / pop the lstack later
             while (nextMessage) {

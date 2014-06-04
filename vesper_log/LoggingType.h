@@ -55,6 +55,7 @@ struct LoggingPipe {
     LoggingPipe *older;
     LoggingPipe *newer;
 
+    Logging *src;
     MessagePipe *messageSource;
 };
 
