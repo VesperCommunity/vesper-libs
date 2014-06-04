@@ -1,6 +1,6 @@
-#include "Vout.h"
+#include "Vout.hpp"
 
-#include "Logging.h"
+#include "Logging.hpp"
 
 #include <iomanip>
 

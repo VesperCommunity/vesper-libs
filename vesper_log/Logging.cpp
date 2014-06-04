@@ -1,4 +1,4 @@
-#include "Logging.h"
+#include "Logging.hpp"
 
 //we need this for variable argument lists
 //C-Style, I don't wanna mess with template and/or vector classes ;-)

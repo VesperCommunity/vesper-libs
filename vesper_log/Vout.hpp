@@ -8,7 +8,7 @@
 #include <sstream>
 #include <string>
 
-#include "LoggingType.h"
+#include "LoggingType.hpp"
 
 namespace Vesper {
 

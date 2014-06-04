@@ -1,12 +1,12 @@
 #ifndef LOGGING_H_INCLUDED
 #define LOGGING_H_INCLUDED
 
-#include "Vout.h"
+#include "Vout.hpp"
 
 #include <iostream>
 #include <sstream>
 
-#include "LoggingType.h"
+#include "LoggingType.hpp"
 
 namespace Vesper {
 
