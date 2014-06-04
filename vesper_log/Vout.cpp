@@ -1,5 +1,9 @@
 #include "Vout.h"
 
+#include "Logging.h"
+
+#include <iomanip>
+
 using namespace Vesper;
 
 Vout::Vout(Logging *parentts) {
@@ -129,7 +133,7 @@ void Vout::flush() {
 
     LoggingType::LoggingPipe *tempPipe = new LoggingType::LoggingPipe;
     tempPipe->messageSource = this->mFIFOfirst;
-    tempPipe->type = this->parent;
+    tempPipe->src = this->parent;
 
     mFIFOfirst = 0;
     mFIFOlast = 0;
@@ -231,7 +235,7 @@ void Vout::pipeFunction() {
 
             //print the header:
             std::cout << std::setw(8);
-            switch (nextMessage->src->getType()) {
+            switch (nextMessage->type) {
                 case LoggingType::client:
                     std::cout << "[client ";
                     break;
@@ -243,7 +247,7 @@ void Vout::pipeFunction() {
                     break;
             }
             std::cout << "|" << std::setw(5);
-            std::cout << nextMessage->src->getID() << "] ";
+            std::cout << lFIFOfirst->src->getID() << "] ";
 
             //we start with the output and delete / pop the lstack later
             while (nextMessage) {

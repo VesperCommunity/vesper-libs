@@ -8,13 +8,19 @@ using namespace Vesper;
 
 int Logging::nextID = 1;
 
-Logging::Logging() {
-
+Logging::Logging() :
+                   out(this)
+{
     uniqueID = 0;
 }
 
-Logging::Logging(LoggingType::LoggingClientType typets) {
+Logging::Logging(LoggingType::LoggingClientType typets) :
+                   out(this)
+{
     clientType = typets;
+
+    uniqueID = nextID;
+    nextID++;
 }
 
 Logging::~Logging() {
@@ -29,6 +35,40 @@ LoggingType::LoggingClientType Logging::getType() {
     return clientType;
 }
 
+
+void Logging::operator<<(int  toWrite) {
+    out << toWrite;
+}
+
+void Logging::operator<<(bool toWrite){
+    out << toWrite;
+}
+
+void Logging::operator<<(char toWrite){
+    out << toWrite;
+}
+
+void Logging::operator<<(char toWrite[]){
+    out << toWrite;
+}
+
+void Logging::operator<<(std::string toWrite){
+    out << toWrite;
+}
+
+void Logging::operator<<(void *toWrite){ //write mem Adress
+    out << toWrite;
+}
+
+void Logging::operator<<(LoggingType::LoggingFlags flag){
+    out << flag;
+}
+
+void Logging::flush(){
+    out.flush();
+}
+
+/* Not implemented yet
 void Logging::logStart(char *text, ...) {
 }
 
@@ -76,14 +116,4 @@ void Logging::logWarning(char *text, ...) {
 
 void Logging::logError(char *text, ...) {
 }
-
-void Logging::printString(std::thread **source, Logging *who, std::stringstream *toPrint) {
-
-}
-
-char *Logging::getCharFromEscSequence(char *toPrint, void *data) {
-    char retString;
-
-    //
-
-}
+*/

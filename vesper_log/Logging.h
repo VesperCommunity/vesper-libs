@@ -25,17 +25,31 @@ class Logging {
         int getID();
         LoggingType::LoggingClientType getType();
 
-        void log(LoggingType::LoggingLevel level);
+        void operator<<(int  toWrite);
+        void operator<<(bool toWrite);
+        void operator<<(char toWrite);
+        void operator<<(char toWrite[]);
+        void operator<<(std::string toWrite);
+        void operator<<(void *toWrite); //write mem Adress
+        void operator<<(LoggingType::LoggingFlags flag);
+        void flush();
+
+        /**
+         * C-Style logging functions
+         * will be added later
+         * --> away-commented
+         */
+        /*void log(LoggingType::LoggingLevel level);
         void logStart(char *text, ...);
         void logDebug(char *text, ...);
         void logNeutral(char *text, ...);
         void logWarning(char *text, ...);
-        void logError(char *text, ...);
+        void logError(char *text, ...);*/
 
     protected:
     private:
 
-        static void printString(std::thread **source, Logging *who, std::stringstream *toPrint);
+        Vout out;
 
         LoggingType::LoggingClientType clientType;
 
@@ -52,18 +66,13 @@ class Logging {
          */
         int uniqueID;
 
-        /* We may need this ...
-        void print(char *data);
-        void printLn(char *data);
-        void printLnEnd();*/
-
         /**
          * This function print a c-style escape sequence
          * *data is a pointer to the data given by va_args
          * *toPrint is the Begine of the Escape Sequence ('%')
          * It returns 0 if success!
          */
-        char *getCharFromEscSequence(char *toPrint, void *data);
+        /*char *getCharFromEscSequence(char *toPrint, void *data);*/
 
 };
 

@@ -8,9 +8,12 @@
  * --> for example use this: LoggingType.client
  * --> avoid using the LoggingType namespace
  */
-namespace LoggingType {
+namespace Vesper {
 
 class Vout;
+class Logging;
+
+namespace LoggingType {
 
 enum ScanDataType {
     error,   //an error occured
@@ -59,6 +62,7 @@ struct LoggingPipe {
     MessagePipe *messageSource;
 };
 
-}; /* namespace LoggingType*/
+}; /* namespace LoggingType */
+}; /* namespace Vesper */
 
 #endif /* LOGGINGTYPE_H_INCLUDED */
