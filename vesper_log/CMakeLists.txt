@@ -4,12 +4,12 @@ cmake_minimum_required(VERSION 2.8)
 
 # add header files of this module
 set(HEADERS
-    ${PROJECT_SOURCE_DIR}/logging.h
+    ${PROJECT_SOURCE_DIR}/Logging.h
 )
 
 # add source files of this module
 set(SOURCES
-    ${PROJECT_SOURCE_DIR}/logging.cpp
+    ${PROJECT_SOURCE_DIR}/Logging.cpp
 )
 
 # add object files to be compiled
