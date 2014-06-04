@@ -24,5 +24,9 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 message(STATUS "'${CMAKE_BUILD_TYPE}' built type was selected.")
 
+# add compiler flags to define C++ version
+# and to compile position independent code
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC")
+
 # add modules
 add_subdirectory(vesper_log)
