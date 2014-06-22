@@ -17,13 +17,13 @@ extern "C" {
 #endif /* defined __cplusplus */
 
 /** Return current error number. */
-VESPER_API int vsp_error_num(void);
+VSP_API int vsp_error_num(void);
 
 /** Set current error number. */
-VESPER_API void vsp_error_set_num(int error_num);
+VSP_API void vsp_error_set_num(int error_num);
 
 /** Return error string for any error number. \see vsp_error_num() */
-VESPER_API const char* vsp_error_str(int error_num);
+VSP_API const char* vsp_error_str(int error_num);
 
 #if defined __cplusplus
 }

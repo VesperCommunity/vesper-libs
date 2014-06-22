@@ -28,8 +28,8 @@ message(STATUS "'${CMAKE_BUILD_TYPE}' built type was selected.")
 include_directories(SYSTEM "${PROJECT_SOURCE_DIR}")
 
 # add definitions used by the sources
-# the VESPER_BUILD_API flag activates API function export
-add_definitions("-DVESPER_BUILD_API")
+# the VSP_BUILD_API flag activates API function export
+add_definitions("-DVSP_BUILD_API")
 
 # add compiler flags to define C version
 # and to compile position independent code

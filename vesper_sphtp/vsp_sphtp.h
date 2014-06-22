@@ -27,7 +27,7 @@ typedef struct vsp_sphtp_network_connector vsp_sphtp_network_connector;
  * Returned pointer should be freed with vsp_sphtp_network_connector_free().
  * Returns NULL and sets vsp_error_num() if failed.
  */
-VESPER_API vsp_sphtp_network_connector*
+VSP_API vsp_sphtp_network_connector*
     vsp_sphtp_network_connector_create(void);
 
 /**
@@ -35,7 +35,7 @@ VESPER_API vsp_sphtp_network_connector*
  * Object should be created with vsp_sphtp_network_connector_create().
  * Returns non-zero and sets vsp_error_num() if failed.
  */
-VESPER_API int vsp_sphtp_network_connector_free(
+VSP_API int vsp_sphtp_network_connector_free(
     vsp_sphtp_network_connector* net_conn);
 
 /**
@@ -43,7 +43,7 @@ VESPER_API int vsp_sphtp_network_connector_free(
  * Returns non-zero and sets vsp_error_num() if failed.
  * \see vsp_sphtp_disconnect
  */
-VESPER_API int vsp_sphtp_connect(vsp_sphtp_network_connector *net_conn,
+VSP_API int vsp_sphtp_connect(vsp_sphtp_network_connector *net_conn,
     const char *publish_address, const char *subscribe_address);
 
 /**
@@ -51,14 +51,14 @@ VESPER_API int vsp_sphtp_connect(vsp_sphtp_network_connector *net_conn,
  * Sockets have to be connected with vsp_sphtp_connect() first.
  * Returns non-zero and sets vsp_error_num() if failed.
  */
-VESPER_API int vsp_sphtp_disconnect(vsp_sphtp_network_connector *net_conn);
+VSP_API int vsp_sphtp_disconnect(vsp_sphtp_network_connector *net_conn);
 
 /**
  * Run event loop for message reception. Should run in its own thread.
  * Terminates when vsp_sphtp_reception_thread_stop() is called.
  * Returns non-zero and sets vsp_error_num() if interrupted or failed.
  */
-VESPER_API int vsp_sphtp_reception_thread_run(
+VSP_API int vsp_sphtp_reception_thread_run(
     vsp_sphtp_network_connector *net_conn);
 
 /**
@@ -66,7 +66,7 @@ VESPER_API int vsp_sphtp_reception_thread_run(
  * Does not wait until vsp_sphtp_reception_thread_run() has finished.
  * Returns non-zero and sets vsp_error_num() if failed.
  */
-VESPER_API int vsp_sphtp_reception_thread_stop(
+VSP_API int vsp_sphtp_reception_thread_stop(
     vsp_sphtp_network_connector *net_conn);
 
 #if defined __cplusplus

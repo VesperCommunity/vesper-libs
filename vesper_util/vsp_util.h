@@ -16,18 +16,18 @@
  * and `__attribute__((visibility("default")))` on GNU platforms.
  */
 #if defined _WIN32
-  #if defined VESPER_BUILD_API
+  #if defined VSP_BUILD_API
     /* build dll */
-    #define VESPER_API __declspec(dllexport)
+    #define VSP_API __declspec(dllexport)
   #else
     /* use dll */
-    #define VESPER_API __declspec(dllimport)
-  #endif /* defined VESPER_BUILD_API*/
+    #define VSP_API __declspec(dllimport)
+  #endif /* defined VSP_BUILD_API*/
 #else
   #if __GNUC__ >= 4
-    #define VESPER_API __attribute__((visibility("default")))
+    #define VSP_API __attribute__((visibility("default")))
   #else
-    #define VESPER_API
+    #define VSP_API
   #endif
 #endif /* defined _WIN32 */
 

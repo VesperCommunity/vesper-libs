@@ -21,23 +21,23 @@
 static vsp_sphtp_network_connector *net_conn;
 
 /** Create global net_conn object. \see net_conn */
-void vesper_sphtp_setup(void);
+void vsp_sphtp_setup(void);
 /** Free global net_conn object. \see net_conn */
-void vesper_sphtp_teardown(void);
+void vsp_sphtp_teardown(void);
 
-void vesper_sphtp_setup(void)
+void vsp_sphtp_setup(void)
 {
     net_conn = vsp_sphtp_network_connector_create();
 }
 
-void vesper_sphtp_teardown(void)
+void vsp_sphtp_teardown(void)
 {
     vsp_sphtp_network_connector_free(net_conn);
 }
 
 /** Test vsp_sphtp_network_connector_create() and
  * vsp_sphtp_network_connector_free(). */
-MU_TEST(vesper_sphtp_allocation)
+MU_TEST(vsp_sphtp_allocation)
 {
     vsp_sphtp_network_connector *local_net_conn;
     int ret;
@@ -50,7 +50,7 @@ MU_TEST(vesper_sphtp_allocation)
 }
 
 /** Test vsp_sphtp_connect(). */
-MU_TEST(vesper_sphtp_connection)
+MU_TEST(vsp_sphtp_connection)
 {
     int ret;
     /* connection */
@@ -59,7 +59,7 @@ MU_TEST(vesper_sphtp_connection)
 }
 
 /** Test vsp_sphtp_disconnect(). */
-MU_TEST(vesper_sphtp_disconnection)
+MU_TEST(vsp_sphtp_disconnection)
 {
     int ret;
     /* connection */
@@ -71,7 +71,7 @@ MU_TEST(vesper_sphtp_disconnection)
 }
 
 /** Test vsp_sphtp_connect() and subsequent vsp_sphtp_disconnect(). */
-MU_TEST(vesper_sphtp_reconnection)
+MU_TEST(vsp_sphtp_reconnection)
 {
     int ret;
     /* connection */
@@ -88,16 +88,16 @@ MU_TEST(vesper_sphtp_reconnection)
 /** Test SphTP implementation. */
 MU_TEST_SUITE(vesper_sphtp)
 {
-    MU_SUITE_CONFIGURE(&vesper_sphtp_setup, &vesper_sphtp_teardown);
-    MU_RUN_TEST(vesper_sphtp_connection);
-    MU_RUN_TEST(vesper_sphtp_disconnection);
-    MU_RUN_TEST(vesper_sphtp_reconnection);
+    MU_SUITE_CONFIGURE(&vsp_sphtp_setup, &vsp_sphtp_teardown);
+    MU_RUN_TEST(vsp_sphtp_connection);
+    MU_RUN_TEST(vsp_sphtp_disconnection);
+    MU_RUN_TEST(vsp_sphtp_reconnection);
 }
 
 /** Run all module tests. */
 int main(void)
 {
-    MU_RUN_TEST(vesper_sphtp_allocation);
+    MU_RUN_TEST(vsp_sphtp_allocation);
     MU_RUN_SUITE(vesper_sphtp);
     MU_REPORT();
     return 0;
