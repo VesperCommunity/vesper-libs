@@ -122,7 +122,7 @@ int vsp_sphtp_disconnect(vsp_sphtp_network_connector *net_conn)
     net_conn->subscribe_socket = -1;
     /* set state */
     net_conn->state = VSP_SPHTP_UNINITIALIZED;
-    /* sockets successfully connected */
+    /* sockets successfully disconnected */
     return 0;
 }
 
