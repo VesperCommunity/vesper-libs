@@ -10,7 +10,7 @@
 #include "minunit.h"
 
 #include <vesper_error/vsp_error.h>
-#include <vesper_sphtp/vsp_sphtp.h>
+#include <vesper_cmcp/vsp_cmcp.h>
 
 /** Publish socket address. */
 #define PUBLISH_ADDRESS "tcp://127.0.0.1:7571"
@@ -18,87 +18,87 @@
 #define SUBSCRIBE_ADDRESS "tcp://127.0.0.1:7572"
 
 /** Global testing object. */
-static vsp_sphtp_network_connector *net_conn;
+static vsp_cmcp_network_connector *net_conn;
 
 /** Create global net_conn object. \see net_conn */
-void vsp_sphtp_setup(void);
+void vsp_cmcp_setup(void);
 /** Free global net_conn object. \see net_conn */
-void vsp_sphtp_teardown(void);
+void vsp_cmcp_teardown(void);
 
-void vsp_sphtp_setup(void)
+void vsp_cmcp_setup(void)
 {
-    net_conn = vsp_sphtp_network_connector_create();
+    net_conn = vsp_cmcp_network_connector_create();
 }
 
-void vsp_sphtp_teardown(void)
+void vsp_cmcp_teardown(void)
 {
-    vsp_sphtp_network_connector_free(net_conn);
+    vsp_cmcp_network_connector_free(net_conn);
 }
 
-/** Test vsp_sphtp_network_connector_create() and
- * vsp_sphtp_network_connector_free(). */
-MU_TEST(vsp_sphtp_allocation)
+/** Test vsp_cmcp_network_connector_create() and
+ * vsp_cmcp_network_connector_free(). */
+MU_TEST(vsp_cmcp_allocation)
 {
-    vsp_sphtp_network_connector *local_net_conn;
+    vsp_cmcp_network_connector *local_net_conn;
     int ret;
     /* allocation */
-    local_net_conn = vsp_sphtp_network_connector_create();
+    local_net_conn = vsp_cmcp_network_connector_create();
     mu_assert(local_net_conn != NULL, vsp_error_str(vsp_error_num()));
     /* deallocation */
-    ret = vsp_sphtp_network_connector_free(local_net_conn);
+    ret = vsp_cmcp_network_connector_free(local_net_conn);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
 }
 
-/** Test vsp_sphtp_connect(). */
-MU_TEST(vsp_sphtp_connection)
+/** Test vsp_cmcp_connect(). */
+MU_TEST(vsp_cmcp_connection)
 {
     int ret;
     /* connection */
-    ret = vsp_sphtp_connect(net_conn, PUBLISH_ADDRESS, SUBSCRIBE_ADDRESS);
+    ret = vsp_cmcp_connect(net_conn, PUBLISH_ADDRESS, SUBSCRIBE_ADDRESS);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
 }
 
-/** Test vsp_sphtp_disconnect(). */
-MU_TEST(vsp_sphtp_disconnection)
+/** Test vsp_cmcp_disconnect(). */
+MU_TEST(vsp_cmcp_disconnection)
 {
     int ret;
     /* connection */
-    ret = vsp_sphtp_connect(net_conn, PUBLISH_ADDRESS, SUBSCRIBE_ADDRESS);
+    ret = vsp_cmcp_connect(net_conn, PUBLISH_ADDRESS, SUBSCRIBE_ADDRESS);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
     /* disconnection */
-    ret = vsp_sphtp_disconnect(net_conn);
+    ret = vsp_cmcp_disconnect(net_conn);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
 }
 
-/** Test vsp_sphtp_connect() and subsequent vsp_sphtp_disconnect(). */
-MU_TEST(vsp_sphtp_reconnection)
+/** Test vsp_cmcp_connect() and subsequent vsp_cmcp_disconnect(). */
+MU_TEST(vsp_cmcp_reconnection)
 {
     int ret;
     /* connection */
-    ret = vsp_sphtp_connect(net_conn, PUBLISH_ADDRESS, SUBSCRIBE_ADDRESS);
+    ret = vsp_cmcp_connect(net_conn, PUBLISH_ADDRESS, SUBSCRIBE_ADDRESS);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
     /* disconnection */
-    ret = vsp_sphtp_disconnect(net_conn);
+    ret = vsp_cmcp_disconnect(net_conn);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
     /* reconnection */
-    ret = vsp_sphtp_connect(net_conn, PUBLISH_ADDRESS, SUBSCRIBE_ADDRESS);
+    ret = vsp_cmcp_connect(net_conn, PUBLISH_ADDRESS, SUBSCRIBE_ADDRESS);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
 }
 
-/** Test SphTP implementation. */
-MU_TEST_SUITE(vesper_sphtp)
+/** Test CMCP implementation. */
+MU_TEST_SUITE(vesper_cmcp)
 {
-    MU_SUITE_CONFIGURE(&vsp_sphtp_setup, &vsp_sphtp_teardown);
-    MU_RUN_TEST(vsp_sphtp_connection);
-    MU_RUN_TEST(vsp_sphtp_disconnection);
-    MU_RUN_TEST(vsp_sphtp_reconnection);
+    MU_SUITE_CONFIGURE(&vsp_cmcp_setup, &vsp_cmcp_teardown);
+    MU_RUN_TEST(vsp_cmcp_connection);
+    MU_RUN_TEST(vsp_cmcp_disconnection);
+    MU_RUN_TEST(vsp_cmcp_reconnection);
 }
 
 /** Run all module tests. */
 int main(void)
 {
-    MU_RUN_TEST(vsp_sphtp_allocation);
-    MU_RUN_SUITE(vesper_sphtp);
+    MU_RUN_TEST(vsp_cmcp_allocation);
+    MU_RUN_SUITE(vesper_cmcp);
     MU_REPORT();
     return 0;
 }

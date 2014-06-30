@@ -12,12 +12,13 @@ All rights reserved.
 
 `vesper-log` provides buffered and prefixed logging outputs to console.
 
-### vesper-sphtp
+### vesper-cmcp
 
-`vesper-sphtp` provides an implementation of the [SphTP protocol][sphtp_link]
-and lets you build simulation servers and clients connected over network.
+`vesper-cmcp` provides an implementation of the [CMCP protocol][cmcp_link]
+and lets you build servers and clients connected over network, e.g. for
+physical simulations.
 
-[sphtp_link]: https://github.com/jellysheep/spheresim/wiki/Protocol
+[cmcp_link]: https://github.com/jellysheep/spheresim/wiki/Protocol
 
 ### vesper-test
 
