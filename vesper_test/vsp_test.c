@@ -18,7 +18,7 @@
 #define SUBSCRIBE_ADDRESS "tcp://127.0.0.1:7572"
 
 /** Global testing object. */
-static vsp_cmcp_network_connector *net_conn;
+static vsp_cmcp_connector *net_conn;
 
 /** Create global net_conn object. \see net_conn */
 void vsp_cmcp_setup(void);
@@ -27,25 +27,25 @@ void vsp_cmcp_teardown(void);
 
 void vsp_cmcp_setup(void)
 {
-    net_conn = vsp_cmcp_network_connector_create();
+    net_conn = vsp_cmcp_connector_create();
 }
 
 void vsp_cmcp_teardown(void)
 {
-    vsp_cmcp_network_connector_free(net_conn);
+    vsp_cmcp_connector_free(net_conn);
 }
 
-/** Test vsp_cmcp_network_connector_create() and
- * vsp_cmcp_network_connector_free(). */
+/** Test vsp_cmcp_connector_create() and
+ * vsp_cmcp_connector_free(). */
 MU_TEST(vsp_cmcp_allocation)
 {
-    vsp_cmcp_network_connector *local_net_conn;
+    vsp_cmcp_connector *local_net_conn;
     int ret;
     /* allocation */
-    local_net_conn = vsp_cmcp_network_connector_create();
+    local_net_conn = vsp_cmcp_connector_create();
     mu_assert(local_net_conn != NULL, vsp_error_str(vsp_error_num()));
     /* deallocation */
-    ret = vsp_cmcp_network_connector_free(local_net_conn);
+    ret = vsp_cmcp_connector_free(local_net_conn);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
 }
 

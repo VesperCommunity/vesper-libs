@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <vesper_error/vsp_error.h>
 
-/** vsp_cmcp_network_connector finite state machine flag. */
+/** vsp_cmcp_connector finite state machine flag. */
 typedef enum {
     /** Sockets are not initialized and not connected. */
     VSP_CMCP_UNINITIALIZED,
@@ -26,7 +26,7 @@ typedef enum {
 } vsp_cmcp_state;
 
 /** State and other data used for network connection. */
-struct vsp_cmcp_network_connector {
+struct vsp_cmcp_connector {
     /** Finite state machine flag. */
     vsp_cmcp_state state;
     /** nanomsg socket number to publish messages. */
@@ -37,11 +37,11 @@ struct vsp_cmcp_network_connector {
     int receiving;
 };
 
-vsp_cmcp_network_connector* vsp_cmcp_network_connector_create(void)
+vsp_cmcp_connector* vsp_cmcp_connector_create(void)
 {
-    vsp_cmcp_network_connector *net_conn;
+    vsp_cmcp_connector *net_conn;
     /* allocate memory */
-    net_conn = malloc(sizeof(struct vsp_cmcp_network_connector));
+    net_conn = malloc(sizeof(struct vsp_cmcp_connector));
     if (net_conn == NULL) {
         /* allocation failed */
         vsp_error_set_num(ENOMEM);
@@ -55,7 +55,7 @@ vsp_cmcp_network_connector* vsp_cmcp_network_connector_create(void)
     return net_conn;
 }
 
-int vsp_cmcp_connect(vsp_cmcp_network_connector *net_conn,
+int vsp_cmcp_connect(vsp_cmcp_connector *net_conn,
     const char *publish_address, const char *subscribe_address)
 {
     int ret;
@@ -91,7 +91,7 @@ int vsp_cmcp_connect(vsp_cmcp_network_connector *net_conn,
     return 0;
 }
 
-int vsp_cmcp_disconnect(vsp_cmcp_network_connector *net_conn)
+int vsp_cmcp_disconnect(vsp_cmcp_connector *net_conn)
 {
     int ret;
 
@@ -126,7 +126,7 @@ int vsp_cmcp_disconnect(vsp_cmcp_network_connector *net_conn)
     return 0;
 }
 
-int vsp_cmcp_reception_thread_run(vsp_cmcp_network_connector *net_conn)
+int vsp_cmcp_reception_thread_run(vsp_cmcp_connector *net_conn)
 {
     if (net_conn == NULL) {
         /* invalid parameter */
@@ -143,7 +143,7 @@ int vsp_cmcp_reception_thread_run(vsp_cmcp_network_connector *net_conn)
     return 0;
 }
 
-int vsp_cmcp_reception_thread_stop(vsp_cmcp_network_connector *net_conn)
+int vsp_cmcp_reception_thread_stop(vsp_cmcp_connector *net_conn)
 {
     if (net_conn == NULL) {
         /* invalid parameter */
@@ -156,7 +156,7 @@ int vsp_cmcp_reception_thread_stop(vsp_cmcp_network_connector *net_conn)
     return 0;
 }
 
-int vsp_cmcp_network_connector_free(vsp_cmcp_network_connector *net_conn)
+int vsp_cmcp_connector_free(vsp_cmcp_connector *net_conn)
 {
     int ret;
     int success;

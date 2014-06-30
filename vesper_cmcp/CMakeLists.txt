@@ -14,7 +14,7 @@ set(HEADERS
 
 # add source files of this module
 set(SOURCES
-    ${PROJECT_SOURCE_DIR}/vsp_network_connector.c
+    ${PROJECT_SOURCE_DIR}/vsp_connector.c
 )
 
 # add object files to be compiled

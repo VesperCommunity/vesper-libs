@@ -15,8 +15,8 @@ All rights reserved.
 ### vesper-cmcp
 
 `vesper-cmcp` provides an implementation of the [CMCP protocol][cmcp_link]
-and lets you build servers and clients connected over network, e.g. for
-physical simulations.
+and lets you build connected servers and clients, e.g. for physical simulations
+over a network.
 
 [cmcp_link]: https://github.com/jellysheep/spheresim/wiki/Protocol
 
