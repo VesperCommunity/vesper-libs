@@ -20,3 +20,6 @@ target_link_libraries(vesper-test vesper-error vesper-cmcp)
 
 # add rule to install executable
 install(TARGETS vesper-test RUNTIME DESTINATION bin)
+
+# add custom target 'make check' to enable testing
+add_custom_target(check COMMAND vesper-test)
