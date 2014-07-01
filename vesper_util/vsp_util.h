@@ -49,4 +49,13 @@
     ptr = NULL; \
 } while (0)
 
+/** Assert condition, set error number and react in case of failure. */
+#define VSP_ASSERT(condition, failure_action) do { \
+    /* check condition */ \
+    if (!(condition)) { \
+        /* condition failed */ \
+        failure_action; \
+    } \
+} while (0)
+
 #endif /* !defined VSP_UTIL_H_INCLUDED */
