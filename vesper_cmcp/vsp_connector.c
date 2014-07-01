@@ -41,12 +41,7 @@ vsp_cmcp_connector* vsp_cmcp_connector_create(void)
 {
     vsp_cmcp_connector *net_conn;
     /* allocate memory */
-    net_conn = malloc(sizeof(struct vsp_cmcp_connector));
-    if (net_conn == NULL) {
-        /* allocation failed */
-        vsp_error_set_num(ENOMEM);
-        return NULL;
-    }
+    VSP_ALLOC(net_conn, vsp_cmcp_connector, return NULL);
     /* initialize struct data */
     net_conn->state = VSP_CMCP_UNINITIALIZED;
     net_conn->publish_socket = -1;
@@ -183,6 +178,6 @@ int vsp_cmcp_connector_free(vsp_cmcp_connector *net_conn)
         }
     }
     /* free memory */
-    free(net_conn);
+    VSP_FREE(net_conn);
     return success;
 }

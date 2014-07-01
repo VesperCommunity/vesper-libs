@@ -31,4 +31,22 @@
   #endif
 #endif /* defined _WIN32 */
 
+/** Try to allocate memory, check result and react in case of failure. */
+#define VSP_ALLOC(ptr, type, failure_action) do { \
+    /* allocate memory */ \
+    ptr = malloc(sizeof(type)); \
+    if (ptr == NULL) { \
+        /* allocation failed */ \
+        vsp_error_set_num(ENOMEM); \
+        failure_action; \
+    } \
+} while (0)
+
+/** Free memory and set `ptr` to `NULL`. */
+#define VSP_FREE(ptr) do { \
+    /* free memory */ \
+    free(ptr); \
+    ptr = NULL; \
+} while (0)
+
 #endif /* !defined VSP_UTIL_H_INCLUDED */
