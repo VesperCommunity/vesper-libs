@@ -10,7 +10,7 @@
 #if !defined VSP_CMCP_H_INCLUDED
 #define VSP_CMCP_H_INCLUDED
 
-#include <vesper_util/vsp_util.h>
+#include <vesper_util/vsp_api.h>
 
 #if defined __cplusplus
 extern "C" {

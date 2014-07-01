@@ -10,27 +10,6 @@
 #if !defined VSP_UTIL_H_INCLUDED
 #define VSP_UTIL_H_INCLUDED
 
-/**
- * Shared library export marker.
- * Defined to be `__declspec(dllexport)` or `__declspec(dllimport)` on Windows
- * and `__attribute__((visibility("default")))` on GNU platforms.
- */
-#if defined _WIN32
-  #if defined VSP_BUILD_API
-    /* build dll */
-    #define VSP_API __declspec(dllexport)
-  #else
-    /* use dll */
-    #define VSP_API __declspec(dllimport)
-  #endif /* defined VSP_BUILD_API*/
-#else
-  #if __GNUC__ >= 4
-    #define VSP_API __attribute__((visibility("default")))
-  #else
-    #define VSP_API
-  #endif
-#endif /* defined _WIN32 */
-
 /** Try to allocate memory, check result and react in case of failure. */
 #define VSP_ALLOC(ptr, type, failure_action) do { \
     /* allocate memory */ \

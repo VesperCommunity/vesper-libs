@@ -15,7 +15,8 @@
 #include <nanomsg/nn.h>
 #include <nanomsg/pubsub.h>
 #include <stdlib.h>
-#include <vesper_error/vsp_error.h>
+#include <vesper_util/vsp_error.h>
+#include <vesper_util/vsp_util.h>
 
 /** vsp_cmcp_connector finite state machine flag. */
 typedef enum {

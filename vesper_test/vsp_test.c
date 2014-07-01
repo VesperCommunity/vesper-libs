@@ -9,7 +9,7 @@
 
 #include "minunit.h"
 
-#include <vesper_error/vsp_error.h>
+#include <vesper_util/vsp_error.h>
 #include <vesper_cmcp/vsp_cmcp.h>
 
 /** Publish socket address. */

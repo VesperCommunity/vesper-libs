@@ -24,15 +24,11 @@ over a network.
 
 `vesper-test` is a small unit test checking functionality of C modules.
 
-### vesper-error
-
-`vesper-error` is a helper module providing small functions for error numbers
-and names (like standard `errno` and `strerror()`).
-
 ### vesper-util
 
-`vesper-util` is a helper module providing a header file with symbol export
-markers.
+`vesper-util` is a helper module providing header files with symbol export
+markers and small functions for error numbers and names (like standard
+`errno` and `strerror()`).
 
 ## Coding style
 
