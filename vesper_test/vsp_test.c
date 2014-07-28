@@ -49,27 +49,6 @@ MU_TEST(vsp_cmcp_client_allocation)
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
 }
 
-/** Test vsp_cmcp_client_connect(). */
-MU_TEST(vsp_cmcp_client_connection)
-{
-    int ret;
-    /* connection */
-    ret = vsp_cmcp_client_connect(net_conn, PUBLISH_ADDRESS, SUBSCRIBE_ADDRESS);
-    mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
-}
-
-/** Test vsp_cmcp_client_disconnect(). */
-MU_TEST(vsp_cmcp_client_disconnection)
-{
-    int ret;
-    /* connection */
-    ret = vsp_cmcp_client_connect(net_conn, PUBLISH_ADDRESS, SUBSCRIBE_ADDRESS);
-    mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
-    /* disconnection */
-    ret = vsp_cmcp_client_disconnect(net_conn);
-    mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
-}
-
 /** Test vsp_cmcp_client_connect() and subsequent vsp_cmcp_client_disconnect(). */
 MU_TEST(vsp_cmcp_client_reconnection)
 {
@@ -89,8 +68,6 @@ MU_TEST(vsp_cmcp_client_reconnection)
 MU_TEST_SUITE(vesper_cmcp_client)
 {
     MU_SUITE_CONFIGURE(&vsp_cmcp_client_setup, &vsp_cmcp_client_teardown);
-    MU_RUN_TEST(vsp_cmcp_client_connection);
-    MU_RUN_TEST(vsp_cmcp_client_disconnection);
     MU_RUN_TEST(vsp_cmcp_client_reconnection);
 }
 
