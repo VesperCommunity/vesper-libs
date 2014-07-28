@@ -138,7 +138,7 @@ int vsp_cmcp_server_unbind(vsp_cmcp_server *cmcp_server)
     return 0;
 }
 
-int vsp_cmcp_server_reception_thread_run(vsp_cmcp_server *cmcp_server)
+int vsp_cmcp_server_run(vsp_cmcp_server *cmcp_server)
 {
     /* check parameter */
     VSP_ASSERT(cmcp_server != NULL, vsp_error_set_num(EINVAL); return -1);
@@ -152,7 +152,7 @@ int vsp_cmcp_server_reception_thread_run(vsp_cmcp_server *cmcp_server)
     return 0;
 }
 
-int vsp_cmcp_server_reception_thread_stop(vsp_cmcp_server *cmcp_server)
+int vsp_cmcp_server_stop(vsp_cmcp_server *cmcp_server)
 {
     /* check parameter */
     VSP_ASSERT(cmcp_server != NULL, vsp_error_set_num(EINVAL); return -1);

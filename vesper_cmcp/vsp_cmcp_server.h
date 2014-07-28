@@ -53,17 +53,17 @@ VSP_API int vsp_cmcp_server_unbind(vsp_cmcp_server *cmcp_server);
 
 /**
  * Run event loop for message reception. Should run in its own thread.
- * Terminates when vsp_cmcp_server_reception_thread_stop() is called.
+ * Terminates when vsp_cmcp_server_stop() is called.
  * Returns non-zero and sets vsp_error_num() if interrupted or failed.
  */
-VSP_API int vsp_cmcp_server_reception_thread_run(vsp_cmcp_server *cmcp_server);
+VSP_API int vsp_cmcp_server_run(vsp_cmcp_server *cmcp_server);
 
 /**
  * Stop event loop for message reception.
- * Does not wait until vsp_cmcp_server_reception_thread_run() has finished.
+ * Does not wait until vsp_cmcp_server_run() has finished.
  * Returns non-zero and sets vsp_error_num() if failed.
  */
-VSP_API int vsp_cmcp_server_reception_thread_stop(vsp_cmcp_server *cmcp_server);
+VSP_API int vsp_cmcp_server_stop(vsp_cmcp_server *cmcp_server);
 
 #if defined __cplusplus
 }
