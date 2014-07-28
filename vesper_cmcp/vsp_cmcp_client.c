@@ -40,18 +40,18 @@ struct vsp_cmcp_client {
 
 vsp_cmcp_client* vsp_cmcp_client_create(void)
 {
-    vsp_cmcp_client *net_conn;
+    vsp_cmcp_client *cmcp_client;
     /* allocate memory */
-    VSP_ALLOC(net_conn, vsp_cmcp_client, return NULL);
+    VSP_ALLOC(cmcp_client, vsp_cmcp_client, return NULL);
     /* initialize struct data */
-    net_conn->state = VSP_CMCP_CLIENT_UNINITIALIZED;
-    net_conn->publish_socket = -1;
-    net_conn->subscribe_socket = -1;
+    cmcp_client->state = VSP_CMCP_CLIENT_UNINITIALIZED;
+    cmcp_client->publish_socket = -1;
+    cmcp_client->subscribe_socket = -1;
     /* return struct pointer */
-    return net_conn;
+    return cmcp_client;
 }
 
-int vsp_cmcp_client_free(vsp_cmcp_client *net_conn)
+int vsp_cmcp_client_free(vsp_cmcp_client *cmcp_client)
 {
     int ret;
     int success;
@@ -59,106 +59,106 @@ int vsp_cmcp_client_free(vsp_cmcp_client *net_conn)
     success = 0;
 
     /* check parameter */
-    VSP_ASSERT(net_conn != NULL, vsp_error_set_num(EINVAL); return -1);
+    VSP_ASSERT(cmcp_client != NULL, vsp_error_set_num(EINVAL); return -1);
 
-    if (net_conn->state != VSP_CMCP_CLIENT_UNINITIALIZED) {
+    if (cmcp_client->state != VSP_CMCP_CLIENT_UNINITIALIZED) {
         /* close publish socket */
-        ret = nn_close(net_conn->publish_socket);
+        ret = nn_close(cmcp_client->publish_socket);
         /* check error set by nanomsg */
         VSP_ASSERT(ret == 0, success = -1);
 
         /* close subscribe socket */
-        ret = nn_close(net_conn->subscribe_socket);
+        ret = nn_close(cmcp_client->subscribe_socket);
         /* check error set by nanomsg */
         VSP_ASSERT(ret == 0, success = -1);
     }
     /* free memory */
-    VSP_FREE(net_conn);
+    VSP_FREE(cmcp_client);
     return success;
 }
 
-int vsp_cmcp_client_connect(vsp_cmcp_client *net_conn,
+int vsp_cmcp_client_connect(vsp_cmcp_client *cmcp_client,
     const char *publish_address, const char *subscribe_address)
 {
     int ret;
 
     /* check parameters */
-    VSP_ASSERT(net_conn != NULL && publish_address != NULL
+    VSP_ASSERT(cmcp_client != NULL && publish_address != NULL
         && subscribe_address != NULL, vsp_error_set_num(EINVAL); return -1);
     /* check sockets not yet initialized */
-    VSP_ASSERT(net_conn->state == VSP_CMCP_CLIENT_UNINITIALIZED,
+    VSP_ASSERT(cmcp_client->state == VSP_CMCP_CLIENT_UNINITIALIZED,
         vsp_error_set_num(EALREADY); return -1);
 
     /* initialize sockets */
-    net_conn->publish_socket = nn_socket(AF_SP, NN_PUB);
-    net_conn->subscribe_socket = nn_socket(AF_SP, NN_SUB);
+    cmcp_client->publish_socket = nn_socket(AF_SP, NN_PUB);
+    cmcp_client->subscribe_socket = nn_socket(AF_SP, NN_SUB);
 
     /* connect sockets */
-    ret = nn_connect(net_conn->publish_socket, publish_address);
+    ret = nn_connect(cmcp_client->publish_socket, publish_address);
     /* check error set by nanomsg */
     VSP_ASSERT(ret >= 0, return -1);
 
-    ret = nn_connect(net_conn->subscribe_socket, subscribe_address);
+    ret = nn_connect(cmcp_client->subscribe_socket, subscribe_address);
     /* check error set by nanomsg */
     VSP_ASSERT(ret >= 0, return -1);
 
     /* set state */
-    net_conn->state = VSP_CMCP_CLIENT_INITIALIZED;
+    cmcp_client->state = VSP_CMCP_CLIENT_INITIALIZED;
     /* sockets successfully connected */
     return 0;
 }
 
-int vsp_cmcp_client_disconnect(vsp_cmcp_client *net_conn)
+int vsp_cmcp_client_disconnect(vsp_cmcp_client *cmcp_client)
 {
     int ret;
 
     /* check parameter */
-    VSP_ASSERT(net_conn != NULL, vsp_error_set_num(EINVAL); return -1);
+    VSP_ASSERT(cmcp_client != NULL, vsp_error_set_num(EINVAL); return -1);
 
     /* check sockets already initialized */
-    VSP_ASSERT(net_conn->state != VSP_CMCP_CLIENT_UNINITIALIZED,
+    VSP_ASSERT(cmcp_client->state != VSP_CMCP_CLIENT_UNINITIALIZED,
         vsp_error_set_num(ENOTCONN); return -1);
 
     /* disconnect sockets */
-    ret = nn_close(net_conn->publish_socket);
+    ret = nn_close(cmcp_client->publish_socket);
     /* check error set by nanomsg */
     VSP_ASSERT(ret == 0, return -1);
 
-    ret = nn_close(net_conn->subscribe_socket);
+    ret = nn_close(cmcp_client->subscribe_socket);
     /* check error set by nanomsg */
     VSP_ASSERT(ret == 0, return -1);
 
     /* deinitialize sockets */
-    net_conn->publish_socket = -1;
-    net_conn->subscribe_socket = -1;
+    cmcp_client->publish_socket = -1;
+    cmcp_client->subscribe_socket = -1;
 
     /* set state */
-    net_conn->state = VSP_CMCP_CLIENT_UNINITIALIZED;
+    cmcp_client->state = VSP_CMCP_CLIENT_UNINITIALIZED;
     /* sockets successfully disconnected */
     return 0;
 }
 
-int vsp_cmcp_client_reception_thread_run(vsp_cmcp_client *net_conn)
+int vsp_cmcp_client_reception_thread_run(vsp_cmcp_client *cmcp_client)
 {
     /* check parameter */
-    VSP_ASSERT(net_conn != NULL, vsp_error_set_num(EINVAL); return -1);
+    VSP_ASSERT(cmcp_client != NULL, vsp_error_set_num(EINVAL); return -1);
 
-    net_conn->receiving = 1;
+    cmcp_client->receiving = 1;
     /* reception loop */
-    while (net_conn->receiving) {
+    while (cmcp_client->receiving) {
 
     }
     /* success */
     return 0;
 }
 
-int vsp_cmcp_client_reception_thread_stop(vsp_cmcp_client *net_conn)
+int vsp_cmcp_client_reception_thread_stop(vsp_cmcp_client *cmcp_client)
 {
     /* check parameter */
-    VSP_ASSERT(net_conn != NULL, vsp_error_set_num(EINVAL); return -1);
+    VSP_ASSERT(cmcp_client != NULL, vsp_error_set_num(EINVAL); return -1);
 
     /* stop reception */
-    net_conn->receiving = 0;
+    cmcp_client->receiving = 0;
     /* success */
     return 0;
 }

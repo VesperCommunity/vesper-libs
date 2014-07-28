@@ -34,14 +34,14 @@ VSP_API vsp_cmcp_server* vsp_cmcp_server_create(void);
  * Object should be created with vsp_cmcp_server_create().
  * Returns non-zero and sets vsp_error_num() if failed.
  */
-VSP_API int vsp_cmcp_server_free(vsp_cmcp_server* net_conn);
+VSP_API int vsp_cmcp_server_free(vsp_cmcp_server* cmcp_server);
 
 /**
  * Initialize and bind sockets.
  * Returns non-zero and sets vsp_error_num() if failed.
  * \see vsp_cmcp_server_unbind
  */
-VSP_API int vsp_cmcp_server_bind(vsp_cmcp_server *net_conn,
+VSP_API int vsp_cmcp_server_bind(vsp_cmcp_server *cmcp_server,
     const char *publish_address, const char *subscribe_address);
 
 /**
@@ -49,21 +49,21 @@ VSP_API int vsp_cmcp_server_bind(vsp_cmcp_server *net_conn,
  * Sockets have to be binded with vsp_cmcp_server_bind() first.
  * Returns non-zero and sets vsp_error_num() if failed.
  */
-VSP_API int vsp_cmcp_server_unbind(vsp_cmcp_server *net_conn);
+VSP_API int vsp_cmcp_server_unbind(vsp_cmcp_server *cmcp_server);
 
 /**
  * Run event loop for message reception. Should run in its own thread.
  * Terminates when vsp_cmcp_server_reception_thread_stop() is called.
  * Returns non-zero and sets vsp_error_num() if interrupted or failed.
  */
-VSP_API int vsp_cmcp_server_reception_thread_run(vsp_cmcp_server *net_conn);
+VSP_API int vsp_cmcp_server_reception_thread_run(vsp_cmcp_server *cmcp_server);
 
 /**
  * Stop event loop for message reception.
  * Does not wait until vsp_cmcp_server_reception_thread_run() has finished.
  * Returns non-zero and sets vsp_error_num() if failed.
  */
-VSP_API int vsp_cmcp_server_reception_thread_stop(vsp_cmcp_server *net_conn);
+VSP_API int vsp_cmcp_server_reception_thread_stop(vsp_cmcp_server *cmcp_server);
 
 #if defined __cplusplus
 }

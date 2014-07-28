@@ -17,50 +17,53 @@
 /** Subscribe socket address. */
 #define SUBSCRIBE_ADDRESS "tcp://127.0.0.1:7572"
 
-/** Global testing object. */
-static vsp_cmcp_client *net_conn;
+/** Global CMCP client object. */
+static vsp_cmcp_client *global_cmcp_client;
 
-/** Create global net_conn object. \see net_conn */
+/** Create global global_cmcp_client object. \see global_cmcp_client */
 void vsp_cmcp_client_setup(void);
-/** Free global net_conn object. \see net_conn */
+/** Free global global_cmcp_client object. \see global_cmcp_client */
 void vsp_cmcp_client_teardown(void);
 
 void vsp_cmcp_client_setup(void)
 {
-    net_conn = vsp_cmcp_client_create();
+    global_cmcp_client = vsp_cmcp_client_create();
 }
 
 void vsp_cmcp_client_teardown(void)
 {
-    vsp_cmcp_client_free(net_conn);
+    vsp_cmcp_client_free(global_cmcp_client);
 }
 
 /** Test vsp_cmcp_client_create() and
  * vsp_cmcp_client_free(). */
 MU_TEST(vsp_cmcp_client_allocation)
 {
-    vsp_cmcp_client *local_net_conn;
+    vsp_cmcp_client *local_global_cmcp_client;
     int ret;
     /* allocation */
-    local_net_conn = vsp_cmcp_client_create();
-    mu_assert(local_net_conn != NULL, vsp_error_str(vsp_error_num()));
+    local_global_cmcp_client = vsp_cmcp_client_create();
+    mu_assert(local_global_cmcp_client != NULL, vsp_error_str(vsp_error_num()));
     /* deallocation */
-    ret = vsp_cmcp_client_free(local_net_conn);
+    ret = vsp_cmcp_client_free(local_global_cmcp_client);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
 }
 
-/** Test vsp_cmcp_client_connect() and subsequent vsp_cmcp_client_disconnect(). */
+/** Test vsp_cmcp_client_connect() and subsequent
+ * vsp_cmcp_client_disconnect(). */
 MU_TEST(vsp_cmcp_client_reconnection)
 {
     int ret;
     /* connection */
-    ret = vsp_cmcp_client_connect(net_conn, PUBLISH_ADDRESS, SUBSCRIBE_ADDRESS);
+    ret = vsp_cmcp_client_connect(global_cmcp_client, PUBLISH_ADDRESS,
+        SUBSCRIBE_ADDRESS);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
     /* disconnection */
-    ret = vsp_cmcp_client_disconnect(net_conn);
+    ret = vsp_cmcp_client_disconnect(global_cmcp_client);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
     /* reconnection */
-    ret = vsp_cmcp_client_connect(net_conn, PUBLISH_ADDRESS, SUBSCRIBE_ADDRESS);
+    ret = vsp_cmcp_client_connect(global_cmcp_client, PUBLISH_ADDRESS,
+        SUBSCRIBE_ADDRESS);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
 }
 
