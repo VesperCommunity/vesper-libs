@@ -46,7 +46,7 @@ VSP_API int vsp_cmcp_server_bind(vsp_cmcp_server *cmcp_server,
 
 /**
  * Unbind and deinitialize sockets.
- * Sockets have to be binded with vsp_cmcp_server_bind() first.
+ * Sockets have to be bound with vsp_cmcp_server_bind() first.
  * Returns non-zero and sets vsp_error_num() if failed.
  */
 VSP_API int vsp_cmcp_server_unbind(vsp_cmcp_server *cmcp_server);

@@ -24,12 +24,12 @@ typedef enum {
     VSP_CMCP_CLIENT_UNINITIALIZED,
     /** Sockets are initialized and connected. */
     VSP_CMCP_CLIENT_INITIALIZED
-} vsp_cmcp_state;
+} vsp_cmcp_client_state;
 
 /** State and other data used for network connection. */
 struct vsp_cmcp_client {
     /** Finite state machine flag. */
-    vsp_cmcp_state state;
+    vsp_cmcp_client_state state;
     /** nanomsg socket number to publish messages. */
     int publish_socket;
     /** nanomsg socket number to receive messages. */
