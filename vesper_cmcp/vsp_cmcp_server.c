@@ -20,13 +20,13 @@
 
 /** vsp_cmcp_server finite state machine flag. */
 typedef enum {
-    /** Sockets are not initialized and not connected. */
+    /** Sockets are not initialized and not binded. */
     VSP_CMCP_SERVER_UNINITIALIZED,
-    /** Sockets are initialized and connected. */
+    /** Sockets are initialized and binded. */
     VSP_CMCP_SERVER_INITIALIZED
 } vsp_cmcp_state;
 
-/** State and other data used for network connection. */
+/** State and other data used for network bindion. */
 struct vsp_cmcp_server {
     /** Finite state machine flag. */
     vsp_cmcp_state state;
@@ -77,7 +77,7 @@ int vsp_cmcp_server_free(vsp_cmcp_server *net_conn)
     return success;
 }
 
-int vsp_cmcp_server_connect(vsp_cmcp_server *net_conn,
+int vsp_cmcp_server_bind(vsp_cmcp_server *net_conn,
     const char *publish_address, const char *subscribe_address)
 {
     int ret;
@@ -93,22 +93,22 @@ int vsp_cmcp_server_connect(vsp_cmcp_server *net_conn,
     net_conn->publish_socket = nn_socket(AF_SP, NN_PUB);
     net_conn->subscribe_socket = nn_socket(AF_SP, NN_SUB);
 
-    /* connect sockets */
-    ret = nn_connect(net_conn->publish_socket, publish_address);
+    /* bind sockets */
+    ret = nn_bind(net_conn->publish_socket, publish_address);
     /* check error set by nanomsg */
     VSP_ASSERT(ret >= 0, return -1);
 
-    ret = nn_connect(net_conn->subscribe_socket, subscribe_address);
+    ret = nn_bind(net_conn->subscribe_socket, subscribe_address);
     /* check error set by nanomsg */
     VSP_ASSERT(ret >= 0, return -1);
 
     /* set state */
     net_conn->state = VSP_CMCP_SERVER_INITIALIZED;
-    /* sockets successfully connected */
+    /* sockets successfully binded */
     return 0;
 }
 
-int vsp_cmcp_server_disconnect(vsp_cmcp_server *net_conn)
+int vsp_cmcp_server_unbind(vsp_cmcp_server *net_conn)
 {
     int ret;
 
@@ -119,7 +119,7 @@ int vsp_cmcp_server_disconnect(vsp_cmcp_server *net_conn)
     VSP_ASSERT(net_conn->state != VSP_CMCP_SERVER_UNINITIALIZED,
         vsp_error_set_num(ENOTCONN); return -1);
 
-    /* disconnect sockets */
+    /* unbind sockets */
     ret = nn_close(net_conn->publish_socket);
     /* check error set by nanomsg */
     VSP_ASSERT(ret == 0, return -1);
@@ -134,7 +134,7 @@ int vsp_cmcp_server_disconnect(vsp_cmcp_server *net_conn)
 
     /* set state */
     net_conn->state = VSP_CMCP_SERVER_UNINITIALIZED;
-    /* sockets successfully disconnected */
+    /* sockets successfully unbinded */
     return 0;
 }
 

@@ -16,7 +16,7 @@
 extern "C" {
 #endif /* defined __cplusplus */
 
-/** State and other data used for (network) connection. */
+/** State and other data used for (network) bindion. */
 struct vsp_cmcp_server;
 
 /** Define type vsp_cmcp_server to avoid 'struct' keyword. */
@@ -37,19 +37,19 @@ VSP_API vsp_cmcp_server* vsp_cmcp_server_create(void);
 VSP_API int vsp_cmcp_server_free(vsp_cmcp_server* net_conn);
 
 /**
- * Initialize and connect sockets.
+ * Initialize and bind sockets.
  * Returns non-zero and sets vsp_error_num() if failed.
- * \see vsp_cmcp_server_disconnect
+ * \see vsp_cmcp_server_unbind
  */
-VSP_API int vsp_cmcp_server_connect(vsp_cmcp_server *net_conn,
+VSP_API int vsp_cmcp_server_bind(vsp_cmcp_server *net_conn,
     const char *publish_address, const char *subscribe_address);
 
 /**
- * Disconnect and deinitialize sockets.
- * Sockets have to be connected with vsp_cmcp_server_connect() first.
+ * Unbind and deinitialize sockets.
+ * Sockets have to be binded with vsp_cmcp_server_bind() first.
  * Returns non-zero and sets vsp_error_num() if failed.
  */
-VSP_API int vsp_cmcp_server_disconnect(vsp_cmcp_server *net_conn);
+VSP_API int vsp_cmcp_server_unbind(vsp_cmcp_server *net_conn);
 
 /**
  * Run event loop for message reception. Should run in its own thread.
