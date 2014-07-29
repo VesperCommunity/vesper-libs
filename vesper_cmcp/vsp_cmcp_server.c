@@ -20,13 +20,13 @@
 
 /** vsp_cmcp_server finite state machine flag. */
 typedef enum {
-    /** Sockets are not initialized and not binded. */
+    /** Sockets are not initialized and not bound. */
     VSP_CMCP_SERVER_UNINITIALIZED,
-    /** Sockets are initialized and binded. */
+    /** Sockets are initialized and bound. */
     VSP_CMCP_SERVER_INITIALIZED
 } vsp_cmcp_server_state;
 
-/** State and other data used for network bindion. */
+/** State and other data used for network connection. */
 struct vsp_cmcp_server {
     /** Finite state machine flag. */
     vsp_cmcp_server_state state;
@@ -104,7 +104,7 @@ int vsp_cmcp_server_bind(vsp_cmcp_server *cmcp_server,
 
     /* set state */
     cmcp_server->state = VSP_CMCP_SERVER_INITIALIZED;
-    /* sockets successfully binded */
+    /* sockets successfully bound */
     return 0;
 }
 
@@ -134,7 +134,7 @@ int vsp_cmcp_server_unbind(vsp_cmcp_server *cmcp_server)
 
     /* set state */
     cmcp_server->state = VSP_CMCP_SERVER_UNINITIALIZED;
-    /* sockets successfully unbinded */
+    /* sockets successfully unbound */
     return 0;
 }
 

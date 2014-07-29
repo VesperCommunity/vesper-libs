@@ -16,7 +16,7 @@
 extern "C" {
 #endif /* defined __cplusplus */
 
-/** State and other data used for (network) bindion. */
+/** State and other data used for (network) connection. */
 struct vsp_cmcp_server;
 
 /** Define type vsp_cmcp_server to avoid 'struct' keyword. */
