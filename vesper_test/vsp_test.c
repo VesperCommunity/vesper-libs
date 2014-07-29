@@ -80,6 +80,12 @@ MU_TEST(vsp_cmcp_connection)
     ret = vsp_cmcp_client_connect(global_cmcp_client, SERVER_SUBSCRIBE_ADDRESS,
         SERVER_PUBLISH_ADDRESS);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
+    /* start */
+    ret = vsp_cmcp_client_start(global_cmcp_client);
+    mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
+    /* stop */
+    ret = vsp_cmcp_client_stop(global_cmcp_client);
+    mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
     /* disconnect */
     ret = vsp_cmcp_client_disconnect(global_cmcp_client);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
