@@ -14,6 +14,7 @@
 #endif
 #include <nanomsg/nn.h>
 #include <nanomsg/pubsub.h>
+#include <pthread.h>
 #include <stdlib.h>
 #include <vesper_util/vsp_error.h>
 #include <vesper_util/vsp_util.h>
@@ -23,7 +24,13 @@ typedef enum {
     /** Sockets are not initialized and not bound. */
     VSP_CMCP_SERVER_UNINITIALIZED,
     /** Sockets are initialized and bound. */
-    VSP_CMCP_SERVER_INITIALIZED
+    VSP_CMCP_SERVER_INITIALIZED,
+    /** Message reception thread was started. */
+    VSP_CMCP_SERVER_STARTING,
+    /** Message reception thread is running. */
+    VSP_CMCP_SERVER_RUNNING,
+    /** Message reception thread was stopped. */
+    VSP_CMCP_SERVER_STOPPING
 } vsp_cmcp_server_state;
 
 /** State and other data used for network connection. */
@@ -34,9 +41,12 @@ struct vsp_cmcp_server {
     int publish_socket;
     /** nanomsg socket number to receive messages. */
     int subscribe_socket;
-    /** Flag for reception thread (1 if running, 0 otherwise). */
-    int receiving;
+    /** Reception thread. */
+    pthread_t thread;
 };
+
+/** Event loop for message reception running in its own thread. */
+static void *_vsp_cmcp_server_run(void *param);
 
 vsp_cmcp_server* vsp_cmcp_server_create(void)
 {
@@ -138,27 +148,92 @@ int vsp_cmcp_server_unbind(vsp_cmcp_server *cmcp_server)
     return 0;
 }
 
-int vsp_cmcp_server_run(vsp_cmcp_server *cmcp_server)
+int vsp_cmcp_server_start(vsp_cmcp_server *cmcp_server)
 {
+    int ret;
+
     /* check parameter */
     VSP_ASSERT(cmcp_server != NULL, vsp_error_set_num(EINVAL); return -1);
 
-    cmcp_server->receiving = 1;
-    /* reception loop */
-    while (cmcp_server->receiving) {
+    /* check sockets are initialized and thread is not running */
+    VSP_ASSERT(cmcp_server->state == VSP_CMCP_SERVER_INITIALIZED,
+        vsp_error_set_num(EINVAL); return -1);
 
-    }
+    /* mark thread as starting */
+    cmcp_server->state = VSP_CMCP_SERVER_STARTING;
+
+    /* start reception thread */
+    ret = pthread_create(&cmcp_server->thread, NULL, _vsp_cmcp_server_run,
+        (void*) cmcp_server);
+
+    /* check for pthread errors */
+    VSP_ASSERT(ret == 0, vsp_error_set_num(ret); return -1);
+
     /* success */
     return 0;
 }
 
 int vsp_cmcp_server_stop(vsp_cmcp_server *cmcp_server)
 {
+    int ret;
+
     /* check parameter */
     VSP_ASSERT(cmcp_server != NULL, vsp_error_set_num(EINVAL); return -1);
 
-    /* stop reception */
-    cmcp_server->receiving = 0;
+    /* wait until thread has started */
+    while (cmcp_server->state == VSP_CMCP_SERVER_STARTING) {
+        /* do nothing */
+    }
+
+    /* check thread is running */
+    VSP_ASSERT(cmcp_server->state == VSP_CMCP_SERVER_RUNNING,
+        vsp_error_set_num(EINVAL); return -1);
+
+    /* stop reception thread */
+    cmcp_server->state = VSP_CMCP_SERVER_STOPPING;
+
+    /* wait for thread to join */
+    ret = pthread_join(cmcp_server->thread, NULL);
+
+    /* check thread has successfully stopped */
+    VSP_ASSERT(ret == 0, vsp_error_set_num(EINTR); return -1);
+
+    /* check state */
+    VSP_ASSERT(cmcp_server->state == VSP_CMCP_SERVER_INITIALIZED,
+        vsp_error_set_num(EINTR); return -1);
+
     /* success */
     return 0;
+}
+
+void *_vsp_cmcp_server_run(void *param)
+{
+    vsp_cmcp_server *cmcp_server;
+
+    /* check parameter */
+    VSP_ASSERT(param != NULL, vsp_error_set_num(EINVAL); return (void*) -1);
+
+    cmcp_server = (vsp_cmcp_server*) param;
+
+    /* check sockets are initialized and thread was started */
+    VSP_ASSERT(cmcp_server->state == VSP_CMCP_SERVER_STARTING,
+        vsp_error_set_num(EINVAL); return (void*) -1);
+
+    /* mark thread as running */
+    cmcp_server->state = VSP_CMCP_SERVER_RUNNING;
+
+    /* reception loop */
+    while (cmcp_server->state == VSP_CMCP_SERVER_RUNNING) {
+
+    }
+
+    /* check thread was requested to stop */
+    VSP_ASSERT(cmcp_server->state == VSP_CMCP_SERVER_STOPPING,
+        vsp_error_set_num(EINTR); return (void*) -1);
+
+    /* signal that thread has stopped */
+    cmcp_server->state = VSP_CMCP_SERVER_INITIALIZED;
+
+    /* success */
+    return (void*) 0;
 }
