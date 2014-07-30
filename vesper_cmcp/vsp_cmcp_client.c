@@ -44,7 +44,7 @@ struct vsp_cmcp_client {
 /** Event loop for message reception running in its own thread. */
 static void *_vsp_cmcp_client_run(void *param);
 
-vsp_cmcp_client* vsp_cmcp_client_create(void)
+vsp_cmcp_client *vsp_cmcp_client_create(void)
 {
     vsp_cmcp_client *cmcp_client;
     /* allocate memory */

@@ -27,14 +27,14 @@ typedef struct vsp_cmcp_client vsp_cmcp_client;
  * Returned pointer should be freed with vsp_cmcp_client_free().
  * Returns NULL and sets vsp_error_num() if failed.
  */
-VSP_API vsp_cmcp_client* vsp_cmcp_client_create(void);
+VSP_API vsp_cmcp_client *vsp_cmcp_client_create(void);
 
 /**
  * Free vsp_cmcp_client object.
  * Object should be created with vsp_cmcp_client_create().
  * Returns non-zero and sets vsp_error_num() if failed.
  */
-VSP_API int vsp_cmcp_client_free(vsp_cmcp_client* cmcp_client);
+VSP_API int vsp_cmcp_client_free(vsp_cmcp_client *cmcp_client);
 
 /**
  * Initialize and connect sockets.

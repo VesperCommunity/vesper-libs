@@ -27,14 +27,14 @@ typedef struct vsp_cmcp_server vsp_cmcp_server;
  * Returned pointer should be freed with vsp_cmcp_server_free().
  * Returns NULL and sets vsp_error_num() if failed.
  */
-VSP_API vsp_cmcp_server* vsp_cmcp_server_create(void);
+VSP_API vsp_cmcp_server *vsp_cmcp_server_create(void);
 
 /**
  * Free vsp_cmcp_server object.
  * Object should be created with vsp_cmcp_server_create().
  * Returns non-zero and sets vsp_error_num() if failed.
  */
-VSP_API int vsp_cmcp_server_free(vsp_cmcp_server* cmcp_server);
+VSP_API int vsp_cmcp_server_free(vsp_cmcp_server *cmcp_server);
 
 /**
  * Initialize and bind sockets.
