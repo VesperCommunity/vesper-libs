@@ -8,16 +8,12 @@
 
 #include "vsp_cmcp_client.h"
 
-#if !defined __STDC_VERSION__ || __STDC_VERSION__ < 199901L
-  /* define "inline" keyword for pre-C99 C standard */
-  #define inline
-#endif
+#include <vesper_util/vsp_error.h>
+#include <vesper_util/vsp_util.h>
 #include <nanomsg/nn.h>
 #include <nanomsg/pubsub.h>
 #include <pthread.h>
 #include <stdlib.h>
-#include <vesper_util/vsp_error.h>
-#include <vesper_util/vsp_util.h>
 
 /** vsp_cmcp_client finite state machine flag. */
 typedef enum {

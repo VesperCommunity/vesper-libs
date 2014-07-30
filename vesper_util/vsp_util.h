@@ -10,6 +10,13 @@
 #if !defined VSP_UTIL_H_INCLUDED
 #define VSP_UTIL_H_INCLUDED
 
+#include <assert.h>
+
+#if !defined __STDC_VERSION__ || __STDC_VERSION__ < 199901L
+  /* define "inline" keyword for pre-C99 C standard */
+  #define inline
+#endif
+
 /** Try to allocate memory, check result and react in case of failure. */
 #define VSP_ALLOC(ptr, type, failure_action) do { \
     /* allocate memory */ \
@@ -29,12 +36,16 @@
 } while (0)
 
 /** Assert condition, set error number and react in case of failure. */
-#define VSP_ASSERT(condition, failure_action) do { \
-    /* check condition */ \
-    if (!(condition)) { \
-        /* condition failed */ \
-        failure_action; \
-    } \
-} while (0)
+#if !defined(NDEBUG)
+  #define VSP_ASSERT(condition, failure_action) assert(condition)
+#else
+  #define VSP_ASSERT(condition, failure_action) do { \
+      /* check condition */ \
+      if (!(condition)) { \
+          /* condition failed */ \
+          failure_action; \
+      } \
+  } while (0)
+#endif /* !defined(NDEBUG) */
 
 #endif /* !defined VSP_UTIL_H_INCLUDED */

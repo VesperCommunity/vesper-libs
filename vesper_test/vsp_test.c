@@ -9,9 +9,9 @@
 
 #include "minunit.h"
 
-#include <vesper_util/vsp_error.h>
-#include <vesper_cmcp/vsp_cmcp_server.h>
 #include <vesper_cmcp/vsp_cmcp_client.h>
+#include <vesper_cmcp/vsp_cmcp_server.h>
+#include <vesper_util/vsp_error.h>
 
 /** Server publish socket address. */
 #define SERVER_PUBLISH_ADDRESS "tcp://127.0.0.1:7571"
