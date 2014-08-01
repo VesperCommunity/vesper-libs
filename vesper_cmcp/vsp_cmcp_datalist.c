@@ -63,7 +63,7 @@ int vsp_cmcp_datalist_add_item(vsp_cmcp_datalist *cmcp_datalist,
         vsp_error_set_num(ENOMEM); return -1);
 
     /* check data list item was not added yet */
-    VSP_ASSERT(_vsp_cmcp_datalist_find_item(cmcp_datalist, data_id) == -1,
+    VSP_CHECK(_vsp_cmcp_datalist_find_item(cmcp_datalist, data_id) == -1,
         vsp_error_set_num(EALREADY); return -1);
 
     /* add data list item */
@@ -88,10 +88,10 @@ void *vsp_cmcp_datalist_get_data(vsp_cmcp_datalist *cmcp_datalist,
     index = _vsp_cmcp_datalist_find_item(cmcp_datalist, data_id);
 
     /* check data list item index */
-    VSP_ASSERT(index != -1, vsp_error_set_num(EINVAL); return NULL);
+    VSP_CHECK(index != -1, vsp_error_set_num(EINVAL); return NULL);
 
     /* check data list item length */
-    VSP_ASSERT(cmcp_datalist->data_lengths[index] == data_length,
+    VSP_CHECK(cmcp_datalist->data_lengths[index] == data_length,
         vsp_error_set_num(EINVAL); return NULL);
 
     /* return data pointer */

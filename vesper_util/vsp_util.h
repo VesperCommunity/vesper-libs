@@ -36,17 +36,22 @@
     ptr = NULL; \
 } while (0)
 
-/** Assert condition, set error number and react in case of failure. */
+/** Check condition, set error number and react in case of failure. */
+#define VSP_CHECK(condition, failure_action) do { \
+    /* check condition */ \
+    if (!(condition)) { \
+        /* condition failed */ \
+        failure_action; \
+    } \
+} while (0)
+
+/** Assert condition, set error number and react in case of failure.
+ * Aborts if condition fails in debug mode. */
 #if !defined(NDEBUG)
   #define VSP_ASSERT(condition, failure_action) assert(condition)
 #else
-  #define VSP_ASSERT(condition, failure_action) do { \
-      /* check condition */ \
-      if (!(condition)) { \
-          /* condition failed */ \
-          failure_action; \
-      } \
-  } while (0)
+  #define VSP_ASSERT(condition, failure_action) \
+      VSP_CHECK(condition, failure_action);
 #endif /* !defined(NDEBUG) */
 
 #endif /* !defined VSP_UTIL_H_INCLUDED */
