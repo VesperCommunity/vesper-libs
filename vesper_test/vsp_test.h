@@ -16,6 +16,8 @@ extern "C" {
 
 /** Test CMCP implementation. */
 MU_TEST_SUITE(vsp_test_cmcp_connection);
+/** Test data list implementation. */
+MU_TEST_SUITE(vsp_test_cmcp_datalist);
 
 #if defined __cplusplus
 }

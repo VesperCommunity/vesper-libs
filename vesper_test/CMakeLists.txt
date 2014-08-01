@@ -13,6 +13,7 @@ set(SOURCES
     ${PROJECT_SOURCE_DIR}/minunit.c
     ${PROJECT_SOURCE_DIR}/vsp_test.c
     ${PROJECT_SOURCE_DIR}/vsp_test_cmcp_connection.c
+    ${PROJECT_SOURCE_DIR}/vsp_test_cmcp_datalist.c
 )
 
 # compile sources into executable
