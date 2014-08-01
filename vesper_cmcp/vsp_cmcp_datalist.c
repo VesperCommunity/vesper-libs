@@ -28,7 +28,8 @@ struct vsp_cmcp_datalist {
 
 /** Search for a specific data list item by its ID.
  * Returns item index if found and -1 else. */
-int _vsp_cmcp_datalist_find_item(vsp_cmcp_datalist *cmcp_datalist, int data_id);
+static int _vsp_cmcp_datalist_find_item(vsp_cmcp_datalist *cmcp_datalist,
+    int data_id);
 
 vsp_cmcp_datalist *vsp_cmcp_datalist_create(void)
 {
