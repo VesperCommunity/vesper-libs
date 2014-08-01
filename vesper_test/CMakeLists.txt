@@ -5,11 +5,14 @@ cmake_minimum_required(VERSION 2.8)
 # add header files of this module
 set(HEADERS
     ${PROJECT_SOURCE_DIR}/minunit.h
+    ${PROJECT_SOURCE_DIR}/vsp_test.h
 )
 
 # add source files of this module
 set(SOURCES
+    ${PROJECT_SOURCE_DIR}/minunit.c
     ${PROJECT_SOURCE_DIR}/vsp_test.c
+    ${PROJECT_SOURCE_DIR}/vsp_test_cmcp_connection.c
 )
 
 # compile sources into executable
