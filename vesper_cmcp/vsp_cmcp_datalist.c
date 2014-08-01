@@ -26,6 +26,10 @@ struct vsp_cmcp_datalist {
     int data_item_count;
 };
 
+/** Search for a specific data list item by its ID.
+ * Returns item index if found and -1 else. */
+int _vsp_cmcp_datalist_find_item(vsp_cmcp_datalist *cmcp_datalist, int data_id);
+
 vsp_cmcp_datalist *vsp_cmcp_datalist_create(void)
 {
     vsp_cmcp_datalist *cmcp_datalist;
@@ -45,4 +49,46 @@ int vsp_cmcp_datalist_free(vsp_cmcp_datalist *cmcp_datalist)
     /* free memory */
     VSP_FREE(cmcp_datalist);
     return 0;
+}
+
+int vsp_cmcp_datalist_add_item(vsp_cmcp_datalist *cmcp_datalist,
+    int data_id, int data_length, void *data_pointer)
+{
+    /* check parameter */
+    VSP_ASSERT(cmcp_datalist != NULL, vsp_error_set_num(EINVAL); return -1);
+
+    /* check data list item count */
+    VSP_ASSERT(cmcp_datalist->data_item_count < VSP_CMCP_DATALIST_MAX_ITEMS,
+        vsp_error_set_num(ENOMEM); return -1);
+
+    /* check data list item was not added yet */
+    VSP_ASSERT(_vsp_cmcp_datalist_find_item(cmcp_datalist, data_id) == -1,
+        vsp_error_set_num(EALREADY); return -1);
+
+    /* add data list item */
+    cmcp_datalist->data_ids[cmcp_datalist->data_item_count] = data_id;
+    cmcp_datalist->data_lengths[cmcp_datalist->data_item_count] = data_length;
+    cmcp_datalist->data_pointers[cmcp_datalist->data_item_count] = data_pointer;
+    ++cmcp_datalist->data_item_count;
+
+    /* success */
+    return 0;
+}
+
+int _vsp_cmcp_datalist_find_item(vsp_cmcp_datalist *cmcp_datalist, int data_id)
+{
+    int index;
+
+    /* check parameter */
+    VSP_ASSERT(cmcp_datalist != NULL, vsp_error_set_num(EINVAL); return -1);
+
+    for (index = 0; index < cmcp_datalist->data_item_count; ++index) {
+        if (cmcp_datalist->data_ids[index] == data_id) {
+            /* data ID found */
+            return index;
+        }
+    }
+
+    /* data ID not found */
+    return -1;
 }
