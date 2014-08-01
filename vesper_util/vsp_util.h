@@ -11,6 +11,7 @@
 #define VSP_UTIL_H_INCLUDED
 
 #include <assert.h>
+#include <errno.h>
 
 #if !defined __STDC_VERSION__ || __STDC_VERSION__ < 199901L
   /* define "inline" keyword for pre-C99 C standard */

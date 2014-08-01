@@ -6,6 +6,7 @@ cmake_minimum_required(VERSION 2.8)
 set(API_HEADERS
     ${PROJECT_SOURCE_DIR}/vsp_cmcp_client.h
     ${PROJECT_SOURCE_DIR}/vsp_cmcp_server.h
+    ${PROJECT_SOURCE_DIR}/vsp_cmcp_datalist.h
 )
 
 # add header files of this module
@@ -17,6 +18,7 @@ set(HEADERS
 set(SOURCES
     ${PROJECT_SOURCE_DIR}/vsp_cmcp_client.c
     ${PROJECT_SOURCE_DIR}/vsp_cmcp_server.c
+    ${PROJECT_SOURCE_DIR}/vsp_cmcp_datalist.c
 )
 
 # add object files to be compiled
