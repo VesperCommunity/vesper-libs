@@ -75,6 +75,28 @@ int vsp_cmcp_datalist_add_item(vsp_cmcp_datalist *cmcp_datalist,
     return 0;
 }
 
+void *vsp_cmcp_datalist_get_data(vsp_cmcp_datalist *cmcp_datalist,
+    int data_id, int data_length)
+{
+    int index;
+
+    /* check parameter */
+    VSP_ASSERT(cmcp_datalist != NULL, vsp_error_set_num(EINVAL); return NULL);
+
+    /* search for data ID */
+    index = _vsp_cmcp_datalist_find_item(cmcp_datalist, data_id);
+
+    /* check data list item index */
+    VSP_ASSERT(index != -1, vsp_error_set_num(EINVAL); return NULL);
+
+    /* check data list item length */
+    VSP_ASSERT(cmcp_datalist->data_lengths[index] == data_length,
+        vsp_error_set_num(EINVAL); return NULL);
+
+    /* return data pointer */
+    return cmcp_datalist->data_pointers[index];
+}
+
 int _vsp_cmcp_datalist_find_item(vsp_cmcp_datalist *cmcp_datalist, int data_id)
 {
     int index;

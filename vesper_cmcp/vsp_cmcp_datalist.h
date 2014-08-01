@@ -49,6 +49,15 @@ VSP_API int vsp_cmcp_datalist_free(vsp_cmcp_datalist *cmcp_datalist);
 VSP_API int vsp_cmcp_datalist_add_item(vsp_cmcp_datalist *cmcp_datalist,
     int data_id, int data_length, void *data_pointer);
 
+/**
+ * Get pointer to data stored in the data list.
+ * The data should be immediately copied for further use, as no accessibility of
+ * the data can be guaranteed after vsp_cmcp_datalist_free() was called.
+ * Returns NULL and sets vsp_error_num() if failed or length does not match.
+ */
+VSP_API void *vsp_cmcp_datalist_get_data(vsp_cmcp_datalist *cmcp_datalist,
+    int data_id, int data_length);
+
 #if defined __cplusplus
 }
 #endif /* defined __cplusplus */
