@@ -13,7 +13,6 @@
 #include <nanomsg/nn.h>
 #include <nanomsg/pubsub.h>
 #include <pthread.h>
-#include <stdlib.h>
 
 /** vsp_cmcp_server finite state machine flag. */
 typedef enum {

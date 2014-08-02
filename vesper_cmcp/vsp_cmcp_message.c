@@ -10,7 +10,6 @@
 
 #include <vesper_util/vsp_error.h>
 #include <vesper_util/vsp_util.h>
-#include <stdlib.h>
 
 /** Message data sent over (network) connection. */
 struct vsp_cmcp_message {
