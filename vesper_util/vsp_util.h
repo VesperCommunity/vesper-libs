@@ -29,6 +29,17 @@
     } \
 } while (0)
 
+/** Try to allocate memory, check result and react in case of failure. */
+#define VSP_ALLOC_N(ptr, bytes, failure_action) do { \
+    /* allocate memory */ \
+    ptr = malloc(bytes); \
+    if (ptr == NULL) { \
+        /* allocation failed */ \
+        vsp_error_set_num(ENOMEM); \
+        failure_action; \
+    } \
+} while (0)
+
 /** Free memory and set `ptr` to `NULL`. */
 #define VSP_FREE(ptr) do { \
     /* free memory */ \
