@@ -52,6 +52,42 @@ int vsp_cmcp_datalist_free(vsp_cmcp_datalist *cmcp_datalist)
     return 0;
 }
 
+vsp_cmcp_datalist *vsp_cmcp_datalist_create_parse(uint16_t data_length,
+    void *data_pointer)
+{
+    uint16_t data_item_id;
+    uint16_t data_item_length;
+    void *data_item_pointer;
+    uint8_t *current_data_pointer;
+
+    vsp_cmcp_datalist *cmcp_datalist;
+    /* allocate memory */
+    VSP_ALLOC(cmcp_datalist, vsp_cmcp_datalist, return NULL);
+    /* initialize struct data: set number of list items to zero */
+    cmcp_datalist->data_item_count = 0;
+    /* add data list items */
+    current_data_pointer = data_pointer;
+    while (data_length >= 4) {
+        data_item_id = *(uint16_t*) current_data_pointer;
+        current_data_pointer += 2;
+        data_length -= 2;
+
+        data_item_length = *(uint16_t*) current_data_pointer;
+        current_data_pointer += 2;
+        data_length -= 2;
+
+        data_item_pointer = current_data_pointer;
+        current_data_pointer += data_item_length;
+        data_length -= data_item_length;
+
+        /* add data list item; failures are silently ignored */
+        vsp_cmcp_datalist_add_item(cmcp_datalist, data_item_id,
+            data_item_length, data_item_pointer);
+    }
+    /* return struct pointer */
+    return cmcp_datalist;
+}
+
 int vsp_cmcp_datalist_add_item(vsp_cmcp_datalist *cmcp_datalist,
     uint16_t data_id, uint16_t data_length, void *data_pointer)
 {
