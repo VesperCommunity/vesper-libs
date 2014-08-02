@@ -17,19 +17,19 @@
 /** State and other data used for network connection. */
 struct vsp_cmcp_datalist {
     /** Data list item IDs. */
-    int data_ids[VSP_CMCP_DATALIST_MAX_ITEMS];
+    uint16_t data_ids[VSP_CMCP_DATALIST_MAX_ITEMS];
     /** Data list item lengths. */
-    int data_lengths[VSP_CMCP_DATALIST_MAX_ITEMS];
+    uint16_t data_lengths[VSP_CMCP_DATALIST_MAX_ITEMS];
     /** Data list item data pointers. */
     void *data_pointers[VSP_CMCP_DATALIST_MAX_ITEMS];
     /** Number of stored data list items. */
-    int data_item_count;
+    uint16_t data_item_count;
 };
 
 /** Search for a specific data list item by its ID.
  * Returns item index if found and -1 else. */
 static int _vsp_cmcp_datalist_find_item(vsp_cmcp_datalist *cmcp_datalist,
-    int data_id);
+    uint16_t data_id);
 
 vsp_cmcp_datalist *vsp_cmcp_datalist_create(void)
 {
@@ -53,7 +53,7 @@ int vsp_cmcp_datalist_free(vsp_cmcp_datalist *cmcp_datalist)
 }
 
 int vsp_cmcp_datalist_add_item(vsp_cmcp_datalist *cmcp_datalist,
-    int data_id, int data_length, void *data_pointer)
+    uint16_t data_id, uint16_t data_length, void *data_pointer)
 {
     /* check parameter */
     VSP_ASSERT(cmcp_datalist != NULL, vsp_error_set_num(EINVAL); return -1);
@@ -77,7 +77,7 @@ int vsp_cmcp_datalist_add_item(vsp_cmcp_datalist *cmcp_datalist,
 }
 
 void *vsp_cmcp_datalist_get_data(vsp_cmcp_datalist *cmcp_datalist,
-    int data_id, int data_length)
+    uint16_t data_id, uint16_t data_length)
 {
     int index;
 
@@ -98,7 +98,8 @@ void *vsp_cmcp_datalist_get_data(vsp_cmcp_datalist *cmcp_datalist,
     return cmcp_datalist->data_pointers[index];
 }
 
-int _vsp_cmcp_datalist_find_item(vsp_cmcp_datalist *cmcp_datalist, int data_id)
+int _vsp_cmcp_datalist_find_item(vsp_cmcp_datalist *cmcp_datalist,
+    uint16_t data_id)
 {
     int index;
 

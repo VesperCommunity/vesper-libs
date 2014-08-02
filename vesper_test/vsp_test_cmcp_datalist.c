@@ -21,7 +21,7 @@
 /** First data list item id */
 #define DATALIST_ITEM1_ID 32349
 /** Second data list item id */
-#define DATALIST_ITEM2_ID -9273
+#define DATALIST_ITEM2_ID 9273
 
 /** First data list item length */
 #define DATALIST_ITEM1_LENGTH 6
