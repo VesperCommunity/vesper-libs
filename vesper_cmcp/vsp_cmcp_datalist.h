@@ -52,6 +52,15 @@ VSP_API vsp_cmcp_datalist *vsp_cmcp_datalist_create_parse(uint16_t data_length,
     void *data_pointer);
 
 /**
+ * Copy list content to binary data array and get data length and pointer.
+ * The data array will be newly created and never freed, so the application
+ * has to free the data.
+ * Returns non-zero and sets vsp_error_num() if failed.
+ */
+VSP_API int vsp_cmcp_datalist_get_data(vsp_cmcp_datalist *cmcp_datalist,
+    uint16_t *data_length, void **data_pointer);
+
+/**
  * Add a data list item to the data list.
  * The data will not be copied and only a pointer to it is stored, so the data
  * has to be accessible until vsp_cmcp_datalist_free() is called.

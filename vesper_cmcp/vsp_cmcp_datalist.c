@@ -10,7 +10,7 @@
 
 #include <vesper_util/vsp_error.h>
 #include <vesper_util/vsp_util.h>
-#include <stdlib.h>
+#include <string.h>
 
 #define VSP_CMCP_DATALIST_MAX_ITEMS 16
 
@@ -78,7 +78,7 @@ vsp_cmcp_datalist *vsp_cmcp_datalist_create_parse(uint16_t data_length,
         data_length -= 2;
 
         data_item_pointer = current_data_pointer;
-        current_data_pointer += data_length;
+        current_data_pointer += data_item_length;
         data_length -= data_item_length;
 
         /* add data list item; failures are silently ignored */
@@ -87,6 +87,57 @@ vsp_cmcp_datalist *vsp_cmcp_datalist_create_parse(uint16_t data_length,
     }
     /* return struct pointer */
     return cmcp_datalist;
+}
+
+int vsp_cmcp_datalist_get_data(vsp_cmcp_datalist *cmcp_datalist,
+    uint16_t *data_length, void **data_pointer)
+{
+    /* max. 64 KiB of data allowed */
+    uint16_t _data_length;
+    void *_data_pointer;
+    uint16_t index;
+    uint16_t data_item_length;
+    /* using byte pointer for safe pointer arithmetic */
+    uint8_t *current_data_pointer;
+
+    /* check parameter */
+    VSP_ASSERT(cmcp_datalist != NULL, vsp_error_set_num(EINVAL); return -1);
+
+    /* calculate data length */
+    for (index = 0; index < cmcp_datalist->data_item_count; ++index) {
+        /* 2 bytes per data item id and length */
+        _data_length += 4;
+        /* additional bytes per data item */
+        _data_length += cmcp_datalist->data_item_lengths[index];
+    }
+
+    /* allocate memory */
+    VSP_ALLOC_N(_data_pointer, _data_length, return -1);
+
+    /* store data item values */
+    current_data_pointer = _data_pointer;
+    for (index = 0; index < cmcp_datalist->data_item_count; ++index) {
+        *(uint16_t*) current_data_pointer =
+            cmcp_datalist->data_item_ids[index];
+        current_data_pointer += 2;
+
+        data_item_length = cmcp_datalist->data_item_lengths[index];
+        *(uint16_t*) current_data_pointer = data_item_length;
+        current_data_pointer += 2;
+
+        if (data_item_length > 0) {
+            memcpy(current_data_pointer,
+                cmcp_datalist->data_item_pointers[index], data_item_length);
+            current_data_pointer += data_item_length;
+        }
+    }
+
+    /* store data array and length in input parameters */
+    *data_length = _data_length;
+    *data_pointer = _data_pointer;
+
+    /* success */
+    return 0;
 }
 
 int vsp_cmcp_datalist_add_item(vsp_cmcp_datalist *cmcp_datalist,

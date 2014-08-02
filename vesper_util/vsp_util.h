@@ -12,6 +12,7 @@
 
 #include <assert.h>
 #include <errno.h>
+#include <stdlib.h>
 
 #if !defined __STDC_VERSION__ || __STDC_VERSION__ < 199901L
   /** Define "inline" keyword for pre-C99 C standard. */
