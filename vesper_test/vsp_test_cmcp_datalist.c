@@ -61,25 +61,25 @@ MU_TEST(vsp_test_cmcp_datalist_test)
     mu_assert(ret != 0, vsp_error_str(EINVAL));
 
     /* get back data list item and verify data */
-    data_pointer = vsp_cmcp_datalist_get_data(cmcp_datalist, DATALIST_ITEM1_ID,
-        DATALIST_ITEM1_LENGTH);
+    data_pointer = vsp_cmcp_datalist_get_data_item(cmcp_datalist,
+        DATALIST_ITEM1_ID, DATALIST_ITEM1_LENGTH);
     mu_assert(data_pointer != NULL, vsp_error_str(vsp_error_num()));
     mu_assert(memcmp(data_pointer, DATALIST_ITEM1_DATA, DATALIST_ITEM1_LENGTH)
         == 0, vsp_error_str(EINVAL));
 
-    data_pointer = vsp_cmcp_datalist_get_data(cmcp_datalist, DATALIST_ITEM2_ID,
-        DATALIST_ITEM2_LENGTH);
+    data_pointer = vsp_cmcp_datalist_get_data_item(cmcp_datalist,
+        DATALIST_ITEM2_ID, DATALIST_ITEM2_LENGTH);
     mu_assert(data_pointer != NULL, vsp_error_str(vsp_error_num()));
     mu_assert(memcmp(data_pointer, DATALIST_ITEM2_DATA, DATALIST_ITEM2_LENGTH)
         == 0, vsp_error_str(EINVAL));
 
     /* get back item data with wrong length and check for failure */
-    data_pointer = vsp_cmcp_datalist_get_data(cmcp_datalist, DATALIST_ITEM1_ID,
-        DATALIST_ITEM1_LENGTH + 1);
+    data_pointer = vsp_cmcp_datalist_get_data_item(cmcp_datalist,
+        DATALIST_ITEM1_ID, DATALIST_ITEM1_LENGTH + 1);
     mu_assert(data_pointer == NULL, vsp_error_str(EINVAL));
 
     /* get back item data for unknown item ID and check for failure */
-    data_pointer = vsp_cmcp_datalist_get_data(cmcp_datalist,
+    data_pointer = vsp_cmcp_datalist_get_data_item(cmcp_datalist,
         DATALIST_ITEM2_ID + 1, DATALIST_ITEM2_LENGTH);
     mu_assert(data_pointer == NULL, vsp_error_str(EINVAL));
 

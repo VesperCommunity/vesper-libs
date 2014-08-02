@@ -58,7 +58,7 @@ VSP_API vsp_cmcp_datalist *vsp_cmcp_datalist_create_parse(uint16_t data_length,
  * Returns non-zero and sets vsp_error_num() if failed.
  */
 VSP_API int vsp_cmcp_datalist_add_item(vsp_cmcp_datalist *cmcp_datalist,
-    uint16_t data_id, uint16_t data_length, void *data_pointer);
+    uint16_t data_item_id, uint16_t data_item_length, void *data_item_pointer);
 
 /**
  * Get pointer to data stored in the data list.
@@ -66,8 +66,8 @@ VSP_API int vsp_cmcp_datalist_add_item(vsp_cmcp_datalist *cmcp_datalist,
  * the data can be guaranteed after vsp_cmcp_datalist_free() was called.
  * Returns NULL and sets vsp_error_num() if failed or length does not match.
  */
-VSP_API void *vsp_cmcp_datalist_get_data(vsp_cmcp_datalist *cmcp_datalist,
-    uint16_t data_id, uint16_t data_length);
+VSP_API void *vsp_cmcp_datalist_get_data_item(vsp_cmcp_datalist *cmcp_datalist,
+    uint16_t data_item_id, uint16_t data_item_length);
 
 #if defined __cplusplus
 }
