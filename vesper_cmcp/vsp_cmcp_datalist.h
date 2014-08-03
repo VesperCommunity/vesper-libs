@@ -35,7 +35,8 @@ VSP_API vsp_cmcp_datalist *vsp_cmcp_datalist_create(void);
 
 /**
  * Free vsp_cmcp_datalist object.
- * Object should be created with vsp_cmcp_datalist_create().
+ * Object should be created with vsp_cmcp_datalist_create() or
+ * vsp_cmcp_datalist_create_parse().
  * This function does not free data stored in the data list.
  * Returns non-zero and sets vsp_error_num() if failed.
  */
