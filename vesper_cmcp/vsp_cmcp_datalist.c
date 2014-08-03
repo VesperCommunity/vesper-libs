@@ -56,6 +56,7 @@ int vsp_cmcp_datalist_free(vsp_cmcp_datalist *cmcp_datalist)
 vsp_cmcp_datalist *vsp_cmcp_datalist_create_parse(uint16_t data_length,
     void *data_pointer)
 {
+    int ret;
     uint16_t data_item_id;
     uint16_t data_item_length;
     void *data_item_pointer;
@@ -84,9 +85,11 @@ vsp_cmcp_datalist *vsp_cmcp_datalist_create_parse(uint16_t data_length,
         current_data_pointer += data_item_length;
         data_length -= data_item_length;
 
-        /* add data list item; failures are silently ignored */
-        vsp_cmcp_datalist_add_item(cmcp_datalist, data_item_id,
+        /* add data list item */
+        ret = vsp_cmcp_datalist_add_item(cmcp_datalist, data_item_id,
             data_item_length, data_item_pointer);
+        VSP_ASSERT(ret == 0,
+            /* failures are silently ignored in release build */);
     }
     /* return struct pointer */
     return cmcp_datalist;
