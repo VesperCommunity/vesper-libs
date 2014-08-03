@@ -41,7 +41,7 @@ MU_TEST(vsp_test_cmcp_datalist_test)
 {
     vsp_cmcp_datalist *cmcp_datalist1, *cmcp_datalist2;
     int ret;
-    uint16_t data_length;
+    int data_length;
     void *data_pointer;
     void *data_item_pointer;
 
@@ -58,9 +58,16 @@ MU_TEST(vsp_test_cmcp_datalist_test)
         DATALIST_ITEM2_LENGTH, DATALIST_ITEM2_DATA);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
 
-    /* get binary data array */
-    ret = vsp_cmcp_datalist_get_data(cmcp_datalist1, &data_length,
-        &data_pointer);
+    /* get binary data array length */
+    data_length = vsp_cmcp_datalist_get_data_length(cmcp_datalist1);
+    mu_assert(data_length ==
+        (DATALIST_ITEM1_LENGTH + DATALIST_ITEM2_LENGTH + 8),
+        vsp_error_str(vsp_error_num()));
+    /* allocate array */
+    data_pointer = malloc(data_length);
+    mu_assert(data_pointer != NULL, vsp_error_str(ENOMEM));
+    /* get binary data */
+    ret = vsp_cmcp_datalist_get_data(cmcp_datalist1, data_pointer);
     mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
 
     /* construct second data list using binary data array */

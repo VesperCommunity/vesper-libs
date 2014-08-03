@@ -90,12 +90,30 @@ vsp_cmcp_datalist *vsp_cmcp_datalist_create_parse(uint16_t data_length,
     return cmcp_datalist;
 }
 
-int vsp_cmcp_datalist_get_data(vsp_cmcp_datalist *cmcp_datalist,
-    uint16_t *data_length, void **data_pointer)
+int vsp_cmcp_datalist_get_data_length(vsp_cmcp_datalist *cmcp_datalist)
 {
     /* max. 64 KiB of data allowed */
-    uint16_t _data_length;
-    void *_data_pointer;
+    uint16_t data_length;
+    uint16_t index;
+
+    /* check parameter */
+    VSP_ASSERT(cmcp_datalist != NULL, vsp_error_set_num(EINVAL); return -1);
+
+    data_length = 0;
+    /* calculate data length */
+    for (index = 0; index < cmcp_datalist->data_item_count; ++index) {
+        /* 2 bytes per data item id and length */
+        data_length += 4;
+        /* additional bytes per data item */
+        data_length += cmcp_datalist->data_item_lengths[index];
+    }
+
+    return data_length;
+}
+
+int vsp_cmcp_datalist_get_data(vsp_cmcp_datalist *cmcp_datalist,
+    void *data_pointer)
+{
     uint16_t index;
     uint16_t data_item_length;
     /* using byte pointer for safe pointer arithmetic */
@@ -104,20 +122,8 @@ int vsp_cmcp_datalist_get_data(vsp_cmcp_datalist *cmcp_datalist,
     /* check parameter */
     VSP_ASSERT(cmcp_datalist != NULL, vsp_error_set_num(EINVAL); return -1);
 
-    _data_length = 0;
-    /* calculate data length */
-    for (index = 0; index < cmcp_datalist->data_item_count; ++index) {
-        /* 2 bytes per data item id and length */
-        _data_length += 4;
-        /* additional bytes per data item */
-        _data_length += cmcp_datalist->data_item_lengths[index];
-    }
-
-    /* allocate memory */
-    VSP_ALLOC_N(_data_pointer, _data_length, return -1);
-
     /* store data item values */
-    current_data_pointer = _data_pointer;
+    current_data_pointer = data_pointer;
     for (index = 0; index < cmcp_datalist->data_item_count; ++index) {
         *(uint16_t*) current_data_pointer =
             cmcp_datalist->data_item_ids[index];
@@ -133,10 +139,6 @@ int vsp_cmcp_datalist_get_data(vsp_cmcp_datalist *cmcp_datalist,
             current_data_pointer += data_item_length;
         }
     }
-
-    /* store data array and length in input parameters */
-    *data_length = _data_length;
-    *data_pointer = _data_pointer;
 
     /* success */
     return 0;
