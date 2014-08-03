@@ -65,6 +65,38 @@ int vsp_cmcp_message_free(vsp_cmcp_message *cmcp_message)
     return 0;
 }
 
+vsp_cmcp_message *vsp_cmcp_message_create_parse(uint16_t data_length,
+    void *data_pointer)
+{
+    /* using short int pointer for safe pointer arithmetic */
+    uint16_t *current_data_pointer;
+    vsp_cmcp_message *cmcp_message;
+
+    /* check parameters */
+    VSP_ASSERT(data_length >= VSP_CMCP_MESSAGE_HEADER_LENGTH,
+        vsp_error_set_num(EINVAL); return NULL);
+    VSP_ASSERT(data_pointer != NULL, vsp_error_set_num(EINVAL); return NULL);
+    /* allocate memory */
+    VSP_ALLOC(cmcp_message, vsp_cmcp_message, return NULL);
+    /* initialize struct data */
+    cmcp_message->type = VSP_CMCP_MESSAGE_TYPE_RECEIVE;
+    current_data_pointer = data_pointer;
+    cmcp_message->topic_id = *current_data_pointer;
+    ++current_data_pointer;
+    cmcp_message->sender_id = *current_data_pointer;
+    ++current_data_pointer;
+    cmcp_message->command_id = *current_data_pointer;
+    ++current_data_pointer;
+    /* parse data list values */
+    cmcp_message->cmcp_datalist = vsp_cmcp_datalist_create_parse(
+        data_length - VSP_CMCP_MESSAGE_HEADER_LENGTH, current_data_pointer);
+    /* in case of failure vsp_error_num() is already set */
+    VSP_ASSERT(cmcp_message->cmcp_datalist != NULL, return NULL);
+
+    /* return struct pointer */
+    return cmcp_message;
+}
+
 int vsp_cmcp_message_get_data_length(vsp_cmcp_message *cmcp_message)
 {
     int data_length;
@@ -81,6 +113,8 @@ int vsp_cmcp_message_get_data_length(vsp_cmcp_message *cmcp_message)
         vsp_cmcp_datalist_get_data_length(cmcp_message->cmcp_datalist);
     /* in case of failure vsp_error_num() is already set */
     VSP_ASSERT(data_length >= 0, return -1);
+
+    data_length += VSP_CMCP_MESSAGE_HEADER_LENGTH;
 
     return data_length;
 }

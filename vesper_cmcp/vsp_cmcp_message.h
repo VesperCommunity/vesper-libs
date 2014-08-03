@@ -38,10 +38,24 @@ VSP_API vsp_cmcp_message *vsp_cmcp_message_create(uint16_t topic_id,
 
 /**
  * Free vsp_cmcp_message object.
- * Object should be created with vsp_cmcp_message_create().
+ * Object should be created with vsp_cmcp_message_create() or
+ * vsp_cmcp_message_create_parse().
+ * Frees internal vsp_cmcp_datalist object when created with
+ * vsp_cmcp_message_create_parse().
  * Returns non-zero and sets vsp_error_num() if failed.
  */
 VSP_API int vsp_cmcp_message_free(vsp_cmcp_message *cmcp_message);
+
+/**
+ * Create new vsp_cmcp_message object from received binary data.
+ * The data will be copied partially and pointers to it are stored, so the data
+ * has to be accessible until vsp_cmcp_message_free() is called.
+ * This function creates an internal object of type vsp_cmcp_datalist.
+ * Returned pointer should be freed with vsp_cmcp_message_free().
+ * Returns NULL and sets vsp_error_num() if failed.
+ */
+VSP_API vsp_cmcp_message *vsp_cmcp_message_create_parse(uint16_t data_length,
+    void *data_pointer);
 
 /**
  * Calculate necessary length of a binary data array storing the message data.
