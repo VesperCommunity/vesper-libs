@@ -7,12 +7,11 @@ set(API_HEADERS
     ${PROJECT_SOURCE_DIR}/vsp_cmcp_client.h
     ${PROJECT_SOURCE_DIR}/vsp_cmcp_server.h
     ${PROJECT_SOURCE_DIR}/vsp_cmcp_datalist.h
-    ${PROJECT_SOURCE_DIR}/vsp_cmcp_message.h
 )
 
 # add header files of this module
 set(HEADERS
-    # currently no headers
+    ${PROJECT_SOURCE_DIR}/vsp_cmcp_message.h
 )
 
 # add source files of this module

@@ -43,7 +43,7 @@ typedef struct vsp_cmcp_message vsp_cmcp_message;
  * to be accessible until vsp_cmcp_message_free() is called.
  * Returns NULL and sets vsp_error_num() if failed.
  */
-VSP_API vsp_cmcp_message *vsp_cmcp_message_create(uint16_t topic_id,
+vsp_cmcp_message *vsp_cmcp_message_create(uint16_t topic_id,
     uint16_t sender_id, uint16_t command_id, vsp_cmcp_datalist *cmcp_datalist);
 
 /**
@@ -54,7 +54,7 @@ VSP_API vsp_cmcp_message *vsp_cmcp_message_create(uint16_t topic_id,
  * vsp_cmcp_message_create_parse().
  * Returns non-zero and sets vsp_error_num() if failed.
  */
-VSP_API int vsp_cmcp_message_free(vsp_cmcp_message *cmcp_message);
+int vsp_cmcp_message_free(vsp_cmcp_message *cmcp_message);
 
 /**
  * Create new vsp_cmcp_message object from received binary data.
@@ -64,7 +64,7 @@ VSP_API int vsp_cmcp_message_free(vsp_cmcp_message *cmcp_message);
  * Returned pointer should be freed with vsp_cmcp_message_free().
  * Returns NULL and sets vsp_error_num() if failed.
  */
-VSP_API vsp_cmcp_message *vsp_cmcp_message_create_parse(uint16_t data_length,
+vsp_cmcp_message *vsp_cmcp_message_create_parse(uint16_t data_length,
     void *data_pointer);
 
 /**
@@ -73,7 +73,7 @@ VSP_API vsp_cmcp_message *vsp_cmcp_message_create_parse(uint16_t data_length,
  * vsp_cmcp_message_create().
  * Returns negative value and sets vsp_error_num() if failed.
  */
-VSP_API int vsp_cmcp_message_get_data_length(vsp_cmcp_message *cmcp_message);
+int vsp_cmcp_message_get_data_length(vsp_cmcp_message *cmcp_message);
 
 /**
  * Copy message data to specified binary data array.
@@ -83,14 +83,14 @@ VSP_API int vsp_cmcp_message_get_data_length(vsp_cmcp_message *cmcp_message);
  * vsp_cmcp_message_create().
  * Returns non-zero and sets vsp_error_num() if failed.
  */
-VSP_API int vsp_cmcp_message_get_data(vsp_cmcp_message *cmcp_message,
+int vsp_cmcp_message_get_data(vsp_cmcp_message *cmcp_message,
     void *data_pointer);
 
 /**
  * Get specified ID and copy to specified address.
  * Returns non-zero and sets vsp_error_num() if failed.
  */
-VSP_API int vsp_cmcp_message_get_id(vsp_cmcp_message *cmcp_message,
+int vsp_cmcp_message_get_id(vsp_cmcp_message *cmcp_message,
     vsp_cmcp_message_id_type id_type, uint16_t *id_pointer);
 
 /**
@@ -99,7 +99,7 @@ VSP_API int vsp_cmcp_message_get_id(vsp_cmcp_message *cmcp_message,
  * vsp_cmcp_message_create_parse().
  * Returns NULL and sets vsp_error_num() if failed.
  */
-VSP_API vsp_cmcp_datalist *vsp_cmcp_message_get_datalist(
+vsp_cmcp_datalist *vsp_cmcp_message_get_datalist(
     vsp_cmcp_message *cmcp_message);
 
 #if defined __cplusplus
