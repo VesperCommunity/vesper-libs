@@ -1,0 +1,77 @@
+/**
+ * \file
+ * \authors Max Mertens
+ *
+ * Copyright (c) 2014, Max Mertens. All rights reserved.
+ * This file is licensed under the "BSD 3-Clause License".
+ * Full license text is under the file "LICENSE" provided with this code.
+ */
+
+#include "minunit.h"
+#include "vsp_test.h"
+
+#include <vesper_cmcp/vsp_cmcp_datalist.h>
+#include <vesper_cmcp/vsp_cmcp_message.h>
+#include <vesper_util/vsp_error.h>
+#include <vesper_util/vsp_util.h>
+#include <stdio.h>
+
+/** Create message and test creating binary data and parse it. */
+MU_TEST(vsp_test_cmcp_message_test);
+
+MU_TEST(vsp_test_cmcp_message_test)
+{
+    vsp_cmcp_datalist *cmcp_datalist1, *cmcp_datalist2;
+    vsp_cmcp_message *cmcp_message1, *cmcp_message2;
+    int ret;
+    int data_length;
+    void *data_pointer;
+    void *data_item_pointer;
+
+    /* allocate data list */
+    cmcp_datalist1 = vsp_cmcp_datalist_create();
+    mu_assert(cmcp_datalist1 != NULL, vsp_error_str(vsp_error_num()));
+    /* insert data list items */
+    ret = vsp_cmcp_datalist_add_item(cmcp_datalist1, DATALIST_ITEM1_ID,
+        DATALIST_ITEM1_LENGTH, DATALIST_ITEM1_DATA);
+    mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
+    ret = vsp_cmcp_datalist_add_item(cmcp_datalist1, DATALIST_ITEM2_ID,
+        DATALIST_ITEM2_LENGTH, DATALIST_ITEM2_DATA);
+    mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
+
+    /* allocate message */
+    cmcp_message1 = vsp_cmcp_message_create(MESSAGE_TOPIC_ID, MESSAGE_SENDER_ID,
+        MESSAGE_COMMAND_ID, cmcp_datalist1);
+
+    /* get binary data array length */
+    data_length = vsp_cmcp_message_get_data_length(cmcp_message1);
+    /* fixed message header length 6 has to be updated if
+     * VSP_CMCP_MESSAGE_HEADER_LENGTH is changed */
+    mu_assert(data_length ==
+        (DATALIST_ITEM1_LENGTH + DATALIST_ITEM2_LENGTH + 8 + 6),
+        vsp_error_str(EINVAL));
+    /* allocate array */
+    data_pointer = malloc(data_length);
+    mu_assert(data_pointer != NULL, vsp_error_str(ENOMEM));
+    /* get binary data */
+    ret = vsp_cmcp_message_get_data(cmcp_message1, data_pointer);
+    mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
+
+    /* construct second message using binary data array */
+    cmcp_message2 = vsp_cmcp_message_create_parse(data_length, data_pointer);
+    mu_assert(cmcp_message2 != NULL, vsp_error_str(vsp_error_num()));
+
+    /* deallocation; cmcp_datalist2 will be freed by cmcp_message2 */
+    VSP_FREE(data_pointer);
+    ret = vsp_cmcp_datalist_free(cmcp_datalist1);
+    mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
+    ret = vsp_cmcp_message_free(cmcp_message1);
+    mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
+    ret = vsp_cmcp_message_free(cmcp_message2);
+    mu_assert(ret == 0, vsp_error_str(vsp_error_num()));
+}
+
+MU_TEST_SUITE(vsp_test_cmcp_message)
+{
+    MU_RUN_TEST(vsp_test_cmcp_message_test);
+}
