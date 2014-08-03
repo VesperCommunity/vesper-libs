@@ -47,6 +47,25 @@ VSP_API vsp_cmcp_message *vsp_cmcp_message_create(uint16_t topic_id,
  */
 VSP_API int vsp_cmcp_message_free(vsp_cmcp_message *cmcp_message);
 
+/**
+ * Calculate necessary length of a binary data array storing the message data.
+ * This function should only be called for messages created with
+ * vsp_cmcp_message_create().
+ * Returns negative value and sets vsp_error_num() if failed.
+ */
+VSP_API int vsp_cmcp_message_get_data_length(vsp_cmcp_message *cmcp_message);
+
+/**
+ * Copy message data to specified binary data array.
+ * The specified array has to be at least as long as the number of bytes
+ * vsp_cmcp_message_get_data_length() returns.
+ * This function should only be called for messages created with
+ * vsp_cmcp_message_create().
+ * Returns non-zero and sets vsp_error_num() if failed.
+ */
+VSP_API int vsp_cmcp_message_get_data(vsp_cmcp_message *cmcp_message,
+    void *data_pointer);
+
 #if defined __cplusplus
 }
 #endif /* defined __cplusplus */

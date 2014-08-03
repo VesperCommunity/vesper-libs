@@ -60,3 +60,56 @@ int vsp_cmcp_message_free(vsp_cmcp_message *cmcp_message)
     VSP_FREE(cmcp_message);
     return 0;
 }
+
+int vsp_cmcp_message_get_data_length(vsp_cmcp_message *cmcp_message)
+{
+    int data_length;
+
+    /* check parameter */
+    VSP_ASSERT(cmcp_message != NULL, vsp_error_set_num(EINVAL); return -1);
+
+    /* check message type */
+    VSP_ASSERT(cmcp_message->type == VSP_CMCP_MESSAGE_TYPE_SEND,
+        vsp_error_set_num(EINVAL); return -1);
+
+    /* calculate data length */
+    data_length =
+        vsp_cmcp_datalist_get_data_length(cmcp_message->cmcp_datalist);
+    /* in case of failure vsp_error_num() is already set */
+    VSP_ASSERT(data_length >= 0, return -1);
+
+    return data_length;
+}
+
+int vsp_cmcp_message_get_data(vsp_cmcp_message *cmcp_message,
+    void *data_pointer)
+{
+    int ret;
+    /* using short int pointer for safe pointer arithmetic */
+    uint16_t *current_data_pointer;
+
+    /* check parameter */
+    VSP_ASSERT(cmcp_message != NULL, vsp_error_set_num(EINVAL); return -1);
+
+    /* check message type */
+    VSP_ASSERT(cmcp_message->type == VSP_CMCP_MESSAGE_TYPE_SEND,
+        vsp_error_set_num(EINVAL); return -1);
+
+    /* store message header */
+    current_data_pointer = data_pointer;
+    *current_data_pointer = cmcp_message->topic_id;
+    ++current_data_pointer;
+    *current_data_pointer = cmcp_message->sender_id;
+    ++current_data_pointer;
+    *current_data_pointer = cmcp_message->command_id;
+    ++current_data_pointer;
+
+    /* store data list values */
+    ret = vsp_cmcp_datalist_get_data(cmcp_message->cmcp_datalist,
+        current_data_pointer);
+    /* in case of failure vsp_error_num() is already set */
+    VSP_ASSERT(ret == 0, return -1);
+
+    /* success */
+    return 0;
+}
