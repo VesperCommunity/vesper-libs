@@ -11,8 +11,18 @@
 #include <vesper_util/vsp_error.h>
 #include <vesper_util/vsp_util.h>
 
+/** Message type: send or receive message. */
+typedef enum {
+    /** Message will be sent. */
+    VSP_CMCP_MESSAGE_TYPE_SEND,
+    /** Message was received. */
+    VSP_CMCP_MESSAGE_TYPE_RECEIVE
+} vsp_cmcp_message_type;
+
 /** Message data sent over (network) connection. */
 struct vsp_cmcp_message {
+    /** Message type. */
+    vsp_cmcp_message_type type;
     /** Message topic or receiver ID. */
     uint16_t topic_id;
     /** Message sender ID. */
@@ -30,6 +40,7 @@ vsp_cmcp_message *vsp_cmcp_message_create(uint16_t topic_id,
     /* allocate memory */
     VSP_ALLOC(cmcp_message, vsp_cmcp_message, return NULL);
     /* initialize struct data */
+    cmcp_message->type = VSP_CMCP_MESSAGE_TYPE_SEND;
     cmcp_message->topic_id = topic_id;
     cmcp_message->sender_id = sender_id;
     cmcp_message->command_id = command_id;

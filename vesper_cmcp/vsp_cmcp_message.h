@@ -30,7 +30,7 @@ struct vsp_cmcp_message;
 typedef struct vsp_cmcp_message vsp_cmcp_message;
 
 /**
- * Create new vsp_cmcp_message object.
+ * Create new vsp_cmcp_message object to send message data.
  * Returned pointer should be freed with vsp_cmcp_message_free().
  * The vsp_cmcp_message will not free the vsp_cmcp_datalist object and it has
  * to be accessible until vsp_cmcp_message_free() is called.
