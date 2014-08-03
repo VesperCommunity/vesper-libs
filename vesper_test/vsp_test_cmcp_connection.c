@@ -16,11 +16,6 @@
 #include <stddef.h>
 #include <stdio.h>
 
-/** Server publish socket address. */
-#define SERVER_PUBLISH_ADDRESS "tcp://127.0.0.1:7571"
-/** Server subscribe socket address. */
-#define SERVER_SUBSCRIBE_ADDRESS "tcp://127.0.0.1:7572"
-
 /** Global CMCP server object. */
 vsp_cmcp_server *global_cmcp_server;
 

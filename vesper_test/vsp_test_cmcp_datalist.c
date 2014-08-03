@@ -19,21 +19,6 @@
 #include <stdio.h>
 #include <string.h>
 
-/** First data list item id */
-#define DATALIST_ITEM1_ID 32349
-/** Second data list item id */
-#define DATALIST_ITEM2_ID 9273
-
-/** First data list item length */
-#define DATALIST_ITEM1_LENGTH 6
-/** Second data list item length */
-#define DATALIST_ITEM2_LENGTH 7
-
-/** First data list item data */
-#define DATALIST_ITEM1_DATA "Hello"
-/** Second data list item data */
-#define DATALIST_ITEM2_DATA "World!"
-
 /** Create data list and test adding and reading items. */
 MU_TEST(vsp_test_cmcp_datalist_test);
 
