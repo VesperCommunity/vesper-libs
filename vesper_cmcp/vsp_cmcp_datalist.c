@@ -12,6 +12,7 @@
 #include <vesper_util/vsp_util.h>
 #include <string.h>
 
+/** Maximum number of items per data list */
 #define VSP_CMCP_DATALIST_MAX_ITEMS 16
 
 /** State and other data used for network connection. */

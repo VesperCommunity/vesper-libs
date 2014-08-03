@@ -19,6 +19,8 @@
 extern "C" {
 #endif /* defined __cplusplus */
 
+/** Size of message headers in bytes:
+ * 2 bytes topic ID, 2 bytes sender ID, 2 bytes command ID. */
 #define VSP_CMCP_MESSAGE_HEADER_LENGTH 6
 
 /** Message data sent over (network) connection. */
