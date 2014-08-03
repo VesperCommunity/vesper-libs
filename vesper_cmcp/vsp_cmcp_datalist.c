@@ -104,6 +104,7 @@ int vsp_cmcp_datalist_get_data(vsp_cmcp_datalist *cmcp_datalist,
     /* check parameter */
     VSP_ASSERT(cmcp_datalist != NULL, vsp_error_set_num(EINVAL); return -1);
 
+    _data_length = 0;
     /* calculate data length */
     for (index = 0; index < cmcp_datalist->data_item_count; ++index) {
         /* 2 bytes per data item id and length */
