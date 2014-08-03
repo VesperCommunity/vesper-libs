@@ -19,6 +19,16 @@
 extern "C" {
 #endif /* defined __cplusplus */
 
+/** Message ID types. */
+typedef enum {
+    /** Message topic or receiver ID. */
+    VSP_CMCP_MESSAGE_TOPIC_ID,
+    /** Message sender ID. */
+    VSP_CMCP_MESSAGE_SENDER_ID,
+    /** Message command ID. */
+    VSP_CMCP_MESSAGE_COMMAND_ID
+} vsp_cmcp_message_id_type;
+
 /** Message data sent over (network) connection. */
 struct vsp_cmcp_message;
 
@@ -75,6 +85,22 @@ VSP_API int vsp_cmcp_message_get_data_length(vsp_cmcp_message *cmcp_message);
  */
 VSP_API int vsp_cmcp_message_get_data(vsp_cmcp_message *cmcp_message,
     void *data_pointer);
+
+/**
+ * Get specified ID and copy to specified address.
+ * Returns non-zero and sets vsp_error_num() if failed.
+ */
+VSP_API int vsp_cmcp_message_get_id(vsp_cmcp_message *cmcp_message,
+    vsp_cmcp_message_id_type id_type, uint16_t *id_pointer);
+
+/**
+ * Get data list parsed by this message object.
+ * This function should only be called for messages created with
+ * vsp_cmcp_message_create_parse().
+ * Returns NULL and sets vsp_error_num() if failed.
+ */
+VSP_API vsp_cmcp_datalist *vsp_cmcp_message_get_datalist(
+    vsp_cmcp_message *cmcp_message);
 
 #if defined __cplusplus
 }

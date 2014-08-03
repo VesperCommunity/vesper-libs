@@ -155,3 +155,37 @@ int vsp_cmcp_message_get_data(vsp_cmcp_message *cmcp_message,
     /* success */
     return 0;
 }
+
+int vsp_cmcp_message_get_id(vsp_cmcp_message *cmcp_message,
+    vsp_cmcp_message_id_type id_type, uint16_t *id_pointer)
+{
+    /* check parameters */
+    VSP_ASSERT(cmcp_message != NULL, vsp_error_set_num(EINVAL); return -1);
+    VSP_ASSERT(id_pointer != NULL, vsp_error_set_num(EINVAL); return -1);
+
+    switch (id_type) {
+        case VSP_CMCP_MESSAGE_TOPIC_ID:
+            *id_pointer = cmcp_message->topic_id;
+            return 0;
+        case VSP_CMCP_MESSAGE_SENDER_ID:
+            *id_pointer = cmcp_message->sender_id;
+            return 0;
+        case VSP_CMCP_MESSAGE_COMMAND_ID:
+            *id_pointer = cmcp_message->command_id;
+            return 0;
+        default:
+            return -1;
+    }
+}
+
+vsp_cmcp_datalist *vsp_cmcp_message_get_datalist(
+    vsp_cmcp_message *cmcp_message) {
+    /* check parameter */
+    VSP_ASSERT(cmcp_message != NULL, vsp_error_set_num(EINVAL); return NULL);
+
+    /* check message type */
+    VSP_ASSERT(cmcp_message->type == VSP_CMCP_MESSAGE_TYPE_RECEIVE,
+        vsp_error_set_num(EINVAL); return NULL);
+
+    return cmcp_message->cmcp_datalist;
+}
