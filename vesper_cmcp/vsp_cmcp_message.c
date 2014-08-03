@@ -60,6 +60,10 @@ int vsp_cmcp_message_free(vsp_cmcp_message *cmcp_message)
     /* check parameter */
     VSP_ASSERT(cmcp_message != NULL, vsp_error_set_num(EINVAL); return -1);
 
+    if (cmcp_message->type == VSP_CMCP_MESSAGE_TYPE_RECEIVE) {
+        vsp_cmcp_datalist_free(cmcp_message->cmcp_datalist);
+    }
+
     /* free memory */
     VSP_FREE(cmcp_message);
     return 0;
