@@ -47,7 +47,7 @@ MU_TEST(vsp_test_cmcp_datalist_test)
     data_length = vsp_cmcp_datalist_get_data_length(cmcp_datalist1);
     mu_assert(data_length ==
         (DATALIST_ITEM1_LENGTH + DATALIST_ITEM2_LENGTH + 8),
-        vsp_error_str(vsp_error_num()));
+        vsp_error_str(EINVAL));
     /* allocate array */
     data_pointer = malloc(data_length);
     mu_assert(data_pointer != NULL, vsp_error_str(ENOMEM));
