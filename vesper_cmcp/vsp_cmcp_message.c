@@ -11,6 +11,10 @@
 #include <vesper_util/vsp_error.h>
 #include <vesper_util/vsp_util.h>
 
+/** Size of message headers in bytes:
+ * 2 bytes topic ID, 2 bytes sender ID, 2 bytes command ID. */
+#define VSP_CMCP_MESSAGE_HEADER_LENGTH 6
+
 /** Message type: send or receive message. */
 typedef enum {
     /** Message will be sent. */
