@@ -26,8 +26,10 @@ class Logging {
         LoggingType::LoggingClientType getType();
 
         template <class T>
-        void operator<<(T toWrite);
-        //void operator<<(const char *toWrite);
+        Logging &operator<<(const T &toWrite) {
+            out << toWrite;
+            return *this;
+        }
 
         void flush();
 
