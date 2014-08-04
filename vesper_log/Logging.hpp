@@ -27,6 +27,7 @@ class Logging {
 
         template <class T>
         void operator<<(T toWrite);
+        //void operator<<(const char *toWrite);
 
         void flush();
 

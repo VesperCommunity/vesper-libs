@@ -54,7 +54,16 @@ int Vout::init() {
     if (threadRunning)
         return 1;
 
+    std::cout << "[logclass] starting: starting thread" << std::endl;
+
     pipeThread = new std::thread(Vout::pipeFunction);
+    pipeThread->detach(); //execute the thread independently
+
+    std::cout << "[logclass] starting: done!" << std::endl;
+
+    while (!threadRunning);
+
+    lMutex.unlock(); //unlock to start!
 
     return 0;
 }
@@ -87,6 +96,14 @@ void Vout::operator<<(char toWrite[]) {
 
     char **temp = new char*;
     *temp = toWrite;
+
+    pushM(LoggingType::t_cstr, (void*) temp);
+}
+
+void Vout::operator<<(const char *toWrite) {
+
+    char **temp = new char*;
+    *temp = (char*)toWrite;
 
     pushM(LoggingType::t_cstr, (void*) temp);
 }
@@ -125,11 +142,13 @@ void Vout::operator<<(LoggingType::LoggingFlags flag) {
 
 void Vout::flush() {
 
+    LoggingType::LoggingFlags *temp = new LoggingType::LoggingFlags;
+    *temp = LoggingType::eom;
+    pushM(LoggingType::t_flag, (void*) temp);
+
     this->mMutex.lock();
 
     ///now we have to attach 'this' to our lFIFO, which is printed by the thread
-
-    bool stackIsEmpty = false;
 
     LoggingType::LoggingPipe *tempPipe = new LoggingType::LoggingPipe;
     tempPipe->messageSource = this->mFIFOfirst;
@@ -152,10 +171,11 @@ void Vout::flush() {
         return;
     }
     else {
-        tempPipe->newer = 0;
-        tempPipe->older = lFIFOlast;
-
+        lFIFOlast->newer = tempPipe;
         lFIFOlast = tempPipe;
+
+        tempPipe->newer = 0;
+
         lMutex.unlock();
 
         return;
@@ -194,16 +214,22 @@ void Vout::pushM(LoggingType::ScanDataType typets, void *datats) {
     mMutex.lock();
 
     if (!mFIFOfirst) {
+
         mFIFOfirst = tempMsg;
         mFIFOlast = tempMsg;
+
+        tempMsg->older = 0;
+        tempMsg->newer = 0;
 
         mMutex.unlock();
 
         return;
     }
     else {
-        tempMsg->older = mFIFOlast;
+
+        mFIFOlast->newer = tempMsg;
         mFIFOlast = tempMsg;
+        tempMsg->newer=0; ///TODO remove this for performance
 
         mMutex.unlock();
 
@@ -213,14 +239,17 @@ void Vout::pushM(LoggingType::ScanDataType typets, void *datats) {
 }
 
 std::mutex                Vout::lMutex;
-LoggingType::LoggingPipe  Vout::*lFIFOfirst = 0;
-LoggingType::LoggingPipe  Vout::*lFIFOlast  = 0;
+LoggingType::LoggingPipe *Vout::lFIFOfirst=0;
+LoggingType::LoggingPipe *Vout::lFIFOlast=0;
 
-bool         Vout::threadRunning = false; //does not work ;-(
-std::thread  Vout::*pipeThread   = 0;
+bool          Vout::threadRunning = false; //does not work ;-(
+std::thread  *Vout::pipeThread=0;
 
 void Vout::pipeFunction() {
     threadRunning = true;
+
+    std::cout << "[logclass] pipeThread: started!" << std::endl;
+
     while (threadRunning) {
 
         lMutex.lock();
@@ -235,7 +264,7 @@ void Vout::pipeFunction() {
 
             //print the header:
             std::cout << std::setw(8);
-            switch (nextMessage->type) {
+            switch (lFIFOfirst->src->getType()) {
                 case LoggingType::client:
                     std::cout << "[client ";
                     break;
@@ -282,8 +311,11 @@ void Vout::pipeFunction() {
                             case LoggingType::endl:
                                 std::cout << std::endl;
                                 break;
+                            case LoggingType::eom:
+                                std::cout << std::endl;
+                                break;
                             default:
-                                ///TODO: add exception or similiar
+                                ///TODO: add exception or similar
                                 break;
                         }
 
@@ -294,6 +326,7 @@ void Vout::pipeFunction() {
                 }
 
                 messageToDelete = nextMessage;
+
                 nextMessage = nextMessage->newer;
 
                 delete messageToDelete;
@@ -305,9 +338,10 @@ void Vout::pipeFunction() {
             delete lPipeToDelete;
         }
 
+        lFIFOlast = 0;
+
         lMutex.unlock();
     }
-    std::cout << "[logclass] note: thread stopped!" << std::endl;
-
+    std::cout << "[logclass] pipeThread: stopped!" << std::endl;
     return;
 }

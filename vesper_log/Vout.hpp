@@ -27,6 +27,7 @@ class Vout {
         void operator<<(bool toWrite);
         void operator<<(char toWrite);
         void operator<<(char toWrite[]);
+        void operator<<(const char *toWrite);
         void operator<<(std::string toWrite);
         void operator<<(void *toWrite); //write mem Adress
         void operator<<(LoggingType::LoggingFlags flag);
