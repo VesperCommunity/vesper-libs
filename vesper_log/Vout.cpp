@@ -61,7 +61,7 @@ int Vout::init() {
 
     std::cout << "[logclass] starting: done!" << std::endl;
 
-    while (!threadRunning);
+    //while (!threadRunning);
 
     lMutex.unlock(); //unlock to start!
 
