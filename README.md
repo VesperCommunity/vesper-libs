@@ -12,26 +12,23 @@ All rights reserved.
 
 `vesper-log` provides buffered and prefixed logging outputs to console.
 
-### vesper-sphtp
+### vesper-cmcp
 
-`vesper-sphtp` provides an implementation of the [SphTP protocol][sphtp_link]
-and lets you build simulation servers and clients connected over network.
+`vesper-cmcp` provides an implementation of the [CMCP protocol][cmcp_link]
+and lets you build connected servers and clients, e.g. for physical simulations
+over a network.
 
-[sphtp_link]: https://github.com/jellysheep/spheresim/wiki/Protocol
+[cmcp_link]: https://github.com/jellysheep/spheresim/wiki/Protocol
 
 ### vesper-test
 
 `vesper-test` is a small unit test checking functionality of C modules.
 
-### vesper-error
-
-`vesper-error` is a helper module providing small functions for error numbers
-and names (like standard `errno` and `strerror()`).
-
 ### vesper-util
 
-`vesper-util` is a helper module providing a header file with symbol export
-markers.
+`vesper-util` is a helper module providing header files with symbol export
+markers and small functions for error numbers and names (like standard
+`errno` and `strerror()`).
 
 ## Coding style
 
