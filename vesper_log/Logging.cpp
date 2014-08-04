@@ -35,35 +35,6 @@ LoggingType::LoggingClientType Logging::getType() {
     return clientType;
 }
 
-
-void Logging::operator<<(int  toWrite) {
-    out << toWrite;
-}
-
-void Logging::operator<<(bool toWrite){
-    out << toWrite;
-}
-
-void Logging::operator<<(char toWrite){
-    out << toWrite;
-}
-
-void Logging::operator<<(char toWrite[]){
-    out << toWrite;
-}
-
-void Logging::operator<<(std::string toWrite){
-    out << toWrite;
-}
-
-void Logging::operator<<(void *toWrite){ //write mem Adress
-    out << toWrite;
-}
-
-void Logging::operator<<(LoggingType::LoggingFlags flag){
-    out << flag;
-}
-
 void Logging::flush(){
     out.flush();
 }
