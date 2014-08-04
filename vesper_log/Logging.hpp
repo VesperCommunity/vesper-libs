@@ -25,13 +25,9 @@ class Logging {
         int getID();
         LoggingType::LoggingClientType getType();
 
-        void operator<<(int  toWrite);
-        void operator<<(bool toWrite);
-        void operator<<(char toWrite);
-        void operator<<(char toWrite[]);
-        void operator<<(std::string toWrite);
-        void operator<<(void *toWrite); //write mem Adress
-        void operator<<(LoggingType::LoggingFlags flag);
+        template <class T>
+        void operator<<(T toWrite);
+
         void flush();
 
         /**

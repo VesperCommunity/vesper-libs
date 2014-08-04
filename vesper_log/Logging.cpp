@@ -35,34 +35,19 @@ LoggingType::LoggingClientType Logging::getType() {
     return clientType;
 }
 
-
-void Logging::operator<<(int  toWrite) {
+template <class T>
+void Logging::operator<<(T  toWrite) {
     out << toWrite;
 }
 
-void Logging::operator<<(bool toWrite){
-    out << toWrite;
-}
-
-void Logging::operator<<(char toWrite){
-    out << toWrite;
-}
-
-void Logging::operator<<(char toWrite[]){
-    out << toWrite;
-}
-
-void Logging::operator<<(std::string toWrite){
-    out << toWrite;
-}
-
-void Logging::operator<<(void *toWrite){ //write mem Adress
-    out << toWrite;
-}
-
-void Logging::operator<<(LoggingType::LoggingFlags flag){
-    out << flag;
-}
+//generate explicit instances:
+template void Logging::operator<<(int  toWrite);
+template void Logging::operator<<(bool toWrite);
+template void Logging::operator<<(char toWrite);
+template void Logging::operator<<(char toWrite[]);
+template void Logging::operator<<(std::string toWrite);
+template void Logging::operator<<(void *toWrite); //write mem Adress
+template void Logging::operator<<(LoggingType::LoggingFlags toWrite);
 
 void Logging::flush(){
     out.flush();
