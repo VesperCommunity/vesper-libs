@@ -29,7 +29,7 @@ Vout Vout::staticInstance = {};
 
 Vout::Vout() : loggingThread(), threadRunning(false), lMutex(), messages()
 {
-    std::cout << "[logclass] starting: starting thread..." << std::endl;
+    std::cout << "[ logclass      ] starting: starting thread..." << std::endl;
     loggingThread = std::thread(&Vout::threadFunction, this);
     while (!threadRunning);
 }
@@ -38,7 +38,7 @@ Vout::~Vout()
 {
     threadRunning = false;
     loggingThread.join();
-    std::cout << "[logclass] stopping: logging finished successfully!";
+    std::cout << "[ logclass      ] stopping: logging finished successfully!";
     std::cout << std::endl;
 }
 
@@ -55,7 +55,7 @@ void Vout::threadFunction()
 {
     threadRunning = true;
 
-    std::cout << "[logclass] loggingThread: started!" << std::endl;
+    std::cout << "[ logclass      ] loggingThread: started!" << std::endl;
 
     while (threadRunning || (messages.empty() == false)) {
         // thread-safe pop message from queue
@@ -71,14 +71,14 @@ void Vout::threadFunction()
 
         //print the header:
         if (loggingMessage->type == LoggingTypes::client) {
-            std::cout << "[client ";
+            std::cout << "[ client ";
         } else {
-            std::cout << "[server ";
+            std::cout << "[ server ";
         }
         std::cout << "|" << std::setw(5);
-        std::cout << loggingMessage->id << "] ";
+        std::cout << loggingMessage->id << " ] ";
         std::cout << loggingMessage->message << '\n';
     }
-    std::cout << "[logclass] loggingThread: stopped!" << std::endl;
+    std::cout << "[ logclass      ] loggingThread: stopped!" << std::endl;
     return;
 }
