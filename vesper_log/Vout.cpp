@@ -29,7 +29,7 @@ Vout Vout::staticInstance = {};
 
 Vout::Vout() : loggingThread(), threadRunning(false), lMutex(), messages()
 {
-    std::cout << "[ logclass      ] starting: starting thread..." << std::endl;
+    std::cout << "[logclass    ] starting: starting thread..." << std::endl;
     loggingThread = std::thread(&Vout::threadFunction, this);
     while (!threadRunning);
 }
@@ -39,7 +39,7 @@ Vout::~Vout()
     threadRunning = false;
     staticInstance.condVariable.notify_one();
     loggingThread.join();
-    std::cout << "[ logclass      ] stopping: logging finished successfully!";
+    std::cout << "[logclass    ] stopping: logging finished successfully!";
     std::cout << std::endl;
 }
 
@@ -57,7 +57,7 @@ void Vout::threadFunction()
 {
     threadRunning = true;
 
-    std::cout << "[ logclass      ] loggingThread: started!" << std::endl;
+    std::cout << "[logclass    ] loggingThread: started!" << std::endl;
 
     while (threadRunning || (messages.empty() == false)) {
         // thread-safe pop message from queue
@@ -78,12 +78,12 @@ void Vout::threadFunction()
         // generate the prefix:
         std::ostringstream prefix;
         if (loggingMessage->type == LoggingTypes::client) {
-            prefix << "[ client ";
+            prefix << "[client";
         } else {
-            prefix << "[ server ";
+            prefix << "[server";
         }
         prefix << "|" << std::setw(5);
-        prefix << loggingMessage->id << " ] ";
+        prefix << loggingMessage->id << "] ";
         std::string prefixStr = prefix.str();
 
         std::string message = loggingMessage->message;
@@ -101,6 +101,6 @@ void Vout::threadFunction()
             std::cout << '\n';
         } while (pos2 != std::string::npos);
     }
-    std::cout << "[ logclass      ] loggingThread: stopped!" << std::endl;
+    std::cout << "[logclass    ] loggingThread: stopped!" << std::endl;
     return;
 }
