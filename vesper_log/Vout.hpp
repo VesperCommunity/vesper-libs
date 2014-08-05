@@ -13,6 +13,7 @@
 #include <thread>
 #include <mutex>
 
+#include <sstream>
 #include <string>
 
 #include "LoggingType.hpp"
@@ -30,32 +31,27 @@ class Vout {
 
         static int init();
 
-        void operator<<(int  toWrite);
-        void operator<<(bool toWrite);
-        void operator<<(char toWrite);
-        void operator<<(char toWrite[]);
-        void operator<<(const char *toWrite);
-        void operator<<(std::string toWrite);
-        void operator<<(void *toWrite); //write mem Adress
-        void operator<<(LoggingType::LoggingFlags flag);
-        void flush();
+        /** Append data to current logging message. */
+        template <class T>
+        Vout &operator<<(const T &toWrite)
+        {
+            message << toWrite;
+            return *this;
+        }
 
-        /**
-         * pop() used by thread to get at FIFOfirst
-         * pop() returns 1 if pipe is empty
-         * we may need this function but by now it is unused
-         */
-        int popM(LoggingType::ScanDataType *typetg, void **datatg);
-        std::mutex mMutex;
-        LoggingType::MessagePipe *mFIFOfirst;
+        /** Modify current logging message.
+         * When parameter is LoggingFlags::eom or LoggingFlags::endl,
+         * flush() is called. */
+        void operator<<(LoggingType::LoggingFlags flag);
+
+        /** Finish and print current logging message. */
+        void flush();
 
     private:
 
         Logging *parent;
 
-        ///push() used by operators to add at FIFOlast
-        void pushM(LoggingType::ScanDataType typets, void *datats);
-        LoggingType::MessagePipe *mFIFOlast;
+        std::ostringstream message;
 
         /**
          * When a LoggingPipe reaches LogginType::eom the message is complete

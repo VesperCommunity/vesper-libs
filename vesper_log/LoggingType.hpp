@@ -10,6 +10,8 @@
 #ifndef LOGGINGTYPE_HPP_INCLUDED
 #define LOGGINGTYPE_HPP_INCLUDED
 
+#include <string>
+
 /**
  * The namespace LoggingTypes will contain enums, structs
  * and other things, that are needed by the Logging class
@@ -22,19 +24,6 @@ namespace Vesper {
 class Logging;
 
 namespace LoggingType {
-
-enum ScanDataType {
-    error,   //an error occured
-    unknown, //unknown escape sequence
-    //eos,     //*E*nd *O*f *S*tring
-    t_int,   //integer
-    t_bool,  //boolean
-    t_char,  //character
-    t_cstr,  //char[] array aka cstring
-    t_stdstr,//std::string
-    t_void,  //use this for pointer aka mem adress (--> hexadecimal)
-    t_flag
-};
 
 enum LoggingFlags {
     endl, //end of line
@@ -54,20 +43,12 @@ enum LoggingClientType {
     server  // the logging client is a server
 };
 
-struct MessagePipe { //FIFO
-    MessagePipe *older;
-    MessagePipe *newer;
-
-    ScanDataType type;
-    void        *data;
-};
-
 struct LoggingPipe {
     LoggingPipe *older;
     LoggingPipe *newer;
 
     Logging *src;
-    MessagePipe *messageSource;
+    std::string message;
 };
 
 }; /* namespace LoggingType */
