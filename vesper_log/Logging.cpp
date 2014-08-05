@@ -44,10 +44,6 @@ void Logging::operator<<(LoggingTypes::LoggingFlags flag)
             flush();
           break;
 
-        case LoggingTypes::endl:
-            flush();
-          break;
-
         default:
             //unknown flag
           break;

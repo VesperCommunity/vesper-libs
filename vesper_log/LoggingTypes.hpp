@@ -26,7 +26,6 @@ class Logging;
 namespace LoggingTypes {
 
 enum LoggingFlags {
-    endl, //end of line
     eom  //EndOfMessage
 };
 

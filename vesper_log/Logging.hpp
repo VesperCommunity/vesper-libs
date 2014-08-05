@@ -39,7 +39,7 @@ class Logging {
         }
 
         /** Modify current logging message.
-         * When parameter is LoggingFlags::eom or LoggingFlags::endl,
+         * When parameter is LoggingFlags::eom,
          * flush() is called. */
         void operator<<(LoggingTypes::LoggingFlags flag);
 
