@@ -39,7 +39,7 @@ class Logging {
          * flush() is called. */
         void operator<<(LoggingTypes::LoggingFlags flag);
 
-        /** Finish and print current logging message. */
+        /** Finish and enqueue current message in logging system. */
         void flush();
 
     protected:
@@ -47,6 +47,7 @@ class Logging {
 
         LoggingTypes::LoggingClientType clientType;
 
+        /** Current message string, continuously appending elements. */
         std::ostringstream message;
 
         /**

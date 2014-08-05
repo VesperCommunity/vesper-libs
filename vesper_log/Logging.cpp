@@ -26,6 +26,7 @@ void Logging::operator<<(LoggingTypes::LoggingFlags flag)
 {
     switch (flag) {
         case LoggingTypes::eom:
+            // end of message: enqueue message string
             flush();
           break;
 

@@ -35,17 +35,22 @@ class Vout {
         Vout();
         ~Vout();
 
+        /** Static instance for automagically starting and cleaning up. */
         static Vout staticInstance;
 
+        /** Worker thread. */
         std::thread loggingThread;
+        /** Thread run flag used to stop the thread. */
         bool threadRunning;
 
         /** Mutex for thread-safe access to message queue. */
         std::mutex lMutex;
         /** Condition variable for waiting idle worker thread. */
         std::condition_variable condVariable;
+        /** Queue of logging messages. */
         std::queue<LoggingMessage*> messages;
 
+        /** Worker thread function. */
         void threadFunction();
 
 }; /* class Vout */
