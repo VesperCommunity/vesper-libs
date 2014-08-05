@@ -25,10 +25,6 @@ class Logging {
          * in general and start the thread
          */
         Logging(LoggingTypes::LoggingClientType typets);
-        ~Logging();
-
-        int getID();
-        LoggingTypes::LoggingClientType getType();
 
         /** Append data to current logging message. */
         template <class T>

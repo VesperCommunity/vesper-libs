@@ -22,21 +22,6 @@ Logging::Logging(LoggingTypes::LoggingClientType typets)
     nextID++;
 }
 
-Logging::~Logging()
-{
-
-}
-
-int Logging::getID()
-{
-    return uniqueID;
-}
-
-LoggingTypes::LoggingClientType Logging::getType()
-{
-    return clientType;
-}
-
 void Logging::operator<<(LoggingTypes::LoggingFlags flag)
 {
     switch (flag) {
