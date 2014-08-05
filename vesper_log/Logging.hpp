@@ -10,6 +10,8 @@
 #ifndef LOGGING_HPP_INCLUDED
 #define LOGGING_HPP_INCLUDED
 
+#include <sstream>
+
 #include "Vout.hpp"
 
 #include "LoggingTypes.hpp"
@@ -31,13 +33,20 @@ class Logging {
         int getID();
         LoggingTypes::LoggingClientType getType();
 
+        /** Append data to current logging message. */
         template <class T>
         Logging &operator<<(const T &toWrite)
         {
-            out << toWrite;
+            message << toWrite;
             return *this;
         }
 
+        /** Modify current logging message.
+         * When parameter is LoggingFlags::eom or LoggingFlags::endl,
+         * flush() is called. */
+        void operator<<(LoggingTypes::LoggingFlags flag);
+
+        /** Finish and print current logging message. */
         void flush();
 
     protected:
@@ -46,6 +55,8 @@ class Logging {
         Vout out;
 
         LoggingTypes::LoggingClientType clientType;
+
+        std::ostringstream message;
 
         /**
          * The unique identification that will be

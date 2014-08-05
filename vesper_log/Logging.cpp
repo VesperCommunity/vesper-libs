@@ -42,7 +42,28 @@ LoggingTypes::LoggingClientType Logging::getType()
     return clientType;
 }
 
+void Logging::operator<<(LoggingTypes::LoggingFlags flag)
+{
+    switch (flag) {
+        case LoggingTypes::eom:
+            flush();
+          break;
+
+        case LoggingTypes::endl:
+            flush();
+          break;
+
+        default:
+            //unknown flag
+          break;
+    }
+}
+
 void Logging::flush()
 {
-    out.flush();
+    // copy and clear current message string
+    std::string messageStr = message.str();
+    message.str(std::string());
+    // push message string
+    out.pushMessage(messageStr);
 }

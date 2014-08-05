@@ -33,27 +33,11 @@ class Vout {
 
         static int init();
 
-        /** Append data to current logging message. */
-        template <class T>
-        Vout &operator<<(const T &toWrite)
-        {
-            message << toWrite;
-            return *this;
-        }
-
-        /** Modify current logging message.
-         * When parameter is LoggingFlags::eom or LoggingFlags::endl,
-         * flush() is called. */
-        void operator<<(LoggingTypes::LoggingFlags flag);
-
-        /** Finish and print current logging message. */
-        void flush();
+        void pushMessage(std::string message);
 
     private:
 
         Logging *parent;
-
-        std::ostringstream message;
 
         /** Mutex for thread-safe access to message queue. */
         static std::mutex lMutex;

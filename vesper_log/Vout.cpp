@@ -60,29 +60,8 @@ int Vout::init()
     return 0;
 }
 
-void Vout::operator<<(LoggingTypes::LoggingFlags flag)
+void Vout::pushMessage(std::string messageStr)
 {
-    switch (flag) {
-        case LoggingTypes::eom:
-            flush();
-          break;
-
-        case LoggingTypes::endl:
-            flush();
-          break;
-
-        default:
-            //unknown flag
-          break;
-    }
-}
-
-void Vout::flush()
-{
-    // copy and clear current message string
-    std::string messageStr = message.str();
-    message.str(std::string());
-
     // thread-safe add message to queue
     lMutex.lock();
     messages.push(new LoggingMessage{
