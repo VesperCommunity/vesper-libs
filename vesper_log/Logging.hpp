@@ -12,8 +12,6 @@
 
 #include <sstream>
 
-#include "Vout.hpp"
-
 #include "LoggingTypes.hpp"
 
 namespace Vesper {
@@ -26,7 +24,6 @@ class Logging {
          * It will initialize the garbageCollector
          * in general and start the thread
          */
-        Logging();
         Logging(LoggingTypes::LoggingClientType typets);
         ~Logging();
 
@@ -51,8 +48,6 @@ class Logging {
 
     protected:
     private:
-
-        Vout out;
 
         LoggingTypes::LoggingClientType clientType;
 

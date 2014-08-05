@@ -25,61 +25,37 @@ struct LoggingMessage {
 
 using namespace Vesper;
 
-Vout::Vout(Logging *parentts)
-{
-    if (!threadRunning) {
-        std::cout << "[logclass] warning: creating object from Vout class "
-            "while thread isn't running" << std::endl;
-    }
+Vout Vout::staticInstance = {};
 
-    parent = parentts;
+Vout::Vout() : loggingThread(), threadRunning(false), lMutex(), messages()
+{
+    std::cout << "[logclass] starting: starting thread..." << std::endl;
+    loggingThread = std::thread(&Vout::threadFunction, this);
+    while (!threadRunning);
 }
 
 Vout::~Vout()
 {
-    std::cout << "[logclass] note: cleaning up ..." << std::endl;
-    std::cout << "                 done!" << std::endl;
+    threadRunning = false;
+    loggingThread.join();
+    std::cout << "[logclass] stopping: logging finished successfully!";
+    std::cout << std::endl;
 }
 
-int Vout::init()
-{
-    if (threadRunning)
-        return 1;
-
-    std::cout << "[logclass] starting: starting thread" << std::endl;
-
-    pipeThread = new std::thread(Vout::pipeFunction);
-    pipeThread->detach(); //execute the thread independently
-
-    std::cout << "[logclass] starting: done!" << std::endl;
-
-    //while (!threadRunning);
-
-    lMutex.unlock(); //unlock to start!
-
-    return 0;
-}
-
-void Vout::pushMessage(std::string messageStr)
+void Vout::pushMessage(std::string messageStr,
+    LoggingTypes::LoggingClientType type, int id)
 {
     // thread-safe add message to queue
-    lMutex.lock();
-    messages.push(new LoggingMessage{
-        messageStr, parent->getType(), parent->getID()});
-    lMutex.unlock();
+    staticInstance.lMutex.lock();
+    staticInstance.messages.push(new LoggingMessage{messageStr, type, id});
+    staticInstance.lMutex.unlock();
 }
 
-std::mutex Vout::lMutex;
-std::queue<LoggingMessage*> Vout::messages;
-
-bool Vout::threadRunning = false; //does not work ;-(
-std::thread *Vout::pipeThread = 0;
-
-void Vout::pipeFunction()
+void Vout::threadFunction()
 {
     threadRunning = true;
 
-    std::cout << "[logclass] pipeThread: started!" << std::endl;
+    std::cout << "[logclass] loggingThread: started!" << std::endl;
 
     while (threadRunning || (messages.empty() == false)) {
         // thread-safe pop message from queue
@@ -94,7 +70,6 @@ void Vout::pipeFunction()
         lMutex.unlock();
 
         //print the header:
-        std::cout << std::setw(8);
         if (loggingMessage->type == LoggingTypes::client) {
             std::cout << "[client ";
         } else {
@@ -102,8 +77,8 @@ void Vout::pipeFunction()
         }
         std::cout << "|" << std::setw(5);
         std::cout << loggingMessage->id << "] ";
-        std::cout << loggingMessage->message << std::endl;
+        std::cout << loggingMessage->message << '\n';
     }
-    std::cout << "[logclass] pipeThread: stopped!" << std::endl;
+    std::cout << "[logclass] loggingThread: stopped!" << std::endl;
     return;
 }

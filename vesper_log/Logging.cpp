@@ -8,18 +8,13 @@
 
 #include "Logging.hpp"
 
+#include "Vout.hpp"
+
 using namespace Vesper;
 
 int Logging::nextID = 1;
 
-Logging::Logging() :
-    out(this)
-{
-    uniqueID = 0;
-}
-
-Logging::Logging(LoggingTypes::LoggingClientType typets) :
-    out(this)
+Logging::Logging(LoggingTypes::LoggingClientType typets)
 {
     clientType = typets;
 
@@ -65,5 +60,5 @@ void Logging::flush()
     std::string messageStr = message.str();
     message.str(std::string());
     // push message string
-    out.pushMessage(messageStr);
+    Vout::pushMessage(messageStr, clientType, uniqueID);
 }

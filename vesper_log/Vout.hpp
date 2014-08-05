@@ -27,26 +27,23 @@ class LoggingMessage;
 class Vout {
 
     public:
-
-        Vout(Logging *parentts);
-        ~Vout();
-
-        static int init();
-
-        void pushMessage(std::string message);
+        static void pushMessage(std::string messageStr,
+            LoggingTypes::LoggingClientType type, int id);
 
     private:
+        Vout();
+        ~Vout();
 
-        Logging *parent;
+        static Vout staticInstance;
+
+        std::thread loggingThread;
+        bool threadRunning;
 
         /** Mutex for thread-safe access to message queue. */
-        static std::mutex lMutex;
-        static std::queue<LoggingMessage*> messages;
+        std::mutex lMutex;
+        std::queue<LoggingMessage*> messages;
 
-        static bool threadRunning;
-        static std::thread *pipeThread;
-
-        static void pipeFunction();
+        void threadFunction();
 
 }; /* class Vout */
 

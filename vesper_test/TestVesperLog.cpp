@@ -18,7 +18,6 @@ MU_TEST(vsp_test_vesper_log_test);
 
 MU_TEST(vsp_test_vesper_log_test)
 {
-    Vesper::Vout::init();
     Vesper::Logging logger(Vesper::LoggingTypes::server);
     logger << "Testing vesper_log module, logging as server.";
     logger << Vesper::LoggingTypes::endl;
