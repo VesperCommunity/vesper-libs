@@ -3,6 +3,7 @@
 #include "Logging.hpp"
 
 #include <iomanip>
+#include <iostream>
 
 using namespace Vesper;
 

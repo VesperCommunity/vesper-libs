@@ -3,9 +3,6 @@
 
 #include "Vout.hpp"
 
-#include <iostream>
-#include <sstream>
-
 #include "LoggingType.hpp"
 
 namespace Vesper {
@@ -33,18 +30,6 @@ class Logging {
 
         void flush();
 
-        /**
-         * C-Style logging functions
-         * will be added later
-         * --> away-commented
-         */
-        /*void log(LoggingType::LoggingLevel level);
-        void logStart(char *text, ...);
-        void logDebug(char *text, ...);
-        void logNeutral(char *text, ...);
-        void logWarning(char *text, ...);
-        void logError(char *text, ...);*/
-
     protected:
     private:
 
@@ -64,14 +49,6 @@ class Logging {
          * itself
          */
         int uniqueID;
-
-        /**
-         * This function print a c-style escape sequence
-         * *data is a pointer to the data given by va_args
-         * *toPrint is the Begine of the Escape Sequence ('%')
-         * It returns 0 if success!
-         */
-        /*char *getCharFromEscSequence(char *toPrint, void *data);*/
 
 };
 

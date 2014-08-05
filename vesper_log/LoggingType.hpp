@@ -10,7 +10,6 @@
  */
 namespace Vesper {
 
-class Vout;
 class Logging;
 
 namespace LoggingType {

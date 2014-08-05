@@ -4,8 +4,6 @@
 #include <thread>
 #include <mutex>
 
-#include <iostream>
-#include <sstream>
 #include <string>
 
 #include "LoggingType.hpp"
