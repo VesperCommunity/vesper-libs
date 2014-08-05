@@ -19,6 +19,7 @@ int main(void)
     MU_RUN_SUITE(vsp_test_cmcp_connection);
     MU_RUN_SUITE(vsp_test_cmcp_datalist);
     MU_RUN_SUITE(vsp_test_cmcp_message);
+    MU_RUN_SUITE(vsp_test_vesper_log);
     MU_REPORT();
     return 0;
 }
