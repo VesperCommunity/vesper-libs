@@ -21,7 +21,7 @@ MU_TEST(vsp_test_vesper_log_test)
     Vesper::Logging logger(Vesper::LoggingTypes::server);
     logger << "Testing vesper_log module, logging as server.";
     logger << Vesper::LoggingTypes::eom;
-    logger << "Some numbers: " << 1 << ", " << 2.0 << ", " << '3';
+    logger << "Some numbers:\n" << 1 << "\n" << 2.0 << "\n" << '3';
     logger << Vesper::LoggingTypes::eom;
 }
 

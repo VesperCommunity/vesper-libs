@@ -67,7 +67,7 @@ void Vout::threadFunction()
             // waiting for messages
             condVariable.wait(lock);
         }
-        if (!threadRunning) {
+        if (!threadRunning && messages.empty()) {
             break;
         }
 
@@ -75,15 +75,31 @@ void Vout::threadFunction()
         messages.pop();
         lock.unlock();
 
-        //print the header:
+        // generate the prefix:
+        std::ostringstream prefix;
         if (loggingMessage->type == LoggingTypes::client) {
-            std::cout << "[ client ";
+            prefix << "[ client ";
         } else {
-            std::cout << "[ server ";
+            prefix << "[ server ";
         }
-        std::cout << "|" << std::setw(5);
-        std::cout << loggingMessage->id << " ] ";
-        std::cout << loggingMessage->message << '\n';
+        prefix << "|" << std::setw(5);
+        prefix << loggingMessage->id << " ] ";
+        std::string prefixStr = prefix.str();
+
+        std::string message = loggingMessage->message;
+
+        // print message and add prefix to newlines:
+        std::string::size_type pos, pos2 = -1;
+        do {
+            pos = pos2 + 1;
+            pos2 = message.find('\n', pos);
+            std::cout << prefixStr;
+            if (pos2 == std::string::npos)
+                std::cout << message.substr(pos);
+            else
+                std::cout << message.substr(pos, pos2-pos);
+            std::cout << '\n';
+        } while (pos2 != std::string::npos);
     }
     std::cout << "[ logclass      ] loggingThread: stopped!" << std::endl;
     return;
