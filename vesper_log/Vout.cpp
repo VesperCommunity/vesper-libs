@@ -7,15 +7,18 @@
 
 using namespace Vesper;
 
-Vout::Vout(Logging *parentts) {
-    if (!threadRunning)
-        std::cout << "[logclass] warning: creating object from Vout class while "
-                     "thread isn't running" << std::endl;
+Vout::Vout(Logging *parentts)
+{
+    if (!threadRunning) {
+        std::cout << "[logclass] warning: creating object from Vout class "
+            "while thread isn't running" << std::endl;
+    }
 
     parent = parentts;
 }
 
-Vout::~Vout() {
+Vout::~Vout()
+{
     std::cout << "[logclass] note: cleaning up ..." << std::endl;
 
     LoggingType::ScanDataType type;
@@ -24,34 +27,35 @@ Vout::~Vout() {
         switch (type) {
             case LoggingType::t_int:
                 delete (int*) dataToDelete;
-                break;
+              break;
             case LoggingType::t_bool:
                 delete (bool*) dataToDelete;
-                break;
+              break;
             case LoggingType::t_char:
                 delete (char*) dataToDelete;
-                break;
+              break;
             case LoggingType::t_cstr:
                 delete (char**) dataToDelete;
-                break;
+              break;
             case LoggingType::t_stdstr:
                 delete (std::string*) dataToDelete;
-                break;
+              break;
             case LoggingType::t_void:
                 delete (void*) dataToDelete; //idk if this is right
-                break;
+              break;
             case LoggingType::t_flag:
                 delete (LoggingType::LoggingFlags*) dataToDelete;
-                break;
+              break;
             default:
                 //this will be a mem leak
-                break;
+              break;
         }
     }
     std::cout << "                 done!" << std::endl;
 }
 
-int Vout::init() {
+int Vout::init()
+{
     if (threadRunning)
         return 1;
 
@@ -69,7 +73,8 @@ int Vout::init() {
     return 0;
 }
 
-void Vout::operator<<(int toWrite) {
+void Vout::operator<<(int toWrite)
+{
 
     int *temp = new int;
     *temp = toWrite;
@@ -77,7 +82,8 @@ void Vout::operator<<(int toWrite) {
     pushM(LoggingType::t_int, (void*) temp);
 }
 
-void Vout::operator<<(bool toWrite) {
+void Vout::operator<<(bool toWrite)
+{
 
     bool *temp = new bool;
     *temp = toWrite;
@@ -85,7 +91,8 @@ void Vout::operator<<(bool toWrite) {
     pushM(LoggingType::t_bool, (void*) temp);
 }
 
-void Vout::operator<<(char toWrite) {
+void Vout::operator<<(char toWrite)
+{
 
     char *temp = new char;
     *temp = toWrite;
@@ -93,7 +100,8 @@ void Vout::operator<<(char toWrite) {
     pushM(LoggingType::t_char, (void*) temp);
 }
 
-void Vout::operator<<(char toWrite[]) {
+void Vout::operator<<(char toWrite[])
+{
 
     char **temp = new char*;
     *temp = toWrite;
@@ -101,7 +109,8 @@ void Vout::operator<<(char toWrite[]) {
     pushM(LoggingType::t_cstr, (void*) temp);
 }
 
-void Vout::operator<<(const char *toWrite) {
+void Vout::operator<<(const char *toWrite)
+{
 
     char **temp = new char*;
     *temp = (char*)toWrite;
@@ -109,7 +118,8 @@ void Vout::operator<<(const char *toWrite) {
     pushM(LoggingType::t_cstr, (void*) temp);
 }
 
-void Vout::operator<<(std::string  toWrite) {
+void Vout::operator<<(std::string  toWrite)
+{
 
     std::string *temp = new std::string;
     *temp = toWrite;
@@ -117,7 +127,8 @@ void Vout::operator<<(std::string  toWrite) {
     pushM(LoggingType::t_stdstr, (void*) temp);
 }
 
-void Vout::operator<<(void *toWrite) {
+void Vout::operator<<(void *toWrite)
+{
 
     void **temp = new void*;
     *temp = toWrite;
@@ -125,23 +136,25 @@ void Vout::operator<<(void *toWrite) {
     pushM(LoggingType::t_void, (void*) temp);
 }
 
-void Vout::operator<<(LoggingType::LoggingFlags flag) {
-    switch (flag){
+void Vout::operator<<(LoggingType::LoggingFlags flag)
+{
+    switch (flag) {
         case LoggingType::eom:
             flush();
-            break;
+          break;
 
         case LoggingType::endl:
             flush();
-            break;
+          break;
 
         default:
             //unknown flag
-            break;
+          break;
     }
 }
 
-void Vout::flush() {
+void Vout::flush()
+{
 
     LoggingType::LoggingFlags *temp = new LoggingType::LoggingFlags;
     *temp = LoggingType::eom;
@@ -170,8 +183,7 @@ void Vout::flush() {
         lMutex.unlock();
 
         return;
-    }
-    else {
+    } else {
         lFIFOlast->newer = tempPipe;
         lFIFOlast = tempPipe;
 
@@ -184,7 +196,8 @@ void Vout::flush() {
 
 }
 
-int Vout::popM(LoggingType::ScanDataType *typetg, void **datatg){
+int Vout::popM(LoggingType::ScanDataType *typetg, void **datatg)
+{
     if (!mFIFOfirst)
         return 1;
 
@@ -192,8 +205,8 @@ int Vout::popM(LoggingType::ScanDataType *typetg, void **datatg){
 
     mMutex.lock();
 
-        tempPipe = mFIFOlast;
-        mFIFOlast = tempPipe->newer;
+    tempPipe = mFIFOlast;
+    mFIFOlast = tempPipe->newer;
 
     mMutex.unlock();
 
@@ -205,7 +218,8 @@ int Vout::popM(LoggingType::ScanDataType *typetg, void **datatg){
     return 0;
 }
 
-void Vout::pushM(LoggingType::ScanDataType typets, void *datats) {
+void Vout::pushM(LoggingType::ScanDataType typets, void *datats)
+{
 
     LoggingType::MessagePipe *tempMsg = new LoggingType::MessagePipe;
 
@@ -225,8 +239,7 @@ void Vout::pushM(LoggingType::ScanDataType typets, void *datats) {
         mMutex.unlock();
 
         return;
-    }
-    else {
+    } else {
 
         mFIFOlast->newer = tempMsg;
         mFIFOlast = tempMsg;
@@ -239,14 +252,15 @@ void Vout::pushM(LoggingType::ScanDataType typets, void *datats) {
 
 }
 
-std::mutex                Vout::lMutex;
+std::mutex Vout::lMutex;
 LoggingType::LoggingPipe *Vout::lFIFOfirst=0;
 LoggingType::LoggingPipe *Vout::lFIFOlast=0;
 
-bool          Vout::threadRunning = false; //does not work ;-(
+bool Vout::threadRunning = false; //does not work ;-(
 std::thread  *Vout::pipeThread=0;
 
-void Vout::pipeFunction() {
+void Vout::pipeFunction()
+{
     threadRunning = true;
 
     std::cout << "[logclass] pipeThread: started!" << std::endl;
@@ -255,7 +269,7 @@ void Vout::pipeFunction() {
 
         lMutex.lock();
 
-        while(lFIFOfirst) {
+        while (lFIFOfirst) {
 
             LoggingType::LoggingPipe *lPipeToDelete;
 
@@ -268,62 +282,63 @@ void Vout::pipeFunction() {
             switch (lFIFOfirst->src->getType()) {
                 case LoggingType::client:
                     std::cout << "[client ";
-                    break;
+                  break;
                 case LoggingType::server:
                     std::cout << "[server ";
-                    break;
+                  break;
                 default:
                     std::cout << "[###### ";
-                    break;
+                  break;
             }
             std::cout << "|" << std::setw(5);
             std::cout << lFIFOfirst->src->getID() << "] ";
 
             //we start with the output and delete / pop the lstack later
             while (nextMessage) {
-                switch(nextMessage->type){
+                switch (nextMessage->type){
                     case LoggingType::t_int:
                         std::cout << *((int*) nextMessage->data);
                         delete (int*) nextMessage->data;
-                        break;
+                      break;
                     case LoggingType::t_bool:
                         std::cout << *((bool*) nextMessage->data);
                         delete (int*) nextMessage->data;
-                        break;
+                      break;
                     case LoggingType::t_char:
                         std::cout << *((char*) nextMessage->data);
-                        break;
+                      break;
                     case LoggingType::t_cstr:
                         std::cout << *((char**) nextMessage->data);
-                        break;
+                      break;
                     case LoggingType::t_stdstr:
                         std::cout << *((std::string*) nextMessage->data);
-                        break;
+                      break;
                     case LoggingType::t_void:
                         std::cout << *((void**) nextMessage->data);
-                        break;
+                      break;
                     case LoggingType::t_flag:
                         //We got a flag!
 
                         LoggingType::LoggingFlags tempFlag;
-                        tempFlag = *((LoggingType::LoggingFlags*)nextMessage->data);
+                        tempFlag = *((LoggingType::LoggingFlags*)
+                            nextMessage->data);
 
-                        switch(tempFlag) {
+                        switch (tempFlag) {
                             case LoggingType::endl:
                                 std::cout << std::endl;
-                                break;
+                              break;
                             case LoggingType::eom:
                                 std::cout << std::endl;
-                                break;
+                              break;
                             default:
                                 ///TODO: add exception or similar
-                                break;
+                              break;
                         }
 
-                        break;
+                      break;
                     default:
                         //not recognized ... maybe throw an error
-                        break;
+                      break;
                 }
 
                 messageToDelete = nextMessage;

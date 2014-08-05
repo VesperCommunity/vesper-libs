@@ -5,13 +5,13 @@ using namespace Vesper;
 int Logging::nextID = 1;
 
 Logging::Logging() :
-                   out(this)
+    out(this)
 {
     uniqueID = 0;
 }
 
 Logging::Logging(LoggingType::LoggingClientType typets) :
-                   out(this)
+    out(this)
 {
     clientType = typets;
 
@@ -19,18 +19,22 @@ Logging::Logging(LoggingType::LoggingClientType typets) :
     nextID++;
 }
 
-Logging::~Logging() {
+Logging::~Logging()
+{
 
 }
 
-int Logging::getID() {
+int Logging::getID()
+{
     return uniqueID;
 }
 
-LoggingType::LoggingClientType Logging::getType() {
+LoggingType::LoggingClientType Logging::getType()
+{
     return clientType;
 }
 
-void Logging::flush(){
+void Logging::flush()
+{
     out.flush();
 }

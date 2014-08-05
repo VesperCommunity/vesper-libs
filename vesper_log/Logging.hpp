@@ -23,7 +23,8 @@ class Logging {
         LoggingType::LoggingClientType getType();
 
         template <class T>
-        Logging &operator<<(const T &toWrite) {
+        Logging &operator<<(const T &toWrite)
+        {
             out << toWrite;
             return *this;
         }
