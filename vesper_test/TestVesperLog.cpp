@@ -19,11 +19,11 @@ MU_TEST(vsp_test_vesper_log_test);
 MU_TEST(vsp_test_vesper_log_test)
 {
     Vesper::Vout::init();
-    Vesper::Logging logger(Vesper::LoggingType::server);
+    Vesper::Logging logger(Vesper::LoggingTypes::server);
     logger << "Testing vesper_log module, logging as server.";
-    logger << Vesper::LoggingType::endl;
+    logger << Vesper::LoggingTypes::endl;
     logger << "Some numbers: " << 1 << ", " << 2.0 << ", " << 3ull;
-    logger << Vesper::LoggingType::endl;
+    logger << Vesper::LoggingTypes::endl;
 }
 
 MU_TEST_SUITE(vsp_test_vesper_log)

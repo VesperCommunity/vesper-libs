@@ -18,7 +18,7 @@ Logging::Logging() :
     uniqueID = 0;
 }
 
-Logging::Logging(LoggingType::LoggingClientType typets) :
+Logging::Logging(LoggingTypes::LoggingClientType typets) :
     out(this)
 {
     clientType = typets;
@@ -37,7 +37,7 @@ int Logging::getID()
     return uniqueID;
 }
 
-LoggingType::LoggingClientType Logging::getType()
+LoggingTypes::LoggingClientType Logging::getType()
 {
     return clientType;
 }

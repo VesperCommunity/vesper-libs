@@ -16,7 +16,7 @@
 #include <sstream>
 #include <string>
 
-#include "LoggingType.hpp"
+#include "LoggingTypes.hpp"
 
 namespace Vesper {
 
@@ -42,7 +42,7 @@ class Vout {
         /** Modify current logging message.
          * When parameter is LoggingFlags::eom or LoggingFlags::endl,
          * flush() is called. */
-        void operator<<(LoggingType::LoggingFlags flag);
+        void operator<<(LoggingTypes::LoggingFlags flag);
 
         /** Finish and print current logging message. */
         void flush();
@@ -60,8 +60,8 @@ class Vout {
          */
 
         static std::mutex lMutex;
-        static LoggingType::LoggingPipe *lFIFOfirst;
-        static LoggingType::LoggingPipe *lFIFOlast;
+        static LoggingTypes::LoggingPipe *lFIFOfirst;
+        static LoggingTypes::LoggingPipe *lFIFOlast;
 
         static bool threadRunning;
         static std::thread *pipeThread;

@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 2.8)
 set(HEADERS
     ${PROJECT_SOURCE_DIR}/Logging.hpp
     ${PROJECT_SOURCE_DIR}/Vout.hpp
-    ${PROJECT_SOURCE_DIR}/LoggingType.hpp
+    ${PROJECT_SOURCE_DIR}/LoggingTypes.hpp
 )
 
 # add source files of this module

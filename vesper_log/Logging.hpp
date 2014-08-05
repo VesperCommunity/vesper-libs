@@ -12,7 +12,7 @@
 
 #include "Vout.hpp"
 
-#include "LoggingType.hpp"
+#include "LoggingTypes.hpp"
 
 namespace Vesper {
 
@@ -25,11 +25,11 @@ class Logging {
          * in general and start the thread
          */
         Logging();
-        Logging(LoggingType::LoggingClientType typets);
+        Logging(LoggingTypes::LoggingClientType typets);
         ~Logging();
 
         int getID();
-        LoggingType::LoggingClientType getType();
+        LoggingTypes::LoggingClientType getType();
 
         template <class T>
         Logging &operator<<(const T &toWrite)
@@ -45,7 +45,7 @@ class Logging {
 
         Vout out;
 
-        LoggingType::LoggingClientType clientType;
+        LoggingTypes::LoggingClientType clientType;
 
         /**
          * The unique identification that will be

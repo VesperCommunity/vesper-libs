@@ -16,14 +16,14 @@
  * The namespace LoggingTypes will contain enums, structs
  * and other things, that are needed by the Logging class
  * We use a namespace to avoid Name-conflicts
- * --> for example use this: LoggingType.client
- * --> avoid using the LoggingType namespace
+ * --> for example use this: LoggingTypes.client
+ * --> avoid using the LoggingTypes namespace
  */
 namespace Vesper {
 
 class Logging;
 
-namespace LoggingType {
+namespace LoggingTypes {
 
 enum LoggingFlags {
     endl, //end of line
@@ -51,7 +51,7 @@ struct LoggingPipe {
     std::string message;
 };
 
-}; /* namespace LoggingType */
+}; /* namespace LoggingTypes */
 }; /* namespace Vesper */
 
 #endif /* LOGGINGTYPE_HPP_INCLUDED */

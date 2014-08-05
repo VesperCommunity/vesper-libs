@@ -50,14 +50,14 @@ int Vout::init()
     return 0;
 }
 
-void Vout::operator<<(LoggingType::LoggingFlags flag)
+void Vout::operator<<(LoggingTypes::LoggingFlags flag)
 {
     switch (flag) {
-        case LoggingType::eom:
+        case LoggingTypes::eom:
             flush();
           break;
 
-        case LoggingType::endl:
+        case LoggingTypes::endl:
             flush();
           break;
 
@@ -76,7 +76,7 @@ void Vout::flush()
     std::string messageStr = message.str();
     message.str(std::string());
 
-    LoggingType::LoggingPipe *tempPipe = new LoggingType::LoggingPipe;
+    LoggingTypes::LoggingPipe *tempPipe = new LoggingTypes::LoggingPipe;
     tempPipe->message = messageStr;
     tempPipe->src = this->parent;
 
@@ -104,8 +104,8 @@ void Vout::flush()
 }
 
 std::mutex Vout::lMutex;
-LoggingType::LoggingPipe *Vout::lFIFOfirst=0;
-LoggingType::LoggingPipe *Vout::lFIFOlast=0;
+LoggingTypes::LoggingPipe *Vout::lFIFOfirst=0;
+LoggingTypes::LoggingPipe *Vout::lFIFOlast=0;
 
 bool Vout::threadRunning = false; //does not work ;-(
 std::thread  *Vout::pipeThread=0;
@@ -122,15 +122,15 @@ void Vout::pipeFunction()
 
         while (lFIFOfirst) {
 
-            LoggingType::LoggingPipe *lPipeToDelete;
+            LoggingTypes::LoggingPipe *lPipeToDelete;
 
             //print the header:
             std::cout << std::setw(8);
             switch (lFIFOfirst->src->getType()) {
-                case LoggingType::client:
+                case LoggingTypes::client:
                     std::cout << "[client ";
                   break;
-                case LoggingType::server:
+                case LoggingTypes::server:
                     std::cout << "[server ";
                   break;
                 default:
