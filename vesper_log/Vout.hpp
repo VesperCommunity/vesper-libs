@@ -10,6 +10,7 @@
 #ifndef VOUT_HPP_INCLUDED
 #define VOUT_HPP_INCLUDED
 
+#include <condition_variable>
 #include <thread>
 #include <mutex>
 
@@ -41,6 +42,8 @@ class Vout {
 
         /** Mutex for thread-safe access to message queue. */
         std::mutex lMutex;
+        /** Condition variable for waiting idle worker thread. */
+        std::condition_variable condVariable;
         std::queue<LoggingMessage*> messages;
 
         void threadFunction();

@@ -37,6 +37,7 @@ Vout::Vout() : loggingThread(), threadRunning(false), lMutex(), messages()
 Vout::~Vout()
 {
     threadRunning = false;
+    staticInstance.condVariable.notify_one();
     loggingThread.join();
     std::cout << "[ logclass      ] stopping: logging finished successfully!";
     std::cout << std::endl;
@@ -46,9 +47,10 @@ void Vout::pushMessage(std::string messageStr,
     LoggingTypes::LoggingClientType type, int id)
 {
     // thread-safe add message to queue
-    staticInstance.lMutex.lock();
+    std::unique_lock<std::mutex> lock(staticInstance.lMutex);
     staticInstance.messages.push(new LoggingMessage{messageStr, type, id});
-    staticInstance.lMutex.unlock();
+    lock.unlock();
+    staticInstance.condVariable.notify_one();
 }
 
 void Vout::threadFunction()
@@ -59,15 +61,19 @@ void Vout::threadFunction()
 
     while (threadRunning || (messages.empty() == false)) {
         // thread-safe pop message from queue
-        lMutex.lock();
-        if (messages.empty()) {
-            lMutex.unlock();
-            continue;
+        std::unique_lock<std::mutex> lock(lMutex);
+        // while loop only necessary in case of spurious wakeups
+        while (threadRunning && messages.empty()) {
+            // waiting for messages
+            condVariable.wait(lock);
+        }
+        if (!threadRunning) {
+            break;
         }
 
         LoggingMessage *loggingMessage = messages.front();
         messages.pop();
-        lMutex.unlock();
+        lock.unlock();
 
         //print the header:
         if (loggingMessage->type == LoggingTypes::client) {
