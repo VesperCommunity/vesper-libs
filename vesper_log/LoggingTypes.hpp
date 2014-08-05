@@ -43,10 +43,7 @@ enum LoggingClientType {
     server  // the logging client is a server
 };
 
-struct LoggingPipe {
-    LoggingPipe *older;
-    LoggingPipe *newer;
-
+struct LoggingMessage {
     Logging *src;
     std::string message;
 };

@@ -13,6 +13,7 @@
 #include <thread>
 #include <mutex>
 
+#include <queue>
 #include <sstream>
 #include <string>
 
@@ -53,15 +54,9 @@ class Vout {
 
         std::ostringstream message;
 
-        /**
-         * When a LoggingPipe reaches LogginType::eom the message is complete
-         * and will be pushed to lFIFO (logging FIFO)
-         * lFIFO will be written by the pipeFunction.
-         */
-
+        /** Mutex for thread-safe access to message queue. */
         static std::mutex lMutex;
-        static LoggingTypes::LoggingPipe *lFIFOfirst;
-        static LoggingTypes::LoggingPipe *lFIFOlast;
+        static std::queue<LoggingTypes::LoggingMessage*> messages;
 
         static bool threadRunning;
         static std::thread *pipeThread;

@@ -69,46 +69,21 @@ void Vout::operator<<(LoggingTypes::LoggingFlags flag)
 
 void Vout::flush()
 {
-
-    ///now we have to attach 'this' to our lFIFO, which is printed by the thread
-
     // copy and clear current message string
     std::string messageStr = message.str();
     message.str(std::string());
 
-    LoggingTypes::LoggingPipe *tempPipe = new LoggingTypes::LoggingPipe;
-    tempPipe->message = messageStr;
-    tempPipe->src = this->parent;
-
-    this->lMutex.lock();
-    if (!lFIFOlast) { //nothing in the FIFO
-        tempPipe->newer = 0;
-        tempPipe->older = 0;
-
-        lFIFOfirst = tempPipe;
-        lFIFOlast = tempPipe;
-        lMutex.unlock();
-
-        return;
-    } else {
-        lFIFOlast->newer = tempPipe;
-        lFIFOlast = tempPipe;
-
-        tempPipe->newer = 0;
-
-        lMutex.unlock();
-
-        return;
-    }
-
+    // thread-safe add message to queue
+    lMutex.lock();
+    messages.push(new LoggingTypes::LoggingMessage{parent, messageStr});
+    lMutex.unlock();
 }
 
 std::mutex Vout::lMutex;
-LoggingTypes::LoggingPipe *Vout::lFIFOfirst=0;
-LoggingTypes::LoggingPipe *Vout::lFIFOlast=0;
+std::queue<LoggingTypes::LoggingMessage*> Vout::messages;
 
 bool Vout::threadRunning = false; //does not work ;-(
-std::thread  *Vout::pipeThread=0;
+std::thread *Vout::pipeThread = 0;
 
 void Vout::pipeFunction()
 {
@@ -116,40 +91,34 @@ void Vout::pipeFunction()
 
     std::cout << "[logclass] pipeThread: started!" << std::endl;
 
-    while (threadRunning) {
-
+    while (threadRunning || (messages.empty() == false)) {
+        // thread-safe pop message from queue
         lMutex.lock();
-
-        while (lFIFOfirst) {
-
-            LoggingTypes::LoggingPipe *lPipeToDelete;
-
-            //print the header:
-            std::cout << std::setw(8);
-            switch (lFIFOfirst->src->getType()) {
-                case LoggingTypes::client:
-                    std::cout << "[client ";
-                  break;
-                case LoggingTypes::server:
-                    std::cout << "[server ";
-                  break;
-                default:
-                    std::cout << "[###### ";
-                  break;
-            }
-            std::cout << "|" << std::setw(5);
-            std::cout << lFIFOfirst->src->getID() << "] ";
-            std::cout << lFIFOfirst->message << std::endl;
-
-            lPipeToDelete = lFIFOfirst;
-            lFIFOfirst = lFIFOfirst->newer;
-
-            delete lPipeToDelete;
+        if (messages.empty()) {
+            lMutex.unlock();
+            continue;
         }
 
-        lFIFOlast = 0;
-
+        LoggingTypes::LoggingMessage *loggingMessage = messages.front();
+        messages.pop();
         lMutex.unlock();
+
+        //print the header:
+        std::cout << std::setw(8);
+        switch (loggingMessage->src->getType()) {
+            case LoggingTypes::client:
+                std::cout << "[client ";
+              break;
+            case LoggingTypes::server:
+                std::cout << "[server ";
+              break;
+            default:
+                std::cout << "[###### ";
+              break;
+        }
+        std::cout << "|" << std::setw(5);
+        std::cout << loggingMessage->src->getID() << "] ";
+        std::cout << loggingMessage->message << std::endl;
     }
     std::cout << "[logclass] pipeThread: stopped!" << std::endl;
     return;
