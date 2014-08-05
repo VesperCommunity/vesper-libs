@@ -13,6 +13,16 @@
 #include <iomanip>
 #include <iostream>
 
+namespace Vesper {
+
+struct LoggingMessage {
+    std::string message;
+    LoggingTypes::LoggingClientType type;
+    int id;
+};
+
+}; /* namespace Vesper */
+
 using namespace Vesper;
 
 Vout::Vout(Logging *parentts)
@@ -75,12 +85,13 @@ void Vout::flush()
 
     // thread-safe add message to queue
     lMutex.lock();
-    messages.push(new LoggingTypes::LoggingMessage{parent, messageStr});
+    messages.push(new LoggingMessage{
+        messageStr, parent->getType(), parent->getID()});
     lMutex.unlock();
 }
 
 std::mutex Vout::lMutex;
-std::queue<LoggingTypes::LoggingMessage*> Vout::messages;
+std::queue<LoggingMessage*> Vout::messages;
 
 bool Vout::threadRunning = false; //does not work ;-(
 std::thread *Vout::pipeThread = 0;
@@ -99,25 +110,19 @@ void Vout::pipeFunction()
             continue;
         }
 
-        LoggingTypes::LoggingMessage *loggingMessage = messages.front();
+        LoggingMessage *loggingMessage = messages.front();
         messages.pop();
         lMutex.unlock();
 
         //print the header:
         std::cout << std::setw(8);
-        switch (loggingMessage->src->getType()) {
-            case LoggingTypes::client:
-                std::cout << "[client ";
-              break;
-            case LoggingTypes::server:
-                std::cout << "[server ";
-              break;
-            default:
-                std::cout << "[###### ";
-              break;
+        if (loggingMessage->type == LoggingTypes::client) {
+            std::cout << "[client ";
+        } else {
+            std::cout << "[server ";
         }
         std::cout << "|" << std::setw(5);
-        std::cout << loggingMessage->src->getID() << "] ";
+        std::cout << loggingMessage->id << "] ";
         std::cout << loggingMessage->message << std::endl;
     }
     std::cout << "[logclass] pipeThread: stopped!" << std::endl;

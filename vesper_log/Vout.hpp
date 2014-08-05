@@ -22,6 +22,7 @@
 namespace Vesper {
 
 class Logging;
+class LoggingMessage;
 
 class Vout {
 
@@ -56,7 +57,7 @@ class Vout {
 
         /** Mutex for thread-safe access to message queue. */
         static std::mutex lMutex;
-        static std::queue<LoggingTypes::LoggingMessage*> messages;
+        static std::queue<LoggingMessage*> messages;
 
         static bool threadRunning;
         static std::thread *pipeThread;

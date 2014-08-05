@@ -43,11 +43,6 @@ enum LoggingClientType {
     server  // the logging client is a server
 };
 
-struct LoggingMessage {
-    Logging *src;
-    std::string message;
-};
-
 }; /* namespace LoggingTypes */
 }; /* namespace Vesper */
 
