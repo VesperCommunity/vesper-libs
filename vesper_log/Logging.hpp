@@ -1,5 +1,5 @@
-#ifndef LOGGING_H_INCLUDED
-#define LOGGING_H_INCLUDED
+#ifndef LOGGING_HPP_INCLUDED
+#define LOGGING_HPP_INCLUDED
 
 #include "Vout.hpp"
 
@@ -55,4 +55,4 @@ class Logging {
 
 }; /* namespace Vesper */
 
-#endif /* LOGGING_H_INCLUDED */
+#endif /* LOGGING_HPP_INCLUDED */

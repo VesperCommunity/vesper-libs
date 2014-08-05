@@ -1,5 +1,5 @@
-#ifndef VOUT_H_INCLUDED
-#define VOUT_H_INCLUDED
+#ifndef VOUT_HPP_INCLUDED
+#define VOUT_HPP_INCLUDED
 
 #include <thread>
 #include <mutex>
@@ -68,4 +68,4 @@ class Vout {
 }; /* namespace Vesper */
 
 
-#endif /* VOUT_H_INCLUDED */
+#endif /* VOUT_HPP_INCLUDED */

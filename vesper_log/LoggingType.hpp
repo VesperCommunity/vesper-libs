@@ -1,5 +1,5 @@
-#ifndef LOGGINGTYPE_H_INCLUDED
-#define LOGGINGTYPE_H_INCLUDED
+#ifndef LOGGINGTYPE_HPP_INCLUDED
+#define LOGGINGTYPE_HPP_INCLUDED
 
 /**
  * The namespace LoggingTypes will contain enums, structs
@@ -64,4 +64,4 @@ struct LoggingPipe {
 }; /* namespace LoggingType */
 }; /* namespace Vesper */
 
-#endif /* LOGGINGTYPE_H_INCLUDED */
+#endif /* LOGGINGTYPE_HPP_INCLUDED */
