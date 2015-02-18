@@ -41,7 +41,7 @@ class Vout {
         /** Worker thread. */
         std::thread loggingThread;
         /** Thread run flag used to stop the thread. */
-        bool threadRunning;
+        volatile bool threadRunning;
 
         /** Mutex for thread-safe access to message queue. */
         std::mutex lMutex;

@@ -31,7 +31,7 @@ typedef enum {
 /** State and other data used for network connection. */
 struct vsp_cmcp_server {
     /** Finite state machine flag. */
-    vsp_cmcp_server_state state;
+    volatile vsp_cmcp_server_state state;
     /** nanomsg socket number to publish messages. */
     int publish_socket;
     /** nanomsg socket number to receive messages. */
