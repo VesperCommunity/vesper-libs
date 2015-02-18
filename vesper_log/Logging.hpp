@@ -1,12 +1,18 @@
-#ifndef LOGGING_H_INCLUDED
-#define LOGGING_H_INCLUDED
+/**
+ * \file
+ * \authors Simon Michalke, Max Mertens
+ *
+ * Copyright (c) 2014, Max Mertens. All rights reserved.
+ * This file is licensed under the "BSD 3-Clause License".
+ * Full license text is under the file "LICENSE" provided with this code.
+ */
 
-#include "Vout.hpp"
+#ifndef LOGGING_HPP_INCLUDED
+#define LOGGING_HPP_INCLUDED
 
-#include <iostream>
 #include <sstream>
 
-#include "LoggingType.hpp"
+#include "LoggingTypes.hpp"
 
 namespace Vesper {
 
@@ -18,39 +24,31 @@ class Logging {
          * It will initialize the garbageCollector
          * in general and start the thread
          */
-        Logging();
-        Logging(LoggingType::LoggingClientType typets);
-        ~Logging();
+        Logging(LoggingTypes::LoggingClientType typets);
 
-        int getID();
-        LoggingType::LoggingClientType getType();
-
+        /** Append data to current logging message. */
         template <class T>
-        Logging &operator<<(const T &toWrite) {
-            out << toWrite;
+        Logging &operator<<(const T &toWrite)
+        {
+            message << toWrite;
             return *this;
         }
 
-        void flush();
+        /** Modify current logging message.
+         * When parameter is LoggingFlags::eom,
+         * flush() is called. */
+        void operator<<(LoggingTypes::LoggingFlags flag);
 
-        /**
-         * C-Style logging functions
-         * will be added later
-         * --> away-commented
-         */
-        /*void log(LoggingType::LoggingLevel level);
-        void logStart(char *text, ...);
-        void logDebug(char *text, ...);
-        void logNeutral(char *text, ...);
-        void logWarning(char *text, ...);
-        void logError(char *text, ...);*/
+        /** Finish and enqueue current message in logging system. */
+        void flush();
 
     protected:
     private:
 
-        Vout out;
+        LoggingTypes::LoggingClientType clientType;
 
-        LoggingType::LoggingClientType clientType;
+        /** Current message string, continuously appending elements. */
+        std::ostringstream message;
 
         /**
          * The unique identification that will be
@@ -65,16 +63,8 @@ class Logging {
          */
         int uniqueID;
 
-        /**
-         * This function print a c-style escape sequence
-         * *data is a pointer to the data given by va_args
-         * *toPrint is the Begine of the Escape Sequence ('%')
-         * It returns 0 if success!
-         */
-        /*char *getCharFromEscSequence(char *toPrint, void *data);*/
-
 };
 
 }; /* namespace Vesper */
 
-#endif /* LOGGING_H_INCLUDED */
+#endif /* LOGGING_HPP_INCLUDED */

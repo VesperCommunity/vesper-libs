@@ -50,6 +50,8 @@ MU_TEST_SUITE(vsp_test_cmcp_connection);
 MU_TEST_SUITE(vsp_test_cmcp_datalist);
 /** Test CMCP message implementation. */
 MU_TEST_SUITE(vsp_test_cmcp_message);
+/** Test vesper_log implementation. */
+MU_TEST_SUITE(vsp_test_vesper_log);
 
 #if defined __cplusplus
 }

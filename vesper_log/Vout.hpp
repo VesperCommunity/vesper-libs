@@ -1,73 +1,61 @@
-#ifndef VOUT_H_INCLUDED
-#define VOUT_H_INCLUDED
+/**
+ * \file
+ * \authors Simon Michalke, Max Mertens
+ *
+ * Copyright (c) 2014, Max Mertens. All rights reserved.
+ * This file is licensed under the "BSD 3-Clause License".
+ * Full license text is under the file "LICENSE" provided with this code.
+ */
 
+#ifndef VOUT_HPP_INCLUDED
+#define VOUT_HPP_INCLUDED
+
+#include <condition_variable>
 #include <thread>
 #include <mutex>
 
-#include <iostream>
+#include <queue>
 #include <sstream>
 #include <string>
 
-#include "LoggingType.hpp"
+#include "LoggingTypes.hpp"
 
 namespace Vesper {
 
 class Logging;
+class LoggingMessage;
 
 class Vout {
 
     public:
-
-        Vout(Logging *parentts);
-        ~Vout();
-
-        static int init();
-
-        void operator<<(int  toWrite);
-        void operator<<(bool toWrite);
-        void operator<<(char toWrite);
-        void operator<<(char toWrite[]);
-        void operator<<(const char *toWrite);
-        void operator<<(std::string toWrite);
-        void operator<<(void *toWrite); //write mem Adress
-        void operator<<(LoggingType::LoggingFlags flag);
-        void flush();
-
-        /**
-         * pop() used by thread to get at FIFOfirst
-         * pop() returns 1 if pipe is empty
-         * we may need this function but by now it is unused
-         */
-        int popM(LoggingType::ScanDataType *typetg, void **datatg);
-        std::mutex mMutex;
-        LoggingType::MessagePipe *mFIFOfirst;
+        static void pushMessage(std::string messageStr,
+            LoggingTypes::LoggingClientType type, int id);
 
     private:
+        Vout();
+        ~Vout();
 
-        Logging *parent;
+        /** Static instance for automagically starting and cleaning up. */
+        static Vout staticInstance;
 
-        ///push() used by operators to add at FIFOlast
-        void pushM(LoggingType::ScanDataType typets, void *datats);
-        LoggingType::MessagePipe *mFIFOlast;
+        /** Worker thread. */
+        std::thread loggingThread;
+        /** Thread run flag used to stop the thread. */
+        bool threadRunning;
 
-        /**
-         * When a LoggingPipe reaches LogginType::eom the message is complete
-         * and will be pushed to lFIFO (logging FIFO)
-         * lFIFO will be written by the pipeFunction.
-         */
+        /** Mutex for thread-safe access to message queue. */
+        std::mutex lMutex;
+        /** Condition variable for waiting idle worker thread. */
+        std::condition_variable condVariable;
+        /** Queue of logging messages. */
+        std::queue<LoggingMessage*> messages;
 
-        static std::mutex lMutex;
-        static LoggingType::LoggingPipe *lFIFOfirst;
-        static LoggingType::LoggingPipe *lFIFOlast;
-
-        static bool threadRunning;
-        static std::thread *pipeThread;
-
-        static void pipeFunction();
+        /** Worker thread function. */
+        void threadFunction();
 
 }; /* class Vout */
 
 }; /* namespace Vesper */
 
 
-#endif /* VOUT_H_INCLUDED */
+#endif /* VOUT_HPP_INCLUDED */

@@ -15,13 +15,14 @@ set(SOURCES
     ${PROJECT_SOURCE_DIR}/vsp_test_cmcp_connection.c
     ${PROJECT_SOURCE_DIR}/vsp_test_cmcp_datalist.c
     ${PROJECT_SOURCE_DIR}/vsp_test_cmcp_message.c
+    ${PROJECT_SOURCE_DIR}/TestVesperLog.cpp
 )
 
 # compile sources into executable
 add_executable(vesper-test ${HEADERS} ${SOURCES})
 
 # add external libraries linked to shared module library
-target_link_libraries(vesper-test vesper-util vesper-cmcp)
+target_link_libraries(vesper-test vesper-util vesper-cmcp vesper-log)
 
 # add rule to install executable
 install(TARGETS vesper-test RUNTIME DESTINATION bin)
