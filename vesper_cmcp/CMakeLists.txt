@@ -32,5 +32,5 @@ add_library(vesper-cmcp SHARED $<TARGET_OBJECTS:vesper-cmcp-objects>)
 # add external libraries linked to shared module library
 target_link_libraries(vesper-cmcp nanomsg vesper-util pthread)
 
-# add rule to install public header file
+# add rule to install public header files
 install(FILES ${API_HEADERS} DESTINATION include)
