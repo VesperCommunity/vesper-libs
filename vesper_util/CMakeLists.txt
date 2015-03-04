@@ -29,5 +29,5 @@ add_library(vesper-util SHARED $<TARGET_OBJECTS:vesper-util-objects>)
 # add external libraries linked to shared module library
 target_link_libraries(vesper-util nanomsg)
 
-# add rule to install public header file
+# add rule to install public header files
 install(FILES ${API_HEADERS} DESTINATION include)
