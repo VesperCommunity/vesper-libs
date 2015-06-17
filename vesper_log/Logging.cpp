@@ -12,7 +12,7 @@
 
 using namespace Vesper;
 
-int Logging::nextID = 1;
+volatile int Logging::nextID = 1;
 
 Logging::Logging(LoggingTypes::LoggingClientType typets)
 {
