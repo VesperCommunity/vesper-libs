@@ -54,7 +54,7 @@ class Logging {
          * The unique identification that will be
          * given to the next client
          */
-        static int nextID;
+        volatile static int nextID;
 
         /**
          * The unique identification
